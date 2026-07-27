@@ -2,6 +2,7 @@ import { useState } from "react";
 import { getDevice } from "../services/adminPanelServices";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { data } from "react-router-dom";
 
 export default function useDevice() {
   // =========================================
@@ -36,6 +37,15 @@ export default function useDevice() {
       setTotalPage(res.data.total_pages);
     } catch (err) {
       console.log(err);
+
+      if (err.response.status === 401) {
+        toast.error(
+          err.response?.data?.error.errors + ", Hubungi Admin" ||
+            err.response?.data?.message,
+          { toastId: "medlink-device-access-code-error" },
+        );
+        return;
+      }
 
       // =========================================
       // HANDLE ERROR

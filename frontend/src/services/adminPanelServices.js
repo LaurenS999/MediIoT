@@ -1,35 +1,30 @@
-import api from "./api";
+import apiLocal from "./apiLocal";
 
 export const getDevice = async (params) => {
-  console.log(api.defaults.baseURL + "integration/v1/devices");
-
-  const response = await api({
+  const response = await apiLocal({
     method: "get",
-    url: "integration/v1/devices",
+    url: "medlink/devices",
     params: params,
   });
   return response.data;
 };
 
 export const getBMI = async ({ height, age, gender, weight, impedance }) => {
-  const response = await api.get(
-    "integration/v1/bmi/get-calculate-health-metrics",
-    {
-      params: {
-        height,
-        age,
-        gender,
-        weight,
-        impedance,
-      },
+  const response = await apiLocal.get("medlink/bmi", {
+    params: {
+      height,
+      age,
+      gender,
+      weight,
+      impedance,
     },
-  );
+  });
 
   return response.data;
 };
 
 export const getGateway = async () => {
-  const response = await api.get("/integration/v1/iot-gateways", {
+  const response = await apiLocal.get("/medlink/gateway", {
     params: {
       page: 1,
       limit: 999,
@@ -39,6 +34,6 @@ export const getGateway = async () => {
 };
 
 export const getJenisPengukuran = async () => {
-  const response = await api.get("/integration/v1/measurement-parameter");
+  const response = await apiLocal.get("/medlink/jenis-pengukuran");
   return response.data;
 };
