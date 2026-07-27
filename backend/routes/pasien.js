@@ -118,19 +118,33 @@ router.get("/", async (req, res) => {
 //GET DATA PASIEN UNTUK DROP DOWN MENU
 router.get("/dropdown", async (req, res) => {
   try {
-    const values = [];
+    const id_relasi = req.query.id_relasi || null;
+
+    const values = [id_relasi];
 
     // =========================
     // DATA QUERY
     // =========================
     let sql = `
-      SELECT id_pasien, nama, kode_pasien
-        FROM pasien
-        WHERE pasien.status_delete = 0
-        ORDER BY pasien.nama ASC
+      SELECT
+          p.id_pasien,
+          p.nama,
+          p.kode_pasien
+      FROM pasien p
+      WHERE p.status_delete = 0
+        AND (
+            NOT EXISTS (
+                SELECT 1
+                FROM user u
+                WHERE u.id_relasi = p.id_pasien
+            )
+            OR p.id_pasien = ?
+        )
+      ORDER BY p.nama ASC;
     `;
 
-    const [result] = await db.query(sql, [...values]);
+    console.log(id_relasi);
+    const [result] = await db.query(sql, [id_relasi]);
 
     res.status(200).json({
       success: true,

@@ -8,8 +8,8 @@ export const getDetailPasien = (id_pasien) => {
   return apiLocal.get(`pasien/${id_pasien}`);
 };
 
-export const getPasienDrowdown = () => {
-  return apiLocal.get(`pasien/dropdown`);
+export const getPasienDrowdown = (id_relasi) => {
+  return apiLocal.get(`pasien/dropdown?id_relasi=${id_relasi}`);
 };
 
 export const createPasien = (data) => {

@@ -24,9 +24,6 @@ export default function ModalUser({
   const { pasien, ambilPasienDropdown } = usePasienDropdown();
   const { gateway, ambilGateway } = useGateway();
 
-  console.log("PASIEN : ", pasien);
-  console.log("GATEWAY : ", gateway);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const pasienOptions = pasien?.map((item) => ({
@@ -49,7 +46,7 @@ export default function ModalUser({
 
   useEffect(() => {
     if (isOpen && isRolePasien) {
-      ambilPasienDropdown();
+      ambilPasienDropdown(form.id_relasi);
     }
     if (isOpen && isRolePerawat) {
       ambilGateway();

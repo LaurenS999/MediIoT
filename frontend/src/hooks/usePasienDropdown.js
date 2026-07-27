@@ -7,9 +7,9 @@ import { useModalInfo } from "../context/ModalInfoProvider.js";
 export const usePasienDropdown = () => {
   const [pasien, setPasien] = useState([]);
 
-  const ambilPasienDropdown = useCallback(async () => {
+  const ambilPasienDropdown = useCallback(async (id_relasi) => {
     try {
-      const res = await getPasienDrowdown();
+      const res = await getPasienDrowdown(id_relasi);
       const pasienList = res.data.data;
       const paginationData = res.data.pagination;
 

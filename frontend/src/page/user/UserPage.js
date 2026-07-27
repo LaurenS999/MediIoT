@@ -12,8 +12,6 @@ import ModalKonfirmasi from "../../components/common/ModalKonfirmasi";
 import { getPaginationItems } from "../../utils/pagination";
 import Pagination from "../../components/common/Pagination";
 import { usePeran } from "../../hooks/usePeran";
-import { usePasienDropdown } from "../../hooks/usePasienDropdown";
-import useGateway from "../../hooks/useGateway";
 
 export default function UserPage() {
   const {
@@ -50,8 +48,6 @@ export default function UserPage() {
   } = useUser();
 
   const { peran, ambilPeran } = usePeran();
-
-  const { gateway, ambilGateway } = useGateway();
 
   const page = getPaginationItems(currentPage, totalPage);
 
@@ -162,7 +158,10 @@ export default function UserPage() {
                     <div className="action-wrapper">
                       <button
                         className="icon-button edit"
-                        onClick={() => handleOpenEdit(item)}
+                        onClick={() => {
+                          ambilPeran();
+                          handleOpenEdit(item);
+                        }}
                       >
                         <Pencil size={18} />
                       </button>
