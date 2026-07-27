@@ -176,7 +176,6 @@ export default function DetailPasienPage() {
   const handleUbahPasien = async () => {
     // validateForm();
 
-    console.log(errors.length);
     if (!validateForm()) {
       return;
     }

@@ -27,13 +27,11 @@ export default function PemeriksaanDokterPage() {
   } = usePemeriksaanDokter();
 
   const page = getPaginationItems(currentPage, totalPage);
-  console.log("DATA PEMERIKSAAN DOKTER : ", pemeriksaanDokter);
 
   // ======================================================
   // NAVIGATE
   // ======================================================
   const handleRowClick = (data) => {
-    console.log("PEMERIKSAAN DOKTER DATA : ", data);
     navigate(`/pemeriksaan-dokter/${data.id_kunjungan}`);
   };
 

@@ -68,8 +68,6 @@ export default function ProfilePage() {
     }));
   };
 
-  console.log("ERROR : ", errors);
-
   // ==============================
   // SAVE PROFILE
   // ==============================

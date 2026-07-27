@@ -13,7 +13,6 @@ export const getKunjunganPasien = async (id_pasien) => {
 };
 
 export const getKunjunganDetail_Terakhir = async (id_pasien) => {
-  console.log("ID PASIEN : ", id_pasien);
   const response = await apiLocal.get(
     `/kunjungan/${id_pasien}/kunjungan-terakhir`,
   );
@@ -30,9 +29,6 @@ export const getKunjunganSelectedRiwayat = async (
   id_pemeriksaan,
   id_pengukuran,
 ) => {
-  console.log("ID PASIEN : ", id_pasien);
-  console.log("ID PEMERIKSAAN : ", id_pemeriksaan);
-  console.log("ID PENGUKURAN : ", id_pengukuran);
   const response = await apiLocal.get(
     `/kunjungan/${id_pasien}/riwayat-kunjungan`,
     {

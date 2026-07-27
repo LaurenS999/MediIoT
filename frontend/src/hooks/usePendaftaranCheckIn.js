@@ -12,10 +12,8 @@ export const usePendaftaranCheckIn = () => {
   const ambilpendaftaranCheckIn = useCallback(async () => {
     try {
       const res = await getPendaftaranCheckIn();
-      console.log("RESPON LIST CHECK IN : ", res);
-
       const pendaftaranList = res.data.data;
-      console.log("PENDAFTARAN LIST CHECK IN : ", pendaftaranList);
+
       if (Array.isArray(pendaftaranList)) {
         if (pendaftaranList.length >= 1) {
           setPendaftaran(pendaftaranList);

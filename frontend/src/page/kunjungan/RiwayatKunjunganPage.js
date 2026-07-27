@@ -34,8 +34,6 @@ export default function RiwayatKunjunganPage() {
     setSearch,
   } = useKunjungan();
 
-  console.log("KUNJUNGAN : ", kunjungan);
-
   const page = getPaginationItems(currentPage, totalPage);
 
   const { user } = useAuth();

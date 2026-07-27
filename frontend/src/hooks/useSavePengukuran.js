@@ -116,15 +116,9 @@ export default function useSavePengukuran() {
         formData.append("kategori", item.kategori);
       });
 
-      //BUAT NGECEK ISI DATA FORMDATA
-      // for (const [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
-
       // CREATE SESI PEMERIKSAAN, SESI PENGUKURAN, dan KUNJUNGAN
       const respon = await createSimpanKunjungan(formData);
 
-      console.log("RESPON SIMPAN KUNJUGAN : ", respon.data.data.id_pengukuran);
       const id_pengukuran = respon.data.data.id_pengukuran;
 
       message += `${respon.data.message} \n`;
@@ -205,18 +199,12 @@ export default function useSavePengukuran() {
         // ======================================
         // SIMPAN SEMUA
         // ======================================
-        console.log(
-          "ID PENGUKURAN NYA di USE SAVE PENGUKURAN : ",
-          id_pengukuran,
-        );
         const hasil = await simpanSemuaPengukuran({
           id_pengukuran,
           devices: payloadDevices,
           bmiResult,
           tinggiBadan,
         });
-
-        // console.log("HASIL:", hasil);
 
         const totalSuccess = hasil.success.length;
         const totalFailed = hasil.failed.length;
@@ -241,7 +229,6 @@ export default function useSavePengukuran() {
           });
         }
       }
-      console.log("ID PENDAFARAN DI USE SAVE PENGUKURAN : ", id_pendaftaran);
 
       showModal(message);
 
@@ -249,7 +236,6 @@ export default function useSavePengukuran() {
       setIsSaved(true);
       return message;
     } catch (error) {
-      console.log(error);
       showModal(error.response?.data?.message);
     } finally {
       setIsSaving(false);

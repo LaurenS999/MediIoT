@@ -63,8 +63,6 @@ export default function useLogin() {
       }
 
       const res = await postLogin(form);
-      console.log("USER LOGIN : ", res.data);
-
       login(res.data.data.token, res.data.data.user);
 
       // currentUser();

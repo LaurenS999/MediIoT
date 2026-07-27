@@ -20,7 +20,6 @@ export default function PendaftaranPage() {
   const { user } = useAuth();
   const isPerawat = user.role === "perawat" || user.role === "super admin";
   const isPasien = user.role === "pasien" || user.role === "super admin";
-  console.log("USER LOGIN : ", user);
 
   const {
     pendaftaran,

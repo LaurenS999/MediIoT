@@ -23,7 +23,6 @@ export const usePasienDetail = (id_pasien, id_user) => {
       const res = await getDetailPasien(id_pasien);
 
       const data = res.data.data.pasien;
-      console.log("DATA DARI BACKEND : ", data);
       setPasienDetailStatus(true);
 
       setPasienDetail(data || null);

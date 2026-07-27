@@ -11,7 +11,6 @@ export default function useJenisPengukuran() {
 
       setJenisPengukuran(Object.values(result.data || {}));
     } catch (error) {
-      console.log(error);
       if (error.response.status === 401) {
         toast.error(
           error.response?.data?.error.errors + ", Hubungi Admin" ||
@@ -25,7 +24,6 @@ export default function useJenisPengukuran() {
       // HANDLE ERROR
       // =========================================
       if (error.response) {
-        console.log(error.response);
         toast.error(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",

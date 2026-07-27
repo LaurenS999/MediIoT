@@ -29,7 +29,6 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    console.log("PROTECTED ROUTE : ", user);
     // =========================================
     // BELUM LOGIN
     // =========================================

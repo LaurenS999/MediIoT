@@ -93,7 +93,6 @@ export const usePendaftaran = (id_user) => {
   }, []);
 
   const handleTambahPendaftaran = useCallback(async () => {
-    // console.log(id_user);
     try {
       const response = await postPendaftaran(form);
 
@@ -112,9 +111,6 @@ export const usePendaftaran = (id_user) => {
 
   const handleConfirm = async () => {
     try {
-      console.log("DATA MODAL : ", modal.data);
-      console.log("ALASAN : ", reason);
-
       switch (modal.action) {
         case "setuju":
           await patchPendaftaranSetuju(modal.data.id_pendaftaran);
@@ -146,7 +142,6 @@ export const usePendaftaran = (id_user) => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message);
-      console.log(error);
     }
   };
 

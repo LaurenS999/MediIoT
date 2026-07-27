@@ -9,7 +9,6 @@ export default function GuestRoute({ children }) {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  console.log("GUEST ROUTE : ", user);
 
   useEffect(() => {
     if (token) {

@@ -69,8 +69,6 @@ export const useUser = () => {
       }
       setUsers(res.data.data || []);
     } catch (error) {
-      console.log(error);
-
       toast.error(error.response?.data?.message);
     } finally {
       setLoading(false);
@@ -80,7 +78,6 @@ export const useUser = () => {
   const validasi = (mode) => {
     const newErrors = {};
 
-    console.log("NEW USER : ", newUser);
     if (!newUser.username) {
       newErrors.username = "Username wajib diisi";
     }
@@ -97,7 +94,6 @@ export const useUser = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      console.log("SET ERROR : ", newErrors);
       toast.error("Data tidak boleh kosong");
       return;
     }
@@ -134,7 +130,6 @@ export const useUser = () => {
 
     if (newUser.password) {
       if (newUser.password != konfimrasiPassword) {
-        console.log("NEW USER : ", newUser);
         toast.error("Password tidak sama dengan Konfirmasi Password");
         setErrors((prev) => ({
           ...prev,
@@ -146,14 +141,12 @@ export const useUser = () => {
 
     if (newUser.role === 5 && !newUser.id_relasi) {
       setErrors(newErrors);
-      console.log("SET ERROR : ", newErrors);
       toast.error("User dengan role pasien wajib isi id pasien user");
       return;
     }
 
     if (newUser.role === 1 && !newUser.bertugas_di) {
       setErrors(newErrors);
-      console.log("SET ERROR : ", newErrors);
       toast.error("User dengan role perawat wajib isi Bertugas di Ruangan");
       return;
     }
@@ -170,8 +163,6 @@ export const useUser = () => {
     if (!validasi("tambah")) return;
 
     try {
-      console.log("NEW USER : ", newUser);
-
       await createUser(newUser);
 
       toast.success("User berhasil ditambahkan");
@@ -192,8 +183,6 @@ export const useUser = () => {
       // REFRESH DATA
       fetchUsers();
     } catch (error) {
-      console.log(error);
-
       toast.error(error.response?.data?.message);
     }
   };
@@ -224,8 +213,6 @@ export const useUser = () => {
 
       fetchUsers();
     } catch (error) {
-      console.log(error);
-
       toast.error(error.response?.data?.message);
     }
   };
@@ -250,8 +237,6 @@ export const useUser = () => {
 
       fetchUsers();
     } catch (error) {
-      console.log(error);
-
       toast.error(error.response?.data?.message);
     }
   };

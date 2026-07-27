@@ -30,8 +30,6 @@ export default function usePengukuranSocketEngine({
       ...new Set(devices.map((d) => d.gateway_id).filter(Boolean)),
     ];
 
-    console.log("UNIQUE GATEWAYS:", uniqueGateways);
-
     // =====================================
     // CREATE SOCKET PER GATEWAY
     // =====================================
@@ -56,7 +54,6 @@ export default function usePengukuranSocketEngine({
       // CONNECT
       // =====================================
       socket.on("connect", () => {
-        console.log("CONNECTED:", gatewayId);
         toast.success("Sucess Koneksi WebSocket");
 
         setGatewayStatus((prev) => ({
@@ -71,7 +68,6 @@ export default function usePengukuranSocketEngine({
       // DISCONNECT
       // =====================================
       socket.on("disconnect", () => {
-        console.log("DISCONNECTED:", gatewayId);
         toast.success("Koneksi Websocket berhasil diputus");
 
         setGatewayStatus((prev) => ({
@@ -122,7 +118,6 @@ export default function usePengukuranSocketEngine({
 
         socket.on(config.event, async (data) => {
           const payload = data?.[config.dataKey];
-          console.log("PAYLOAD : ", payload);
 
           if (!payload) return;
 

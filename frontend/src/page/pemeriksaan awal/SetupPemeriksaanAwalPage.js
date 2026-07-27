@@ -110,8 +110,6 @@ export default function SetupPemeriksaanAwalPage() {
       return;
     }
 
-    console.log("SELECTED JENIS PENGUKURAN : ", selectedMeasurements);
-
     const payload = {
       page: 1,
       limit: 9999,
@@ -207,8 +205,6 @@ export default function SetupPemeriksaanAwalPage() {
   // =====================================================
   const toggleDevice = (device) => {
     setSelectedDevices((prev) => {
-      console.log("DEVICE : ", device);
-
       const isUsed = usedDeviceSet.has(device.mac_address);
       if (isUsed) {
         toast.error("Device sedang digunakan. Pilih device yang lain", {

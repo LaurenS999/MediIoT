@@ -35,7 +35,5 @@ export function getPaginationItems(currentPage, totalPage) {
   if (end < totalPage && !pages.includes(totalPage)) {
     pages.push(totalPage);
   }
-
-  console.log("PAGES : ", pages);
   return pages;
 }

@@ -16,7 +16,6 @@ export const usePendaftaranDetail = (id_pendaftaran, setKeluhan) => {
       setLoadingPendaftaran(true);
 
       const res = await getPendaftaranDetail(id_pendaftaran);
-      console.log("RESPONE PENDAFTARAN DETAIL : ", res.data.data);
       const data = res.data.data[0];
       setPendaftaranDetail(data);
       setKeluhan(data.keluhan);

@@ -103,8 +103,8 @@ router.get("/", auth, allow("kunjungan.read"), async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: [],
-      // data: result,
+      // data: [],
+      data: result,
       pagination: {
         page,
         limit,

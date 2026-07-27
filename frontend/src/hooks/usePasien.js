@@ -115,7 +115,6 @@ export const usePasien = (id_user) => {
 
   const handleTambahPasien = useCallback(async () => {
     if (!validateForm()) return;
-    // console.log(id_user);
     try {
       const response = await createPasien({
         nama: newPasien.nama,
@@ -143,8 +142,6 @@ export const usePasien = (id_user) => {
       ambilPasien();
       setOpenModal(false);
     } catch (error) {
-      console.log("ERROR : ", error.response);
-
       if (error.response?.status === 401) {
         if (error.response?.status === 401) {
           setErrors((prev) => ({

@@ -63,7 +63,6 @@ export default function PemeriksaanAwalPage() {
     selectedPatient?.id_pasien,
   );
 
-  console.log("PASIEN DETAIL : ", pasienDetail);
   const devices = state?.devices || [];
 
   const [openPatientModal, setOpenPatientModal] = useState(false);
@@ -72,8 +71,6 @@ export default function PemeriksaanAwalPage() {
 
   const [draftLampiran, setDraftLampiran] = useState([]);
   const [showUploadLampiran, setShowUploadLampiran] = useState(false);
-
-  console.log("DRAFT LAMPIRAN : ", draftLampiran);
 
   // =====================================
   // LIVE DATA

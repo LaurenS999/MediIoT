@@ -16,7 +16,6 @@ export const useKunjungan = () => {
   const ambilKunjungan = useCallback(async (page = 1) => {
     try {
       const res = await getKunjungan(search, page, limitPage);
-      console.log("RESPON : ", currentPage);
       const kunjunganList = res.data;
 
       if (Array.isArray(kunjunganList)) {

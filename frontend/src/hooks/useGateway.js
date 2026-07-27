@@ -32,7 +32,6 @@ export default function useGateway() {
       // HANDLE ERROR
       // =========================================
       if (error.response) {
-        console.log(error.response);
         toast.error(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data gateway",

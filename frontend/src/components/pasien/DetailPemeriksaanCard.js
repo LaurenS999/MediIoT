@@ -1,8 +1,6 @@
 import "../../styles/detailPemeriksaanCard.css";
 import { formatDateTime } from "../../utils/formatDate";
 export function DetailPemeriksaanCard({ pemeriksaan }) {
-  console.log("Pemeriksaan : ", pemeriksaan);
-
   return (
     <div className="examination-card">
       <div className="card-header">

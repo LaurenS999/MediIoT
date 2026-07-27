@@ -28,16 +28,12 @@ export default function useDevice() {
 
     try {
       const res = await getDevice(payload);
-      console.log("PARAMS : ", payload);
-      console.log("RESPONSE : ", res.data);
       const deviceList = res?.data?.data || [];
 
       setDevices(deviceList);
       setCurrentPage(res.data.current_page);
       setTotalPage(res.data.total_pages);
     } catch (err) {
-      console.log(err);
-
       if (err.response.status === 401) {
         toast.error(
           err.response?.data?.error.errors + ", Hubungi Admin" ||
@@ -51,7 +47,6 @@ export default function useDevice() {
       // HANDLE ERROR
       // =========================================
       if (err.response) {
-        console.log(err.response);
         toast.error(
           err.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",

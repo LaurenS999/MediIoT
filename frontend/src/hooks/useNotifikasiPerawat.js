@@ -11,8 +11,6 @@ export default function useNotifikasiPerawat() {
   const fetchNotifications = useCallback(async () => {
     try {
       const response = await getNotifikasiPerawat();
-
-      console.log("JUMLAH NOTIF : ", response.data.data);
       setNotifikasi(response.data.data || []);
       setCount(response.data.jumlah.Jumlah_notif || 0);
     } catch (error) {
