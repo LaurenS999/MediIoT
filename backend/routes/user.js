@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     let countSql = `
       SELECT COUNT(*) AS total
       FROM user u inner join peran p on u.id_peran = p.id_peran
-      WHERE status_delete = 0
+      WHERE status_delete = 0 AND p.id_peran != 4
     `;
 
     // =========================
