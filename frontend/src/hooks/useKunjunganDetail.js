@@ -1,0 +1,119 @@
+import { useEffect, useState, useCallback, useRef } from "react";
+import { toast } from "react-toastify";
+import { useModalInfo } from "../context/ModalInfoProvider.js";
+import { getPeran } from "../services/peranService.js";
+import {
+  getKunjunganDetail_Terakhir,
+  getKunjunganPasien,
+  getKunjunganSelectedRiwayat,
+} from "../services/kunjunganService.js";
+
+export const useKunjunganDetail = (id_pasien) => {
+  const [kunjungan, setKunjungan] = useState([]);
+  const [daftarKunjungan, setDaftarKunjungan] = useState([]);
+  const [pengukuran, setPengukuran] = useState([]);
+  const [pemeriksaan, setPemeriksaan] = useState([]);
+  const id_pasien_detail = id_pasien;
+
+  const [loadingDaftarKunjungan, setLoadingDaftarKunjungan] = useState(true);
+  const measurementRef = useRef(null);
+
+  const ambilDaftarKunjunga = useCallback(async (id_pasien) => {
+    try {
+      const res = await getKunjunganPasien(id_pasien);
+      setDaftarKunjungan(res.data);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data peran",
+      );
+    } finally {
+      setLoadingDaftarKunjungan(false);
+    }
+  });
+
+  const ambilKunjunganTerakhir = useCallback(async (id_pasien) => {
+    try {
+      const res = await getKunjunganDetail_Terakhir(id_pasien);
+
+      setKunjungan(res.data.kunjungan);
+
+      setPengukuran(res.data.pengukuran);
+
+      if (res.data.pemeriksaan == []) {
+        toast.info("PASIEN BELUM ADA PEMERIKSAAN");
+        setPemeriksaan([]);
+      } else {
+        setPemeriksaan(res.data.pemeriksaan);
+      }
+
+      if (res.data.pemeriksaan == []) {
+        toast.info("PASIEN BELUM ADA PEMERIKSAAN");
+        setPengukuran([]);
+      } else {
+        setPengukuran(res.data.pengukuran);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data peran",
+      );
+    }
+  }, []);
+
+  const handleSelectKunjungan = async (
+    id_pasien,
+    id_pemeriksaan,
+    id_pengukuran,
+  ) => {
+    try {
+      const response = await getKunjunganSelectedRiwayat(
+        id_pasien,
+        id_pemeriksaan,
+        id_pengukuran,
+      );
+
+      setPemeriksaan(response.data.pemeriksaan);
+      setPengukuran(response.data.pengukuran);
+
+      toast.success(
+        "Data hasil pemeriksaan dan pengukuran berhasil ditampilkan",
+      );
+
+      setTimeout(() => {
+        if (measurementRef.current) {
+          const navbarHeight = 80;
+
+          const elementPosition =
+            measurementRef.current.getBoundingClientRect().top +
+            window.pageYOffset;
+
+          window.scrollTo({
+            top: elementPosition - navbarHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingDaftarKunjungan(false);
+    }
+  };
+
+  useEffect(() => {
+    ambilDaftarKunjunga(id_pasien);
+    ambilKunjunganTerakhir(id_pasien);
+  }, [id_pasien]);
+
+  return {
+    kunjungan,
+    daftarKunjungan,
+    pengukuran,
+    pemeriksaan,
+    handleSelectKunjungan,
+    loadingDaftarKunjungan,
+    setLoadingDaftarKunjungan,
+    measurementRef,
+  };
+};

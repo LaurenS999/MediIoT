@@ -1,0 +1,719 @@
+/* =========================================================
+   PANEL CONTAINER
+========================================================= */
+
+.panel-container {
+  padding: 28px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+/* =========================================================
+   CARD GLOBAL
+========================================================= */
+
+.card-custom {
+  background: #ffffff;
+  border: 1px solid #e9eef5;
+  border-radius: 24px;
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.card-title-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+/* =========================================================
+   PATIENT GRID
+========================================================= */
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.patient-item {
+  background: #f8fafc;
+  border: 1px solid #eef2f7;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.label-small {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.value-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   MEASUREMENT GRID
+========================================================= */
+
+.measurement-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   DEVICE CARD
+========================================================= */
+
+.measurement-card {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 28px;
+  padding: 26px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+}
+
+/* =========================================================
+   DEVICE HEADER
+========================================================= */
+
+.measurement-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.measurement-device-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.measurement-device-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.measurement-device-mac {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   BMI CONTAINER
+========================================================= */
+
+.bmi-container {
+  width: 100%;
+}
+
+/* =========================================================
+   TOP SECTION BMI
+========================================================= */
+
+.bmi-top-section {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 42px;
+  margin-bottom: 28px;
+}
+
+/* =========================================================
+   BERAT BADAN
+========================================================= */
+
+.main-weight {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  color: #0f172a;
+}
+
+.main-weight.compact {
+  font-size: 34px;
+}
+
+.main-unit {
+  font-size: 30px;
+  font-weight: 700;
+  color: #64748b;
+  margin-left: 8px;
+}
+
+.main-label {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+/* =========================================================
+   HEIGHT INPUT
+========================================================= */
+
+.height-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.height-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.height-input-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.height-input {
+  width: 160px;
+  height: 60px;
+  border-radius: 18px;
+  border: 1px solid #dbe3ec;
+  background: #ffffff;
+  padding: 0 18px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.height-input.compact {
+  width: 160px;
+}
+
+.height-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.height-unit {
+  font-size: 20px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* =========================================================
+   BMI GRID
+========================================================= */
+
+.bmi-secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+/* =========================================================
+   METRIC BOX
+========================================================= */
+
+.metric-box {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 20px;
+  padding: 16px;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.metric-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.metric-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.metric-value.compact {
+  font-size: 28px;
+}
+
+.metric-unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* =========================================================
+   RANGE WRAPPER
+========================================================= */
+
+.range-wrapper {
+  width: 100%;
+}
+
+/* =========================================================
+   RANGE BAR
+========================================================= */
+
+.range-bar-container {
+  width: 100%;
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.range-segment {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.range-segment.inactive {
+  background: #e5e7eb;
+}
+
+/* =========================================================
+   ACTIVE COLORS
+========================================================= */
+
+.range-segment.active.slim,
+.range-segment.active.low {
+  background: #06b6d4;
+}
+
+.range-segment.active.healthy,
+.range-segment.active.excellent {
+  background: #22c55e;
+}
+
+.range-segment.active.over {
+  background: #f59e0b;
+}
+
+.range-segment.active.obese,
+.range-segment.active.high {
+  background: #ef4444;
+}
+
+/* =========================================================
+   RANGE TEXT
+========================================================= */
+
+.range-text {
+  font-size: 10px;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.metric-placeholder {
+  height: 52px;
+  width: 100%;
+}
+
+/* =========================================================
+   DEVICE GRID
+========================================================= */
+
+.device-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* =========================================================
+   DEVICE ITEM
+========================================================= */
+
+.device-item-card {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 18px;
+  padding: 16px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.device-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.device-value {
+  font-size: 34px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.device-unit {
+  font-size: 16px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* =========================================================
+   WAITING
+========================================================= */
+
+.device-waiting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* =========================================================
+   COLORS
+========================================================= */
+/* 
+.color-red{
+  color:#ef4444;
+}
+
+.color-green{
+  color:#22c55e;
+}
+
+.color-blue{
+  color:#0ea5e9;
+}
+
+.color-purple{
+  color:#8b5cf6;
+}
+
+.color-orange{
+  color:#f59e0b;
+}
+
+.color-pink{
+  color:#ec4899;
+} */
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.device-grid-tensi {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.highlight-button {
+    animation: breathingGlow 2s ease-in-out infinite;
+}
+
+@keyframes breathingGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(59,130,246,.4);
+    }
+
+    50% {
+        box-shadow: 0 0 24px rgba(59,130,246,1);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(59,130,246,.4);
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1400px) {
+  .bmi-secondary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .device-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .patient-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bmi-top-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .panel-container {
+    padding: 18px;
+  }
+  .patient-grid {
+    grid-template-columns: 1fr;
+  }
+  .bmi-secondary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .device-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .action-buttons {
+    flex-direction: column;
+  }
+  .main-weight {
+    font-size: 54px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bmi-secondary-grid {
+    grid-template-columns: 1fr;
+  }
+  .device-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-box {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .device-grid-tensi {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .device-grid-tensi {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .device-grid-tensi {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-change-patient {
+  display: flex;
+  align-items: center;
+  width: 170px;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn-change-patient:hover {
+  background: #1d4ed8;
+}
+
+.measurement-mode-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+}
+
+.measurement-mode-card h4 {
+  margin: 0;
+}
+
+.measurement-mode-card span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* SWITCH */
+
+.switch {
+  position: relative;
+  width: 56px;
+  height: 30px;
+  display: inline-block;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: #d1d5db;
+  border-radius: 999px;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: #2563eb;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(26px);
+}
+.device-manual-input {
+  width: 100px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.gateway-status-wrapper {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.gateway-status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.connected {
+  background: #22c55e;
+}
+
+.status-dot.disconnected {
+  background: #ef4444;
+}
+
+.keluhan-textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+
+  padding: 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  box-sizing: border-box;
+}
+
+.keluhan-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}

@@ -1,0 +1,193 @@
+/* ===================================================== */
+/* WRAPPER */
+/* ===================================================== */
+
+.doctor-detail-wrapper {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+/* ===================================================== */
+/* HEADER */
+/* ===================================================== */
+
+.doctor-detail-header {
+  margin-bottom: 24px;
+}
+
+.doctor-detail-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.doctor-detail-header p {
+  margin-top: 8px;
+  margin-bottom: 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* ===================================================== */
+/* CARD */
+/* ===================================================== */
+
+.doctor-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.doctor-card h2 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ===================================================== */
+/* DETAIL PASIEN */
+/* ===================================================== */
+
+.patient-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.patient-detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.patient-detail-item label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.patient-detail-item p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* ===================================================== */
+/* FORM */
+/* ===================================================== */
+
+.doctor-form-group {
+  margin-bottom: 20px;
+}
+
+.doctor-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.doctor-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.required-mark {
+  color: #dc2626;
+}
+
+.doctor-textarea,
+.doctor-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.doctor-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.doctor-textarea:focus,
+.doctor-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.doctor-textarea:disabled {
+  background: #f3f4f6;
+  color: #4b5563;
+  cursor: not-allowed;
+}
+
+.doctor-select {
+  cursor: pointer;
+  background: white;
+}
+
+/* ===================================================== */
+/* BUTTON */
+/* ===================================================== */
+
+.doctor-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.doctor-submit-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doctor-submit-btn:hover {
+  background: #1d4ed8;
+}
+
+.doctor-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===================================================== */
+/* RESPONSIVE */
+/* ===================================================== */
+
+@media (max-width: 768px) {
+  .patient-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .doctor-card {
+    padding: 18px;
+  }
+
+  .doctor-detail-header h1 {
+    font-size: 24px;
+  }
+
+  .doctor-action {
+    justify-content: stretch;
+  }
+
+  .doctor-submit-btn {
+    width: 100%;
+  }
+}

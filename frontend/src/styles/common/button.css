@@ -1,0 +1,144 @@
+.action-button-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-success,
+.btn-danger,
+.btn-secondary,
+.btn-info {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-success {
+  background: #22c55e;
+}
+
+.btn-danger {
+  background: #ef4444;
+}
+
+
+.btn-info {
+  background: #0ea5e9;
+}
+
+
+
+.close-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+
+.login-button {
+  margin-top: 8px;
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.login-button:hover {
+  background-color: #1d4ed8;
+}
+
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 10px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6b7280;
+}
+
+
+/* EDIT */
+
+.btn-edit {
+  background: #eef4ff;
+  color: #2563eb;
+}
+
+.btn-edit:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+}
+
+/* DELETE */
+
+.btn-delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+
+.btn-edit:active,
+.btn-delete:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+
+  .btn-primary {
+    width: 100%;
+  }
+}

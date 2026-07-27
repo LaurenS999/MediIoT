@@ -1,0 +1,228 @@
+/* =======================================================
+   OVERLAY
+======================================================= */
+
+.lampiran-upload-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+/* =======================================================
+   MODAL
+======================================================= */
+
+.lampiran-upload-modal {
+  width: 600px;
+  max-width: 95vw;
+  max-height: 90vh;
+
+  background: #fff;
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* =======================================================
+   HEADER
+======================================================= */
+
+.lampiran-upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 24px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lampiran-upload-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.lampiran-upload-close-btn {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  background: transparent;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: .2s;
+}
+
+.lampiran-upload-close-btn:hover {
+  background: #f3f4f6;
+}
+
+/* =======================================================
+   BODY
+======================================================= */
+
+.lampiran-upload-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.lampiran-upload-group {
+  margin-bottom: 24px;
+}
+
+.lampiran-upload-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.lampiran-upload-select {
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.lampiran-upload-select:focus {
+  border-color: #2563eb;
+}
+
+/* =======================================================
+   DROPZONE
+======================================================= */
+
+.lampiran-upload-dropzone {
+  border: 2px dashed #cbd5e1;
+
+  border-radius: 10px;
+
+  padding: 36px 20px;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.lampiran-upload-dropzone:hover {
+  border-color: #2563eb;
+  background: #f8fbff;
+}
+
+.lampiran-upload-dropzone svg {
+  margin-bottom: 12px;
+  color: #2563eb;
+}
+
+.lampiran-upload-dropzone h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.lampiran-upload-dropzone p {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* =======================================================
+   FILE LIST
+======================================================= */
+
+.lampiran-upload-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lampiran-upload-empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 16px;
+}
+
+.lampiran-upload-file-item {
+  display: flex;
+  align-items: center;
+
+  padding: 12px 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  background: #fafafa;
+
+  font-size: 14px;
+}
+
+/* =======================================================
+   FOOTER
+======================================================= */
+
+.lampiran-upload-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  padding: 18px 24px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+/* =======================================================
+   LOADING
+======================================================= */
+
+.spin {
+  animation: spin .8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lampiran-upload-info {
+  margin: -4px 0 10px;
+
+  font-size: 12px;
+
+  color: #6b7280;
+}

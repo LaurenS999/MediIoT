@@ -1,0 +1,76 @@
+.patient-modal {
+  width: 700px;
+  max-width: 95%;
+  max-height: 80vh;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.patient-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.patient-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.patient-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.patient-row:hover {
+  background: #f8fafc;
+}
+
+.patient-name {
+  font-weight: 600;
+}
+
+.patient-info {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.select-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+}

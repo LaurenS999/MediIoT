@@ -1,0 +1,68 @@
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   APP LAYOUT
+===================================================== */
+
+.app-layout {
+  width: 100%;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  background-color: #f5f7fb;
+}
+
+
+/* =====================================================
+   MAIN AREA
+===================================================== */
+
+.app-main {
+  flex: 1;
+
+  min-width: 0;
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.app-body {
+  flex: 1;
+
+  width: 100%;
+
+  min-width: 0;
+
+  padding: 40px;
+
+  background-color: #f5f7fb;
+}

@@ -1,0 +1,71 @@
+/* ======================================================
+   COMMON LAYOUT AND COMPONENT STYLES
+====================================================== */
+.input-error {
+  border: 1px solid red !important;
+  outline: none;
+  background-color: #fff5f5;
+}
+
+/* Form Control */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page Headers */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.page-subtitle {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Content Custom Card */
+.card-custom {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.label-header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+
+/* Responsive Headers */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 26px;
+  }
+}
+

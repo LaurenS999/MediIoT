@@ -1,0 +1,115 @@
+/* ======================================================
+   PAGE
+====================================================== */
+
+.device-page-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.device-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.device-page-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.device-page-subtitle {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ======================================================
+   STATS
+====================================================== */
+
+.device-stats-wrapper {
+  display: flex;
+  gap: 14px;
+}
+
+.device-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  min-width: 170px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.device-stat-card svg {
+  color: #2563eb;
+}
+
+.device-stat-card.success svg {
+  color: #22c55e;
+}
+
+.device-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.device-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* ======================================================
+   CARD
+====================================================== */
+
+.device-card {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
+}
+
+.device-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 768px) {
+  .device-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .device-stats-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+  .device-stat-card {
+    width: 100%;
+  }
+  .device-page-title {
+    font-size: 26px;
+  }
+}

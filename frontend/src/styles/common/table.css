@@ -1,0 +1,118 @@
+
+/* Modern Data Table */
+.table-wrapper-modern {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table thead {
+  background: #f8fafc;
+}
+
+.modern-table th {
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.modern-table td {
+  padding: 18px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.modern-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modern-row:hover {
+  background: #f8fbff;
+}
+
+/* Common Text Styling */
+.table-id-text {
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.table-name-text {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* KHUSUS TABLE DEVICE */
+.device-name {
+  font-weight: 700;
+  color: #111827;
+}
+
+.device-mac {
+  font-family: monospace;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.gateway-chip,
+.function-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.gateway-chip {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.function-chip {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+/* END */
+
+
+.empty-table {
+  text-align: center;
+  padding: 40px !important;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+
+/* KOLOM STATUS */
+.td-status {
+  text-align: center;
+}
+
+
+.modern-table th.th-center {
+  text-align: center;
+}
+
+.td-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.td-center > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,115 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+.device-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge-warning {
+  background: #f59e0b;
+}
+
+.badge-success {
+  background: #10b981;
+}
+
+.badge-danger {
+  background: #ef4444;
+}
+
+.badge-secondary {
+  background: #6b7280;
+}
+
+.badge-info {
+  background: #0ea5e9;
+}
+
+.badge-primary {
+  background: #2563eb;
+}
+
+
+
+.badge.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+
+
+.badge.connected {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.disconnected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.badge.male {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.badge.female {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.badge.super-admin {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.badge.admin {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.badge.perawat {
+  background: #ecfeff;
+  color: #0891b2;
+}
+
+.badge.pasien {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.badge.dokter {
+  background: #f9ecff;
+  color: #6308b2;
+}
+
+
+.badge.available {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge.used {
+  background: #fef3c7;
+  color: #92400e;
+}

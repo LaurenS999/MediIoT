@@ -1,0 +1,223 @@
+.measurement-detail-wrapper {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.measurement-detail-header {
+  margin-bottom: 24px;
+}
+
+.measurement-detail-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.measurement-detail-header p {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.measurement-section-title {
+  margin-top: 28px;
+  margin-bottom: 14px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+}
+
+.metric-active {
+  opacity: 1;
+}
+
+.metric-inactive {
+  opacity: 0.8;
+  background: #f9fafb;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.metric-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-label {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+.metric-body {
+  margin-top: 18px;
+}
+
+.metric-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-value-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.metric-unit {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 3px;
+}
+
+.metric-empty {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.composition-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+/* ===================================================== */
+/* RESPONSIVE */
+/* ===================================================== */
+
+@media (max-width: 1200px) {
+  .composition-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .composition-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .measurement-detail-header h2 {
+    font-size: 22px;
+  }
+
+  .measurement-section-title {
+    font-size: 16px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .composition-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .metric-card {
+    padding: 16px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .metric-grid,
+  .composition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .measurement-detail-header h2 {
+    font-size: 20px;
+  }
+
+  .measurement-section-title {
+    margin-top: 20px;
+  }
+
+  .metric-card {
+    padding: 14px;
+  }
+
+  .metric-value {
+    font-size: 22px;
+  }
+
+  .metric-unit {
+    font-size: 12px;
+  }
+}
+
+.composition-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .composition-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .composition-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .composition-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .composition-grid {
+    grid-template-columns: 1fr;
+  }
+}

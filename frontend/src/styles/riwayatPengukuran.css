@@ -1,0 +1,199 @@
+/* ======================================================
+   PAGE
+====================================================== */
+
+.history-page-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.history-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.history-page-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.history-page-subtitle {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ======================================================
+   STATS
+====================================================== */
+
+.history-stats-wrapper {
+  display: flex;
+  gap: 14px;
+}
+
+.history-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  min-width: 180px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.history-stat-card svg {
+  color: #7c3aed;
+}
+
+.history-stat-card.blue svg {
+  color: #2563eb;
+}
+
+.history-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.history-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* ======================================================
+   TEXT
+====================================================== */
+
+
+/* ======================================================
+   GENDER
+====================================================== */
+
+.gender-badge-history {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.gender-badge-history.male {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.gender-badge-history.female {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+/* ======================================================
+   USER CHIP
+====================================================== */
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ======================================================
+   DATE
+====================================================== */
+
+.date-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.date-wrapper svg {
+  color: #9ca3af;
+}
+
+/* ======================================================
+   EMPTY
+====================================================== */
+
+.history-empty {
+  text-align: center;
+  padding: 40px !important;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ======================================================
+   PAGINATION
+====================================================== */
+
+.history-pagination-wrapper {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 768px) {
+  .history-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .history-stats-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+  .history-stat-card {
+    width: 100%;
+  }
+  .history-page-title {
+    font-size: 26px;
+  }
+}
+
+.export-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.export-button:hover {
+  background: #1d4ed8;
+}

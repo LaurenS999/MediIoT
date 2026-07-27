@@ -1,0 +1,35 @@
+import axios from "axios";
+
+const apiLocal = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
+
+// =========================================
+// REQUEST INTERCEPTOR
+// =========================================
+apiLocal.interceptors.request.use(
+  (config) => {
+    // =========================================
+    // AMBIL TOKEN DARI LOCAL STORAGE
+    // =========================================
+    const token = localStorage.getItem("token");
+    console.log("TOKEN :", token);
+
+    // =========================================
+    // SET AUTHORIZATION HEADER
+    // =========================================
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
+export default apiLocal;

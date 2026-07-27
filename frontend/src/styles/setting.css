@@ -1,0 +1,97 @@
+.setting-page {
+  padding: 24px;
+  background-color: #f4f7fb;
+  min-height: 100vh;
+}
+
+.setting-header {
+  margin-bottom: 24px;
+}
+
+.setting-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #1e293b;
+}
+
+.setting-header p {
+  margin-top: 6px;
+  color: #64748b;
+}
+
+.setting-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.setting-card h2 {
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.server-key-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.server-key-wrapper input {
+  flex: 1;
+}
+
+.show-button {
+  border: none;
+  background-color: #e2e8f0;
+  padding: 0 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.show-button:hover {
+  background-color: #cbd5e1;
+}
+
+.save-button {
+  min-width: 240px;
+  margin-top: 10px;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  background-color: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.save-button:hover {
+  background-color: #1d4ed8;
+}

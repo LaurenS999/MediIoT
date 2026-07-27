@@ -1,0 +1,63 @@
+.hasil-group {
+  margin-bottom: 32px;
+}
+
+.hasil-group-header {
+  margin-bottom: 16px;
+}
+
+.hasil-group-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.hasil-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.hasil-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 120px;
+}
+
+.hasil-card-title {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.hasil-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.hasil-card-unit {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.hasil-card-status {
+  padding: 4px 10px;
+  margin-top: 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}

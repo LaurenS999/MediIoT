@@ -1,0 +1,42 @@
+.lampiran-section {
+  margin-top: 24px;
+}
+
+.lampiran-title {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lampiran-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.lampiran-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.lampiran-preview {
+  width: 100%;
+  height: 220px;
+  background: #f5f5f5;
+}
+
+.lampiran-preview img,
+.lampiran-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: cover;
+}
+
+.lampiran-info {
+  padding: 12px;
+  border-top: 1px solid #eee;
+  word-break: break-word;
+}
