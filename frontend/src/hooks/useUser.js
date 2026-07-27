@@ -47,6 +47,7 @@ export const useUser = () => {
     role: "",
     status_aktif: 0,
     id_relasi: null,
+    bertugas_di: null,
   });
 
   const [konfimrasiPassword, setKonfirmasiPassword] = useState("");
@@ -150,6 +151,13 @@ export const useUser = () => {
       return;
     }
 
+    if (newUser.role === 1 && !newUser.bertugas_di) {
+      setErrors(newErrors);
+      console.log("SET ERROR : ", newErrors);
+      toast.error("User dengan role perawat wajib isi Bertugas di Ruangan");
+      return;
+    }
+
     return true;
   };
 
@@ -172,9 +180,10 @@ export const useUser = () => {
       setNewUser({
         username: "",
         password: "",
-        role: "perawat",
+        role: "",
         status_aktif: 0,
         id_relasi: null,
+        bertugas_di: null,
       });
       setErrors({});
       // CLOSE MODAL
@@ -206,9 +215,10 @@ export const useUser = () => {
       setNewUser({
         username: "",
         password: "",
-        role: "perawat",
+        role: "",
         status_aktif: 0,
         id_relasi: null,
+        bertugas_di: null,
       });
       setErrors({});
 
@@ -257,6 +267,7 @@ export const useUser = () => {
       role: "",
       status_aktif: 0,
       id_relasi: null,
+      bertugas_di: null,
     });
 
     setOpenModal(true);
@@ -269,6 +280,7 @@ export const useUser = () => {
 
     setNewUser({
       id_relasi: userEdit.id_relasi || null,
+      bertugas_di: userEdit.bertugas_di || null,
       username: userEdit.username,
       password: "",
       role: userEdit.role,

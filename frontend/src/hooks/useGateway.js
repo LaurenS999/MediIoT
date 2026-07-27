@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 
 export default function useGateway() {
   const [gateway, setGateway] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const ambilGateway = async () => {
     try {
@@ -17,10 +19,10 @@ export default function useGateway() {
         });
       }
     } catch (error) {
-      if (err.response.status === 401) {
+      if (error.response?.status === 401) {
         toast.error(
-          err.response?.data?.error.errors + ", Hubungi Admin" ||
-            err.response?.data?.message,
+          error.response?.data?.error.errors + ", Hubungi Admin" ||
+            error.response?.data?.message,
           { toastId: "medlink-gateway-access-code-error" },
         );
         return;
@@ -29,14 +31,14 @@ export default function useGateway() {
       // =========================================
       // HANDLE ERROR
       // =========================================
-      if (err.response) {
-        console.log(err.response);
+      if (error.response) {
+        console.log(error.response);
         toast.error(
-          err.response?.data?.message ||
+          error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data gateway",
         );
 
-        setError(err.response.data.message || "Ambil Gateway Gagal");
+        setError(error.response.data.message || "Ambil Gateway Gagal");
       } else {
         toast.error("Server MedLink tidak terjangkau", {
           toastId: "gateway-server-tidak-terjangkau",
@@ -48,7 +50,7 @@ export default function useGateway() {
       // =========================================
       // RESET DEVICE
       // =========================================
-      setDevices([]);
+      setGateway([]);
     } finally {
       setLoading(false);
     }

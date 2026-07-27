@@ -3,9 +3,9 @@ const { getAccessToken } = require("./accessTokenService");
 
 const requestMedlink = async (config) => {
   const { client_id, client_key, server_key } = await getAccessToken();
-  console.log("CLIENT ID : ", client_id);
-  console.log("CLIENT KEY : ", client_key);
-  console.log("SERVER KEY : ", server_key);
+  // console.log("CLIENT ID : ", client_id);
+  // console.log("CLIENT KEY : ", client_key);
+  // console.log("SERVER KEY : ", server_key);
 
   const response = await medlinkApi({
     ...config,

@@ -44,7 +44,8 @@ router.get("/", async (req, res) => {
         u.status_aktif,
         u.dibuat_pada,
         u.diperbarui_pada,
-        u.id_relasi
+        u.id_relasi,
+        u.bertugas_di
       FROM user u inner join peran p ON u.id_peran = p.id_peran
             WHERE u.status_delete = 0 AND p.id_peran != 4
     `;
@@ -129,7 +130,8 @@ router.get("/:id", async (req, res) => {
           u.status_aktif,
           u.dibuat_pada,
           u.diperbarui_pada,
-          u.id_relasi
+          u.id_relasi,
+          u.bertugas_di
         FROM user u inner join peran p ON u.id_peran = p.id_peran
         WHERE id_user = ? 
         AND status_delete = 0
@@ -164,7 +166,7 @@ router.get("/:id", async (req, res) => {
 // =====================================================
 router.post("/", auth, async (req, res) => {
   try {
-    const { username, role, password, id_relasi } = req.body;
+    const { username, role, password, id_relasi, bertugas_di } = req.body;
     console.log("REQUSET BODY : , ", req.body);
     // VALIDASI
     if (!username || !role || !password) {
@@ -229,6 +231,11 @@ router.post("/", auth, async (req, res) => {
       }
     }
 
+    let bertugasDi = null;
+    if (Number(role) === 1) {
+      bertugasDi = bertugas_di;
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -238,9 +245,10 @@ router.post("/", auth, async (req, res) => {
         id_peran,
         password,
         tipe_relasi,
-        id_relasi
+        id_relasi,
+        bertugas_di
       )
-      VALUES (?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     const [result] = await db.query(sql, [
@@ -249,6 +257,7 @@ router.post("/", auth, async (req, res) => {
       hashedPassword,
       tipeRelasi,
       idRelasi,
+      bertugasDi,
     ]);
 
     res.status(201).json({
@@ -277,7 +286,8 @@ router.put("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { username, role, password, status_aktif, id_relasi } = req.body;
+    const { username, role, password, status_aktif, id_relasi, bertugas_di } =
+      req.body;
     console.log("REQUEST BODY : ", req.body);
 
     if (!username || username == "" || !role || role == "") {
@@ -352,9 +362,14 @@ router.put("/:id", auth, async (req, res) => {
     let idRelasi = null;
     let tipe_relasi = null;
 
-    if (id_relasi != null) {
+    if (role === 5) {
       idRelasi = id_relasi;
       tipe_relasi = "pasien";
+    }
+
+    let bertugasDi = null;
+    if (role === 1) {
+      bertugasDi = bertugas_di;
     }
 
     let sql = `
@@ -364,10 +379,18 @@ router.put("/:id", auth, async (req, res) => {
         id_peran = ?,
         status_aktif = ?,
         tipe_relasi = ?,
-        id_relasi = ?
+        id_relasi = ?,
+        bertugas_di = ?
     `;
 
-    const values = [username, role, status_aktif, tipe_relasi, idRelasi];
+    const values = [
+      username,
+      role,
+      status_aktif,
+      tipe_relasi,
+      idRelasi,
+      bertugasDi,
+    ];
 
     if (password && password.trim() !== "") {
       if (password.length < 8) {

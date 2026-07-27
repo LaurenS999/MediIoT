@@ -1,8 +1,10 @@
 import "../../styles/dropDown.css";
 import Select from "react-select";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import { usePasienDropdown } from "../../hooks/usePasienDropdown";
+import useGateway from "../../hooks/useGateway";
+
 export default function ModalUser({
   isOpen,
   onClose,
@@ -17,9 +19,16 @@ export default function ModalUser({
   setKonfirmasiPassword,
   mode = "create",
 }) {
+  const conditionalRef = useRef(null);
+
   const { pasien, ambilPasienDropdown } = usePasienDropdown();
+  const { gateway, ambilGateway } = useGateway();
+
+  console.log("PASIEN : ", pasien);
+  console.log("GATEWAY : ", gateway);
 
   const [showPassword, setShowPassword] = useState(false);
+
   const pasienOptions = pasien?.map((item) => ({
     value: item.id_pasien,
     label: `${item.id_pasien} - ${item.nama}`,
@@ -28,14 +37,36 @@ export default function ModalUser({
     value: item.id_peran,
     label: `${item.nama}`,
   }));
+  const gatewayOptions = gateway?.map((item) => ({
+    value: item.id,
+    label: `${item.id} - ${item.name}`,
+  }));
 
   const isRolePasien = Number(form.role) === 5;
+  const isRolePerawat = Number(form.role) === 1;
+  const isConditionalOpen = isRolePasien || isRolePerawat;
+  const [conditionalHeight, setConditionalHeight] = useState(0);
+
+  useEffect(() => {
+    if (isOpen && isRolePasien) {
+      ambilPasienDropdown();
+    }
+    if (isOpen && isRolePerawat) {
+      ambilGateway();
+    }
+  }, [isOpen, isRolePasien, isRolePerawat]);
+
+  useEffect(() => {
+    if (conditionalRef.current) {
+      setConditionalHeight(
+        isConditionalOpen ? conditionalRef.current.scrollHeight : 0,
+      );
+    }
+  }, [isConditionalOpen]);
 
   const isEdit = mode === "edit";
   if (!isOpen) return null;
-  else {
-    ambilPasienDropdown();
-  }
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -51,7 +82,7 @@ export default function ModalUser({
         {/* BODY */}
         <div className="modal-form">
           {/* USERNAME */}
-          <div className="form-group">
+          <div className="form-group full-width">
             <label>Username</label>
 
             <input
@@ -72,30 +103,6 @@ export default function ModalUser({
               }}
             />
           </div>
-
-          {mode === "edit" && (
-            <div className="form-group">
-              <label>Status Aktif</label>
-
-              <select
-                value={form.status_aktif}
-                onChange={(e) => {
-                  setForm({
-                    ...form,
-                    status_aktif: Number(e.target.value),
-                  });
-
-                  setErrors((prev) => ({
-                    ...prev,
-                    status_aktif: false,
-                  }));
-                }}
-              >
-                <option value={0}>Aktif</option>
-                <option value={1}>Tidak Aktif</option>
-              </select>
-            </div>
-          )}
 
           {/* PASSWORD */}
           <div className="form-group">
@@ -157,7 +164,7 @@ export default function ModalUser({
           </div>
 
           {/* ROLE */}
-          <div className="form-group">
+          <div className="form-group ">
             <label>Role</label>
 
             <Select
@@ -186,30 +193,90 @@ export default function ModalUser({
             />
           </div>
 
-          {/* Pasien */}
-          <div className="form-group">
-            <label>ID Pasien User</label>
+          {mode === "edit" && (
+            <div className="form-group">
+              <label>Status Aktif</label>
 
-            <Select
-              className={errors.id_relasi ? "dropdown input-error" : "dropdown"}
-              maxMenuHeight={240}
-              isDisabled={Number(form.role) !== 5}
-              options={pasienOptions}
-              placeholder="Pilih ID Pasien milik User"
-              value={
-                pasienOptions.find(
-                  (option) => option.value === form.id_relasi,
-                ) || null
-              }
-              onChange={(selectedOption) =>
-                setForm({
-                  ...form,
-                  id_relasi: selectedOption?.value || "",
-                })
-              }
-              maxMenuHeight={240}
-              isClearable
-            />
+              <select
+                value={form.status_aktif}
+                onChange={(e) => {
+                  setForm({
+                    ...form,
+                    status_aktif: Number(e.target.value),
+                  });
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    status_aktif: false,
+                  }));
+                }}
+              >
+                <option value={0}>Aktif</option>
+                <option value={1}>Tidak Aktif</option>
+              </select>
+            </div>
+          )}
+
+          <div
+            className="full-width conditional-wrapper"
+            style={{
+              height: `${conditionalHeight}px`,
+              opacity: isConditionalOpen ? 1 : 0,
+            }}
+          >
+            <div ref={conditionalRef} className="conditional-content">
+              {isRolePasien && (
+                <div className="form-group">
+                  <label>ID Pasien User</label>
+
+                  <Select
+                    className={
+                      errors.id_relasi ? "dropdown input-error" : "dropdown"
+                    }
+                    options={pasienOptions}
+                    placeholder="Pilih ID Pasien milik User"
+                    value={
+                      pasienOptions.find(
+                        (option) => option.value === form.id_relasi,
+                      ) || null
+                    }
+                    onChange={(selectedOption) =>
+                      setForm({
+                        ...form,
+                        id_relasi: selectedOption?.value || "",
+                      })
+                    }
+                    isClearable
+                  />
+                </div>
+              )}
+
+              {isRolePerawat && (
+                <div className="form-group">
+                  <label>Tempat Bertugas</label>
+
+                  <Select
+                    className={
+                      errors.id_gateway ? "dropdown input-error" : "dropdown"
+                    }
+                    options={gatewayOptions}
+                    placeholder="Pilih Gateway"
+                    value={
+                      gatewayOptions.find(
+                        (option) => option.value === form.bertugas_di,
+                      ) || null
+                    }
+                    onChange={(selectedOption) =>
+                      setForm({
+                        ...form,
+                        bertugas_di: selectedOption?.value || "",
+                      })
+                    }
+                    isClearable
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* FOOTER */}
