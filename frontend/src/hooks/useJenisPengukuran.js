@@ -11,31 +11,33 @@ export default function useJenisPengukuran() {
 
       setJenisPengukuran(Object.values(result.data || {}));
     } catch (error) {
-      if (error.response.status === 401) {
-        toast.error(
-          error.response?.data?.error.errors + ", Hubungi Admin" ||
-            error.response?.data?.message,
-          { toastId: "medlink-jenis-pengukuran-access-code-error" },
-        );
-        return;
-      }
-
       // =========================================
       // HANDLE ERROR
       // =========================================
       if (error.response) {
+        if (error.response.status === 401) {
+          toast.error(
+            error.response?.data?.error.errors + ", Hubungi Admin" ||
+              error.response?.data?.message,
+            { toastId: "medlink-jenis-pengukuran-access-code-error" },
+          );
+          return;
+        }
+
         toast.error(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",
         );
 
         setError(error.response.data.message || "Ambil Device Gagal");
+        return;
       } else {
         toast.error("Server MedLink tidak terjangkau", {
           toastId: "jenis-pengukuran-server-tidak-terjangkau",
         });
 
         setError("Server MedLink tidak terjangkau");
+        return;
       }
     }
   };

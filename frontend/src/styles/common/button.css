@@ -7,7 +7,8 @@
 .btn-success,
 .btn-danger,
 .btn-secondary,
-.btn-info {
+.btn-info,
+.btn-batal {
   border: none;
   border-radius: 6px;
   padding: 6px 12px;
@@ -25,11 +26,13 @@
   background: #ef4444;
 }
 
-
 .btn-info {
   background: #0ea5e9;
 }
 
+.btn-batal {
+  background: #6b7280;
+}
 
 
 .close-btn {
@@ -78,7 +81,14 @@
 }
 
 
-.btn-primary:disabled {
+.btn-primary:disabled,
+.btn-success:disabled,
+.btn-danger:disabled,
+.btn-secondary:disabled,
+.btn-info:disabled,
+.btn-batal:disabled,
+.btn-cancel:disabled,
+.btn-secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

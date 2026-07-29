@@ -34,19 +34,19 @@ export default function useDevice() {
       setCurrentPage(res.data.current_page);
       setTotalPage(res.data.total_pages);
     } catch (err) {
-      if (err.response.status === 401) {
-        toast.error(
-          err.response?.data?.error.errors + ", Hubungi Admin" ||
-            err.response?.data?.message,
-          { toastId: "medlink-device-access-code-error" },
-        );
-        return;
-      }
-
       // =========================================
       // HANDLE ERROR
       // =========================================
       if (err.response) {
+        if (err.response.status === 401) {
+          toast.error(
+            err.response?.data?.error.errors + ", Hubungi Admin" ||
+              err.response?.data?.message,
+            { toastId: "medlink-device-access-code-error" },
+          );
+          return;
+        }
+
         toast.error(
           err.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",

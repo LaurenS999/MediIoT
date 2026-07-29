@@ -1,0 +1,304 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import "../../styles/pasien.css";
+import "../../styles/pendaftaran.css";
+
+import { usePermintaanPemeriksaan } from "../../hooks/usePermintaanPemeriksaan";
+import { formatDateTime } from "../../utils/formatDate";
+
+import { renderStatusPendaftaran } from "../../utils/renderStatusPendaftaran";
+import { useAuth } from "../../context/AuthContext";
+
+import renderActionButton from "../../utils/renderButtonPendaftaran";
+import ModalKonfirmasi from "../../components/pendaftaran/modalKonfirmasi";
+
+import { modalKonfirmasiPendaftaranConfig } from "../../config/modalKonfirmasiPendaftaranConfig";
+
+export default function PermintaanPemeriksaanPage() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const isPerawat = user.role === "perawat" || user.role === "super admin";
+  const isPasien = user.role === "pasien" || user.role === "super admin";
+
+  const {
+    pendaftaran,
+    form,
+    setForm,
+    modal,
+    alasan,
+    setAlasan,
+    handleOpenModal,
+    handleCloseModal,
+    handleTambahPendaftaran,
+    handleConfirm,
+
+    errors,
+    setErrors,
+    loading,
+  } = usePermintaanPemeriksaan();
+  const today = new Date().toISOString().split("T")[0];
+  console.log("Pendaftarn : ", pendaftaran);
+
+  const currentModal = modalKonfirmasiPendaftaranConfig[modal.action];
+
+  return (
+    <div className="setup-container">
+      {/* ====================================================== */}
+      {/* HEADER */}
+      {/* ====================================================== */}
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Permintaan Pemeriksaan</h1>
+
+          <p className="page-subtitle">
+            Daftar permintaan pemeriksaan dan lihat riwayat permintaan
+            pemeriksaan.
+          </p>
+        </div>
+      </div>
+
+      {isPasien && (
+        <div className="card-custom">
+          <div className="card-header-flex">
+            <h3>Form Pendaftaran Pemeriksaan</h3>
+          </div>
+
+          <div className="card-body">
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Tanggal */}
+              <div className="form-group">
+                <label>Tanggal Pemeriksaan</label>
+
+                <input
+                  type="date"
+                  className={
+                    errors.tanggal_pemeriksaan
+                      ? "date-input input-error"
+                      : "date-input"
+                  }
+                  min={today}
+                  value={form.tanggal_pemeriksaan}
+                  onKeyDown={(e) => e.preventDefault()}
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      tanggal_pemeriksaan: e.target.value,
+                    }));
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      tanggal_pemeriksaan: false,
+                    }));
+                  }}
+                  required
+                />
+              </div>
+
+              {/* Waktu */}
+              <div className="form-group">
+                <label>Waktu Pemeriksaan</label>
+
+                <select
+                  className={
+                    errors.jam_pemeriksaan
+                      ? "form-select input-error"
+                      : "form-select"
+                  }
+                  value={form.jam_pemeriksaan}
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      jam_pemeriksaan: e.target.value,
+                    }));
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      jam_pemeriksaan: false,
+                    }));
+                  }}
+                  required
+                >
+                  <option value="">Pilih waktu</option>
+                  <option value="08:00-09:00">08:00 - 09:00</option>
+                  <option value="09:00-10:00">09:00 - 10:00</option>
+                  <option value="10:00-11:00">10:00 - 11:00</option>
+                  <option value="11:00-12:00">11:00 - 12:00</option>
+                  <option value="12:00-13:00">12:00 - 13:00</option>
+                  <option value="13:00-14:00">13:00 - 14:00</option>
+                  <option value="14:00-15:00">14:00 - 15:00</option>
+                  <option value="15:00-16:00">15:00 - 16:00</option>
+                  <option value="16:00-17:00">16:00 - 17:00</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Keluhan</label>
+              <textarea
+                className={
+                  errors.keluhan ? "form-textarea input-error" : "form-textarea"
+                }
+                rows={4}
+                placeholder="Masukkan keluhan yang sedang dialami..."
+                value={form.keluhan}
+                onChange={(e) => {
+                  setForm((prev) => ({
+                    ...prev,
+                    keluhan: e.target.value,
+                  }));
+                  setErrors((prev) => ({
+                    ...prev,
+                    keluhan: false,
+                  }));
+                }}
+                required
+              />
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "20px",
+              }}
+            >
+              <button
+                className="btn-primary"
+                onClick={handleTambahPendaftaran}
+                disabled={loading}
+              >
+                Daftar Pemeriksaan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================== */}
+      {/* CARD RIWAYAT */}
+      {/* ====================================================== */}
+      <div className="card-custom" style={{ marginTop: "24px" }}>
+        <div className="card-header-flex">
+          <h3>Daftar Permintaan</h3>
+        </div>
+
+        <div className="card-body">
+          <div className="table-wrapper-modern">
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  {isPerawat && <th>Nama Pasien</th>}
+                  <th>Tanggal Pemeriksaan</th>
+                  <th>Jam Pemeriksaan</th>
+                  <th>Keluhan</th>
+                  <th className="th-center">Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {pendaftaran.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="empty-table">
+                      Belum ada riwayat pendaftaran
+                    </td>
+                  </tr>
+                ) : (
+                  pendaftaran.map((item, index) => (
+                    <tr key={pendaftaran.id_pendaftaran} className="modern-row">
+                      {isPerawat && (
+                        <td>
+                          <div className="patient-name-text">
+                            {item.nama_pasien}
+                          </div>
+                        </td>
+                      )}
+
+                      <td>
+                        <div className="patient-name-text">
+                          {formatDateTime(item.tanggal_pemeriksaan, false)}
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className="patient-name-text">
+                          {item.jam_pemeriksaan}
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className="patient-name-text">{item.keluhan}</div>
+                      </td>
+
+                      <td className="td-center">
+                        {renderStatusPendaftaran(item.status)}
+                      </td>
+
+                      <td>
+                        {/* ACTION PERAWAT / SUPER ADMIN */}
+                        {isPerawat &&
+                          item.status === "menunggu persetujuan" && (
+                            <div className="action-button-group">
+                              <button
+                                className="btn-success"
+                                onClick={() => handleOpenModal("setuju", item)}
+                              >
+                                Setuju
+                              </button>
+
+                              <button
+                                className="btn-danger"
+                                onClick={() => handleOpenModal("tolak", item)}
+                              >
+                                Tolak
+                              </button>
+                            </div>
+                          )}
+
+                        {/* ACTION PASIEN */}
+                        {(isPasien && item.status === "menunggu persetujuan") ||
+                          (item.status === "disetujui" && (
+                            <div className="action-button-group">
+                              <button
+                                className="btn-batal"
+                                onClick={() => handleOpenModal("batal", item)}
+                              >
+                                Batal
+                              </button>
+                            </div>
+                          ))}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <ModalKonfirmasi
+        open={modal.open}
+        title={currentModal?.title}
+        message={currentModal?.message}
+        showAlasan={currentModal?.showAlasan}
+        confirmText={currentModal?.confirmText}
+        confirmClass={currentModal?.confirmClass}
+        alasan={alasan}
+        setAlasan={setAlasan}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirm}
+        errors={errors}
+        setErrors={setErrors}
+        loading={loading}
+      />
+    </div>
+  );
+}

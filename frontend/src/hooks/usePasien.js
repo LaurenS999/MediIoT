@@ -81,7 +81,7 @@ export const usePasien = (id_user) => {
     }
   }, []);
 
-  const validateForm = () => {
+  const validasi = () => {
     const newErrors = {};
     const namaLengkapRegex = /^[A-Za-zÀ-ÿ\s]+$/;
 
@@ -114,7 +114,7 @@ export const usePasien = (id_user) => {
   };
 
   const handleTambahPasien = useCallback(async () => {
-    if (!validateForm()) return;
+    if (!validasi()) return;
     try {
       const response = await createPasien({
         nama: newPasien.nama,

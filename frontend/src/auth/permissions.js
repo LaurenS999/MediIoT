@@ -13,12 +13,12 @@ export const permissions = {
     "pasien.detail-pengukuran.read",
     "pasien.graph.read",
 
-    "pendaftaran.read",
-    "pendaftaran.read.pasien",
-    "pendaftaran.patch.setuju",
-    "pendaftaran.patch.tolak",
-    "pendaftaran.patch.batal",
-    "pendaftaran.patch.check-in",
+    "permintaan.pemeriksaan.read",
+    "permintaan.pemeriksaan.read.pasien",
+    "permintaan.pemeriksaan.create",
+    "permintaan.pemeriksaan.patch.tolak",
+    "permintaan.pemeriksaan.patch.batal",
+    "permintaan.pemeriksaan.patch.setuju",
 
     "pengukuran.read",
     "pengukuran.create",
@@ -70,9 +70,10 @@ export const permissions = {
     "trend.fat.read",
     "trend.muscle.read",
 
-    "pendaftaran.create",
-    "pendaftaran.read.pasien",
-    "pendaftaran.patch.batal",
+    "permintaan.pemeriksaan.create",
+    "permintaan.pemeriksaan.read",
+    "permintaan.pemeriksaan.read.pasien",
+    "permintaan.pemeriksaan.patch.batal",
 
     "kunjungan.read",
 
@@ -90,12 +91,11 @@ export const permissions = {
     "pasien.detail-pengukuran.read",
     "pasien.graph.read",
 
-    "pendaftaran.read",
-    "pendaftaran.read.pasien",
-    "pendaftaran.patch.setuju",
-    "pendaftaran.patch.tolak",
-    "pendaftaran.patch.batal",
-    "pendaftaran.patch.check-in",
+    "permintaan.pemeriksaan.read",
+    "permintaan.pemeriksaan.read.pasien",
+    "permintaan.pemeriksaan.patch.tolak",
+    "permintaan.pemeriksaan.patch.batal",
+    "permintaan.pemeriksaan.patch.setuju",
 
     "pengukuran.read",
     "pengukuran.create",

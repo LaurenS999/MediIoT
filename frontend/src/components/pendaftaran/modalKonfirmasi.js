@@ -4,14 +4,18 @@ export default function ModalKonfirmasi({
   open,
   title,
   message,
-  showReason = false,
-  reason,
-  onReasonChange,
+  showAlasan = false,
+  alasan,
+  setAlasan,
   confirmText,
   confirmClass = "btn-primary",
   onClose,
   onConfirm,
+  errors,
+  setErrors,
+  loading,
 }) {
+  console.log("SET ALASAN");
   if (!open) return null;
 
   return (
@@ -26,14 +30,24 @@ export default function ModalKonfirmasi({
         </div>
         <div className="modal-body">
           <p style={{ marginBottom: "20px" }}>{message}</p>
-          {showReason && (
+          {showAlasan && (
             <div className="form-group">
               <label>Alasan</label>
 
               <textarea
+                className={
+                  errors.alasan ? "form-textarea input-error" : "form-textarea"
+                }
                 rows={4}
-                value={reason}
-                onChange={(e) => onReasonChange(e.target.value)}
+                value={alasan}
+                onChange={(e) => {
+                  setErrors((prev) => ({
+                    ...prev,
+                    alasan: false,
+                  }));
+
+                  setAlasan(e.target.value);
+                }}
                 placeholder="Masukkan alasan..."
               />
             </div>
@@ -41,11 +55,15 @@ export default function ModalKonfirmasi({
         </div>
 
         <div className="modal-footer">
-          <button className="btn-cancel" onClick={onClose}>
+          <button className="btn-cancel" onClick={onClose} disabled={loading}>
             Batal
           </button>
 
-          <button className={confirmClass} onClick={onConfirm}>
+          <button
+            className={confirmClass}
+            onClick={onConfirm}
+            disabled={loading}
+          >
             Submit
           </button>
         </div>

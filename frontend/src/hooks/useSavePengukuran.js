@@ -8,7 +8,7 @@ import { createpemeriksaan } from "../services/pemeriksaanService";
 import { createKunjungan } from "../services/kunjunganService";
 import { useAuth } from "../context/AuthContext";
 import { createSimpanKunjungan } from "../services/simpanKunjungan";
-import { patchPendaftaranSelesai } from "../services/pendaftaranService";
+import { patchPendaftaranSelesai } from "../services/permintaanPemeriksaanService";
 
 const buildPayloadByDevice = ({ device, data, tinggiBadan }) => {
   switch (device.device_function) {

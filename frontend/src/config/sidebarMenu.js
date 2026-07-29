@@ -5,6 +5,7 @@ import {
   Smartphone,
   ScrollText,
   Stethoscope,
+  ClipboardPlus,
 } from "lucide-react";
 
 export const sidebarMenu = [
@@ -24,26 +25,27 @@ export const sidebarMenu = [
   },
 
   {
+    label: "Data Pasien",
+    path: `/rekam-medis-saya`,
+    icon: Users,
+    roles: ["pasien", "super admin"],
+  },
+
+  {
+    label: "Permintaan Pemeriksaan",
+    path: "/permintaan-pemeriksaan",
+    icon: ClipboardPlus,
+
+    roles: ["perawat", "pasien", "super admin"],
+  },
+
+  {
     label: "Pasien",
     path: "/pasien",
     icon: Users,
 
     roles: ["dokter", "perawat", "super admin"],
   },
-
-  {
-    label: "Data Pasien",
-    path: `/rekam-medis-saya`,
-    icon: Users,
-    roles: ["pasien", "super_admin"],
-  },
-
-  // {
-  //   label: "Pendaftaran",
-  //   path: `/pendaftaran`,
-  //   icon: ScrollText,
-  //   roles: ["perawat", "super admin", "pasien"],
-  // },
 
   {
     label: "Riwayat Kunjungan",

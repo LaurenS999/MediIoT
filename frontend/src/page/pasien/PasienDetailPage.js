@@ -42,7 +42,8 @@ export default function DetailPasienPage() {
 
   const { id } = useParams();
 
-  const idPasien = user.role === "pasien" ? user.id_relasi : id;
+  const idPasien =
+    user.role === "pasien" || user.role === "super admin" ? user.id_relasi : id;
   const is_Perawat = user.role === "perawat" || "super admin" ? true : false;
 
   // =====================================================

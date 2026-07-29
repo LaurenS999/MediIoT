@@ -25,7 +25,7 @@ import { ToastContainer } from "react-toastify";
 import { ModalInfoProvider } from "./context/ModalInfoProvider";
 
 import ScrollToTop from "./components/common/ScrollToTop";
-import PendaftaranPage from "./page/pendaftaran/PendaftaranPage";
+import PermintaanPemeriksaanPage from "./page/permintaan pemeriksaan/PermintaanPemeriksaanPage";
 
 function App() {
   return (
@@ -69,7 +69,7 @@ function App() {
               <Route
                 path="/rekam-medis-saya"
                 element={
-                  <ProtectedRoute allowedRoles={["pasien"]}>
+                  <ProtectedRoute allowedRoles={["pasien", "super admin"]}>
                     <DetailPasienPage />
                   </ProtectedRoute>
                 }
@@ -185,6 +185,16 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={["admin", "super admin"]}>
                     <UserPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/permintaan-pemeriksaan"
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["perawat", "pasien", "super admin"]}
+                  >
+                    <PermintaanPemeriksaanPage />
                   </ProtectedRoute>
                 }
               />

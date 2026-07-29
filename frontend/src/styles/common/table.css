@@ -24,6 +24,11 @@
   white-space: nowrap;
 }
 
+.modern-table th:first-child,
+.modern-table td:first-child {
+  min-width: 180px;
+}
+
 .modern-table td {
   padding: 18px 16px;
   border-bottom: 1px solid #f1f5f9;
@@ -50,6 +55,7 @@
 .table-name-text {
   font-weight: 600;
   color: #111827;
+
 }
 
 /* KHUSUS TABLE DEVICE */
@@ -109,6 +115,7 @@
 .td-center {
   text-align: center;
   vertical-align: middle;
+  
 }
 
 .td-center > * {
