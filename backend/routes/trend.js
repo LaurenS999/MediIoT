@@ -19,12 +19,27 @@ router.get(
       console.log("ID Pasien:", id);
 
       const sql = `
-      SELECT b.berat, b.dibuat_pada
-        FROM pengukuran_bmi b 
-        inner join sesi_pengukuran s ON b.id_sesi = s.id_pengukuran
-        inner join kunjungan k ON k.id_pengukuran = s.id_pengukuran
-        WHERE k.id_pasien = ? AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
-        ORDER BY b.dibuat_pada ASC;
+      SELECT
+          berat,
+          dibuat_pada
+      FROM (
+          SELECT
+              b.berat,
+              b.dibuat_pada,
+              ROW_NUMBER() OVER (
+                  PARTITION BY DATE(b.dibuat_pada)
+                  ORDER BY b.dibuat_pada DESC
+              ) AS rn
+          FROM pengukuran_bmi b
+          INNER JOIN sesi_pengukuran s
+              ON b.id_sesi = s.id_pengukuran
+          INNER JOIN kunjungan k
+              ON k.id_pengukuran = s.id_pengukuran
+          WHERE k.id_pasien = ?
+            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL ? DAY
+      ) AS ranked
+      WHERE rn = 1
+      ORDER BY dibuat_pada ASC;
     `;
 
       // Menggunakan await (gaya Promise)
@@ -66,13 +81,30 @@ router.get(
       const { id, interval } = req.params;
 
       const sql = `
-      SELECT t.systolic, t.diastolic, t.dibuat_pada
-        FROM pengukuran_tensi t 
-        inner join sesi_pengukuran s ON t.id_sesi = s.id_pengukuran
-        inner join kunjungan k ON k.id_pengukuran = s.id_pengukuran
-        WHERE k.id_pasien = ? AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
-        ORDER BY t.dibuat_pada ASC;
-    `;
+        SELECT
+          systolic,
+          diastolic,
+          dibuat_pada
+        FROM (
+          SELECT
+            t.systolic,
+            t.diastolic,
+            t.dibuat_pada,
+            ROW_NUMBER() OVER (
+              PARTITION BY DATE(t.dibuat_pada)
+              ORDER BY t.dibuat_pada DESC
+            ) AS rn
+          FROM pengukuran_tensi t
+          INNER JOIN sesi_pengukuran s
+            ON t.id_sesi = s.id_pengukuran
+          INNER JOIN kunjungan k
+            ON k.id_pengukuran = s.id_pengukuran
+          WHERE k.id_pasien = ?
+            AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
+        ) AS ranked
+        WHERE rn = 1
+        ORDER BY dibuat_pada ASC;
+      `;
 
       const [result] = await db.query(sql, [id, interval]);
 
@@ -110,13 +142,28 @@ router.get(
       const { id, interval } = req.params;
 
       const sql = `
-      SELECT b.body_fat, b.dibuat_pada
-        FROM pengukuran_bmi b 
-        inner join sesi_pengukuran s ON b.id_sesi = s.id_pengukuran
-        inner join kunjungan k ON k.id_pengukuran = s.id_pengukuran
-        WHERE k.id_pasien = ? AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
-        ORDER BY b.dibuat_pada ASC;
-    `;
+        SELECT
+          body_fat,
+          dibuat_pada
+        FROM (
+          SELECT
+            b.body_fat,
+            b.dibuat_pada,
+            ROW_NUMBER() OVER (
+              PARTITION BY DATE(b.dibuat_pada)
+              ORDER BY b.dibuat_pada DESC
+            ) AS rn
+          FROM pengukuran_bmi b
+          INNER JOIN sesi_pengukuran s
+            ON b.id_sesi = s.id_pengukuran
+          INNER JOIN kunjungan k
+            ON k.id_pengukuran = s.id_pengukuran
+          WHERE k.id_pasien = ?
+            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL 6 DAY
+        ) AS ranked
+        WHERE rn = 1
+        ORDER BY dibuat_pada ASC;
+      `;
 
       const [result] = await db.query(sql, [id, interval]);
 
@@ -154,13 +201,28 @@ router.get(
       const { id, interval } = req.params;
 
       const sql = `
-      SELECT b.muscle_mass, b.dibuat_pada
-        FROM pengukuran_bmi b 
-        inner join sesi_pengukuran s ON b.id_sesi = s.id_pengukuran
-        inner join kunjungan k ON k.id_pengukuran = s.id_pengukuran
-        WHERE k.id_pasien = ? AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
-        ORDER BY b.dibuat_pada ASC;
-    `;
+        SELECT
+          muscle_mass,
+          dibuat_pada
+        FROM (
+          SELECT
+            b.muscle_mass,
+            b.dibuat_pada,
+            ROW_NUMBER() OVER (
+              PARTITION BY DATE(b.dibuat_pada)
+              ORDER BY b.dibuat_pada DESC
+            ) AS rn
+          FROM pengukuran_bmi b
+          INNER JOIN sesi_pengukuran s
+            ON b.id_sesi = s.id_pengukuran
+          INNER JOIN kunjungan k
+            ON k.id_pengukuran = s.id_pengukuran
+          WHERE k.id_pasien = ?
+            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL 6 DAY
+        ) AS ranked
+        WHERE rn = 1
+        ORDER BY dibuat_pada ASC;
+      `;
 
       const [result] = await db.query(sql, [id, interval]);
 
