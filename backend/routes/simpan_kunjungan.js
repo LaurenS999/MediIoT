@@ -205,8 +205,33 @@ router.post(
       const id_kunjungan = insertKunjungan.insertId;
 
       // ==========================================
-      // INSERT LAMPIRAN
+      // UPDATE STATUS PERMINTAAN PEMERIKSAAN
       // ==========================================
+
+      const [permintaan] = await conn.query(
+        `
+          SELECT id_permintaan_pemeriksaan
+          FROM permintaan_pemeriksaan
+          WHERE id_pasien = ?
+            AND tanggal_pemeriksaan = CURDATE()
+            AND status = 'disetujui'
+          LIMIT 1
+        `,
+        [patient.id_pasien],
+      );
+
+      if (permintaan.length > 0) {
+        await conn.query(
+          `
+            UPDATE permintaan_pemeriksaan
+            SET
+              status = 'selesai',
+              diubah_pada = NOW()
+            WHERE id_permintaan_pemeriksaan = ?
+          `,
+          [permintaan[0].id_permintaan_pemeriksaan],
+        );
+      }
 
       // ==========================================
       // INSERT LAMPIRAN
@@ -237,11 +262,11 @@ router.post(
           if (nomorKategori[kategori] === undefined) {
             const [[total]] = await conn.query(
               `
-          SELECT COUNT(*) AS jumlah
-          FROM kunjungan_lampiran
-          WHERE id_kunjungan = ?
-          AND kategori = ?
-        `,
+                SELECT COUNT(*) AS jumlah
+                FROM kunjungan_lampiran
+                WHERE id_kunjungan = ?
+                AND kategori = ?
+              `,
               [id_kunjungan, kategori],
             );
 
@@ -258,15 +283,15 @@ router.post(
 
           await conn.query(
             `
-        INSERT INTO kunjungan_lampiran
-        (
-          id_kunjungan,
-          kategori,
-          nama_file,
-          path_file
-        )
-        VALUES (?, ?, ?, ?)
-      `,
+              INSERT INTO kunjungan_lampiran
+              (
+                id_kunjungan,
+                kategori,
+                nama_file,
+                path_file
+              )
+              VALUES (?, ?, ?, ?)
+            `,
             [id_kunjungan, kategori, namaFile, file.filename],
           );
 

@@ -1,15 +1,13 @@
 // Digunakan untuk mengakses API MedLink
 const express = require("express");
 
+const router = express.Router();
 const {
   getDevice,
   getBMI,
   getGateway,
   getJenisPengukuran,
 } = require("../services/medlinkService");
-
-const router = express.Router();
-
 router.get("/devices", async (req, res) => {
   try {
     const data = await getDevice(req.query);

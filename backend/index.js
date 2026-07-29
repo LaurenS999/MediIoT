@@ -63,8 +63,8 @@ app.use("/notifikasi", notifikasiRoutes);
 const peranRoutes = require("./routes/peran");
 app.use("/peran", peranRoutes);
 
-const pendaftaranRoutes = require("./routes/pendaftaran");
-app.use("/pendaftaran", pendaftaranRoutes);
+const permintaanPemeriksaanRoutes = require("./routes/permintaan_pemeriksaan");
+app.use("/permintaan-pemeriksaan", permintaanPemeriksaanRoutes);
 
 const kunjunganRoutes = require("./routes/kunjungan");
 app.use("/kunjungan", kunjunganRoutes);
@@ -97,6 +97,9 @@ app.use("/pengukuran/tensi", tensi);
 // CRON JOB UNTUK MENGHAPUS SEMUA ALAT YANG TIDAK DIGUNAKAN
 const { startCleanupStatusAlatCron } = require("./cron/cleanupStatusAlat");
 startCleanupStatusAlatCron();
+
+const startCronPemeriksaanBesok = require("./cron/pemeriksaanBesok");
+startCronPemeriksaanBesok();
 
 // BUAT LAMPIRAN
 app.use("/uploads", express.static("uploads"));
