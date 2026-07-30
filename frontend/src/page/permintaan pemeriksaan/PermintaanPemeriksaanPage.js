@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { CircleAlert } from "lucide-react";
 import "../../styles/pasien.css";
 import "../../styles/pendaftaran.css";
 
@@ -78,6 +78,17 @@ export default function PermintaanPemeriksaanPage() {
           </div>
 
           <div className="card-body">
+            <div className="important-notice">
+              <div className="important-notice-header">
+                <CircleAlert size={20} />
+                <strong>Perlu Diperhatikan</strong>
+              </div>
+
+              <p>
+                Untuk kondisi yang membutuhkan penanganan segera, silakan
+                langsung menghubungi petugas medis atau datang ke UKS
+              </p>
+            </div>
             <div
               style={{
                 display: "flex",
@@ -279,18 +290,19 @@ export default function PermintaanPemeriksaanPage() {
                             </div>
                           )}
 
-                        {/* ACTION PASIEN */}
-                        {(isPasien && item.status === "menunggu persetujuan") ||
-                          (item.status === "disetujui" && (
-                            <div className="action-button-group">
-                              <button
-                                className="btn-batal"
-                                onClick={() => handleOpenModal("batal", item)}
-                              >
-                                Batal
-                              </button>
-                            </div>
-                          ))}
+                        {((isPasien &&
+                          (item.status === "menunggu persetujuan" ||
+                            item.status === "disetujui")) ||
+                          (isPerawat && item.status === "disetujui")) && (
+                          <div className="action-button-group">
+                            <button
+                              className="btn-batal"
+                              onClick={() => handleOpenModal("batal", item)}
+                            >
+                              Batal
+                            </button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))
