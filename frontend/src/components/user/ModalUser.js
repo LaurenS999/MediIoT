@@ -111,7 +111,9 @@ export default function ModalUser({
                 placeholder={
                   isEdit ? "Kosongkan jika tidak diubah" : "Masukkan password"
                 }
-                className={errors.password ? "input-error" : ""}
+                className={
+                  errors.password || errors.password_kosong ? "input-error" : ""
+                }
                 value={form.password}
                 onChange={(e) => {
                   setForm({
@@ -147,7 +149,14 @@ export default function ModalUser({
                 }
                 className={errors.password ? "input-error" : ""}
                 value={konfirmasipassword}
-                onChange={(e) => setKonfirmasiPassword(e.target.value)}
+                onChange={(e) => {
+                  setKonfirmasiPassword(e.target.value);
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: false,
+                  }));
+                }}
               />
 
               <button
@@ -254,7 +263,7 @@ export default function ModalUser({
 
                   <Select
                     className={
-                      errors.id_gateway ? "dropdown input-error" : "dropdown"
+                      errors.bertugas_di ? "dropdown input-error" : "dropdown"
                     }
                     options={gatewayOptions}
                     placeholder="Pilih Gateway"

@@ -84,7 +84,7 @@ export const useUser = () => {
 
     if (mode === "tambah") {
       if (!newUser.password) {
-        newErrors.password = "Password wajib diisi";
+        newErrors.password_kosong = "Password wajib diisi";
       }
     }
 
@@ -92,63 +92,50 @@ export const useUser = () => {
       newErrors.role = "Role wajib dipilih";
     }
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      toast.error("Data tidak boleh kosong");
-      return;
-    }
+    if (newUser.username.length > 0) {
+      const usernameRegex = /^[a-zA-Z0-9._]+$/;
+      if (!usernameRegex.test(newUser.username)) {
+        toast.error(
+          "Username hanya boleh berisi huruf, angka, underscore (_), dan dot (.).",
+        );
+        newErrors.username = true;
+      }
 
-    if (newUser.username.length < 8) {
-      toast.error("Username minimal 8 karakter");
-      setErrors((prev) => ({
-        ...prev,
-        username: true,
-      }));
-      return;
-    }
-
-    const usernameRegex = /^[a-zA-Z0-9._]+$/;
-    if (!usernameRegex.test(newUser.username)) {
-      toast.error(
-        "Username hanya boleh berisi huruf, angka, underscore (_), dan dot (.).",
-      );
-      setErrors((prev) => ({
-        ...prev,
-        username: true,
-      }));
-      return;
-    }
-
-    if (newUser.username.length < 8) {
-      toast.error("Username minimal 8 karakter");
-      setErrors((prev) => ({
-        ...prev,
-        username: true,
-      }));
-      return;
-    }
-
-    if (newUser.password) {
-      if (newUser.password != konfimrasiPassword) {
-        toast.error("Password tidak sama dengan Konfirmasi Password");
-        setErrors((prev) => ({
-          ...prev,
-          password: true,
-        }));
-        return;
+      if (newUser.username.length < 8) {
+        toast.error("Username minimal 8 karakter");
+        newErrors.username = true;
       }
     }
 
+    if (newUser.password.length > 0) {
+      if (newUser.password != konfimrasiPassword) {
+        toast.error("password tidak sama dengan konfirmasi password");
+        newErrors.password = true;
+      }
+    }
+
+    if (newUser.password.length < 8) {
+      toast.error("password minimal 8 karakter");
+      newErrors.password = true;
+    }
+
     if (newUser.role === 5 && !newUser.id_relasi) {
-      setErrors(newErrors);
+      newErrors.id_relasi = true;
       toast.error("User dengan role pasien wajib isi id pasien user");
-      return;
     }
 
     if (newUser.role === 1 && !newUser.bertugas_di) {
-      setErrors(newErrors);
+      newErrors.bertugas_di = true;
       toast.error("User dengan role perawat wajib isi Bertugas di Ruangan");
-      return;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+
+      if (newErrors.username || newErrors.role || newErrors.password_kosong) {
+        toast.error("Data tidak boleh kosong");
+      }
+      return false;
     }
 
     return true;
