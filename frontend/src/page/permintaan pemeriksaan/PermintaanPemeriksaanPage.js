@@ -15,6 +15,8 @@ import ModalKonfirmasi from "../../components/pendaftaran/modalKonfirmasi";
 
 import { modalKonfirmasiPendaftaranConfig } from "../../config/modalKonfirmasiPendaftaranConfig";
 
+import { pilihanJam, isJamLewat } from "../../utils/waktuPermintaan";
+
 export default function PermintaanPemeriksaanPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -90,6 +92,7 @@ export default function PermintaanPemeriksaanPage() {
                     setForm((prev) => ({
                       ...prev,
                       tanggal_pemeriksaan: e.target.value,
+                      jam_pemeriksaan: "",
                     }));
 
                     setErrors((prev) => ({
@@ -100,7 +103,6 @@ export default function PermintaanPemeriksaanPage() {
                   required
                 />
               </div>
-
               {/* Waktu */}
               <div className="form-group">
                 <label>Waktu Pemeriksaan</label>
@@ -126,15 +128,16 @@ export default function PermintaanPemeriksaanPage() {
                   required
                 >
                   <option value="">Pilih waktu</option>
-                  <option value="08:00-09:00">08:00 - 09:00</option>
-                  <option value="09:00-10:00">09:00 - 10:00</option>
-                  <option value="10:00-11:00">10:00 - 11:00</option>
-                  <option value="11:00-12:00">11:00 - 12:00</option>
-                  <option value="12:00-13:00">12:00 - 13:00</option>
-                  <option value="13:00-14:00">13:00 - 14:00</option>
-                  <option value="14:00-15:00">14:00 - 15:00</option>
-                  <option value="15:00-16:00">15:00 - 16:00</option>
-                  <option value="16:00-17:00">16:00 - 17:00</option>
+
+                  {pilihanJam?.map((jam) => (
+                    <option
+                      key={jam}
+                      value={jam}
+                      disabled={isJamLewat(jam, form.tanggal_pemeriksaan)}
+                    >
+                      {jam.replace("-", " - ")}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

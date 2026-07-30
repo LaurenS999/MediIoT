@@ -62,7 +62,7 @@ router.get(
       const { id_pasien } = req.params;
 
       const sql = `
-            SELECT pe.*
+            SELECT pe.*, p.nama as nama_pasien
             FROM permintaan_pemeriksaan pe 
                 INNER JOIN pasien p on pe.id_pasien = p.id_pasien
             WHERE pe.id_pasien = ?
@@ -133,6 +133,37 @@ router.post(
         });
       }
 
+      const sekarang = new Date();
+
+      const hariIni = new Date();
+      hariIni.setHours(0, 0, 0, 0);
+
+      const tanggalPemeriksaan = new Date(tanggal_pemeriksaan);
+      tanggalPemeriksaan.setHours(0, 0, 0, 0);
+
+      const isHariIni = tanggalPemeriksaan.getTime() === hariIni.getTime();
+
+      if (isHariIni) {
+        const jamSelesai = jam_pemeriksaan.split("-")[1];
+
+        const [jam, menit] = jamSelesai.split(":").map(Number);
+
+        const waktuSelesai = new Date();
+        waktuSelesai.setHours(jam, menit, 0, 0);
+
+        // 15 menit sebelum waktu selesai
+        const batasPemesanan = new Date(waktuSelesai);
+        batasPemesanan.setMinutes(batasPemesanan.getMinutes() - 10);
+
+        // Jika sudah masuk 15 menit terakhir → tidak boleh
+        if (sekarang >= batasPemesanan) {
+          return res.status(400).json({
+            success: false,
+            message: "Waktu pemeriksaan sudah memasuki batas akhir pemesanan.",
+          });
+        }
+      }
+
       const [lastpermintaan_pemeriksaan] = await db.query(`
       SELECT kode_permintaan_pemeriksaan
         FROM permintaan_pemeriksaan
@@ -180,13 +211,7 @@ router.post(
         kode_permintaan_pemeriksaan,
       ]);
 
-      today.setHours(0, 0, 0, 0);
-
-      const tanggalPemeriksaan = new Date(tanggal_pemeriksaan);
-
-      tanggalPemeriksaan.setHours(0, 0, 0, 0);
-
-      if (today.getTime() === tanggalPemeriksaan.getTime()) {
+      if (isHariIni) {
         const email = templatePermintaanPemeriksaan({
           kodePermintaan: kode_permintaan_pemeriksaan,
           tanggalPemeriksaan: tanggal_pemeriksaan,
