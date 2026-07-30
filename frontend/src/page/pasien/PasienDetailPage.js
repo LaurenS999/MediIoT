@@ -31,6 +31,8 @@ import { renderAktivitasKunjungan } from "../../utils/renderAktivitasKunjungan";
 
 import LampiranModal from "../../components/lampiranModal/LampiranModal";
 
+import Pagination from "../../components/common/Pagination";
+import { getPaginationItems } from "../../utils/pagination";
 export default function DetailPasienPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -42,8 +44,7 @@ export default function DetailPasienPage() {
 
   const { id } = useParams();
 
-  const idPasien =
-    user.role === "pasien" || user.role === "super admin" ? user.id_relasi : id;
+  const idPasien = user.role === "pasien" ? user.id_relasi : id;
   const is_Perawat = user.role === "perawat" || "super admin" ? true : false;
 
   // =====================================================
@@ -84,7 +85,13 @@ export default function DetailPasienPage() {
     loadingDaftarKunjungan,
     setLoadingDaftarKunjungan,
     measurementRef,
-  } = useKunjunganDetail(pasienDetail?.id_pasien);
+    currentPage,
+    setCurrentPage,
+    limitPage,
+    totalPage,
+  } = useKunjunganDetail(idPasien);
+
+  const page = getPaginationItems(currentPage, totalPage);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -643,6 +650,13 @@ export default function DetailPasienPage() {
               )}
             </tbody>
           </table>
+
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+            pages={page}
+            totalPages={totalPage}
+          />
         </div>
       </div>
 

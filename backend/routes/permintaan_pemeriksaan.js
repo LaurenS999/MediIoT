@@ -20,25 +20,71 @@ router.get(
   allow("permintaan.pemeriksaan.read"),
   async (req, res) => {
     try {
-      const sql = `
-        SELECT pe.*, p.nama as nama_pasien
-        FROM permintaan_pemeriksaan pe 
-            INNER JOIN pasien p ON pe.id_pasien = p.id_pasien 
-        ORDER BY pe.id_permintaan_pemeriksaan DESC;
+      // =========================
+      // PAGINATION
+      // =========================
+      console.log("REQUEST QUERY : ", req.query);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      // =========================
+      // COUNT QUERY
+      // =========================
+      const countSql = `
+        SELECT COUNT(*) AS total
+        FROM permintaan_pemeriksaan pe
+        INNER JOIN pasien p
+          ON pe.id_pasien = p.id_pasien
       `;
 
-      const [rows] = await db.query(sql);
+      // =========================
+      // DATA QUERY
+      // =========================
+      const sql = `
+        SELECT
+          pe.*,
+          p.nama AS nama_pasien
+        FROM permintaan_pemeriksaan pe
+        INNER JOIN pasien p
+          ON pe.id_pasien = p.id_pasien
+        ORDER BY pe.id_permintaan_pemeriksaan DESC
+        LIMIT ? OFFSET ?
+      `;
+
+      // =========================
+      // TOTAL DATA
+      // =========================
+      const [countRows] = await db.query(countSql);
+
+      const totalData = countRows[0].total;
+      const totalPage = Math.ceil(totalData / limit);
+
+      // =========================
+      // DATA
+      // =========================
+      const [rows] = await db.query(sql, [limit, offset]);
+
+      // =========================
+      // MESSAGE
+      // =========================
       let message = "";
-      if (rows.length == 0) {
-        message = "Belum adaa data permintaan_pemeriksaan";
+
+      if (rows.length === 0) {
+        message = "Belum ada data permintaan pemeriksaan";
       } else {
-        message =
-          "Berhasil mengambil daftar sesi yang menunggu pemeriksaan pemeriksaan dokter.";
+        message = "Data permintaan pemeriksaan berhasil diambil";
       }
 
       res.status(200).json({
         success: true,
-        message: message,
+        message,
+        pagination: {
+          page,
+          limit,
+          totalData,
+          totalPage,
+        },
         data: rows,
       });
     } catch (error) {
@@ -46,7 +92,7 @@ router.get(
 
       res.status(500).json({
         success: false,
-        message: "Internal server error",
+        message: "Internal Server Error",
       });
     }
   },
@@ -61,27 +107,72 @@ router.get(
     try {
       const { id_pasien } = req.params;
 
-      const sql = `
-            SELECT pe.*, p.nama as nama_pasien
-            FROM permintaan_pemeriksaan pe 
-                INNER JOIN pasien p on pe.id_pasien = p.id_pasien
-            WHERE pe.id_pasien = ?
-            ORDER BY pe.id_permintaan_pemeriksaan DESC;
+      // =========================
+      // PAGINATION
+      // =========================
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      // =========================
+      // COUNT QUERY
+      // =========================
+      const countSql = `
+        SELECT COUNT(*) AS total
+        FROM permintaan_pemeriksaan pe
+        INNER JOIN pasien p
+          ON pe.id_pasien = p.id_pasien
+        WHERE pe.id_pasien = ?
       `;
 
-      const [rows] = await db.query(sql, [id_pasien]);
+      // =========================
+      // DATA QUERY
+      // =========================
+      const sql = `
+        SELECT
+          pe.*,
+          p.nama AS nama_pasien
+        FROM permintaan_pemeriksaan pe
+        INNER JOIN pasien p
+          ON pe.id_pasien = p.id_pasien
+        WHERE pe.id_pasien = ?
+        ORDER BY pe.id_permintaan_pemeriksaan DESC
+        LIMIT ? OFFSET ?
+      `;
 
+      // =========================
+      // TOTAL DATA
+      // =========================
+      const [countRows] = await db.query(countSql, [id_pasien]);
+
+      const totalData = countRows[0].total;
+      const totalPage = Math.ceil(totalData / limit);
+
+      // =========================
+      // DATA
+      // =========================
+      const [rows] = await db.query(sql, [id_pasien, limit, offset]);
+
+      // =========================
+      // MESSAGE
+      // =========================
       let message = "";
-      if (rows.length == 0) {
-        message = "Pasien belum mempunyai data permintaan_pemeriksaan";
+
+      if (rows.length === 0) {
+        message = "Pasien belum mempunyai data permintaan pemeriksaan";
       } else {
-        message =
-          "Berhasil mengambil daftar sesi yang menunggu pemeriksaan dokter.";
+        message = "Data permintaan pemeriksaan berhasil diambil";
       }
 
       res.status(200).json({
         success: true,
-        message: message,
+        message,
+        pagination: {
+          page,
+          limit,
+          totalData,
+          totalPage,
+        },
         data: rows,
       });
     } catch (error) {
@@ -89,7 +180,7 @@ router.get(
 
       res.status(500).json({
         success: false,
-        message: "Internal server error",
+        message: "Internal Server Error",
       });
     }
   },

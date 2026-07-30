@@ -133,36 +133,85 @@ router.get("/:id_pasien", auth, allow("kunjungan.read"), async (req, res) => {
   try {
     const { id_pasien } = req.params;
 
+    // =========================
+    // PAGINATION
+    // =========================
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // =========================
+    // COUNT QUERY
+    // =========================
+    const countSql = `
+        SELECT COUNT(*) AS total
+        FROM kunjungan k
+        WHERE k.id_pasien = ?
+      `;
+
+    // =========================
+    // DATA QUERY
+    // =========================
     const sql = `
         SELECT
-            k.id_kunjungan,
-            k.kode_kunjungan,
-            k.id_pemeriksaan,
-            k.id_pengukuran,
-            
-            perawat.username AS nama_perawat,
-            dokter.id_user as id_dokter,
-            dokter.username AS nama_dokter,
-            k.dibuat_pada as tanggal_kunjungan
+          k.id_kunjungan,
+          k.kode_kunjungan,
+          k.id_pemeriksaan,
+          k.id_pengukuran,
+
+          perawat.username AS nama_perawat,
+          dokter.id_user AS id_dokter,
+          dokter.username AS nama_dokter,
+          k.dibuat_pada AS tanggal_kunjungan
+
         FROM kunjungan k
 
         JOIN pasien p
-        ON p.id_pasien = k.id_pasien
+          ON p.id_pasien = k.id_pasien
 
         LEFT JOIN user perawat
-        ON perawat.id_user = k.id_perawat
+          ON perawat.id_user = k.id_perawat
 
         LEFT JOIN user dokter
-        ON dokter.id_user = k.id_dokter
+          ON dokter.id_user = k.id_dokter
 
         WHERE k.id_pasien = ?
+
         ORDER BY k.dibuat_pada DESC
+
+        LIMIT ? OFFSET ?
       `;
 
-    const [result] = await db.query(sql, [id_pasien]);
+    // =========================
+    // TOTAL DATA
+    // =========================
+    const [countRows] = await db.query(countSql, [id_pasien]);
+
+    const totalData = countRows[0].total;
+    const totalPage = Math.ceil(totalData / limit);
+
+    // =========================
+    // DATA
+    // =========================
+    const [result] = await db.query(sql, [id_pasien, limit, offset]);
+
+    let message = "";
+
+    if (result.length === 0) {
+      message = "Pasien belum mempunyai data kunjungan";
+    } else {
+      message = "Data kunjungan berhasil diambil";
+    }
 
     res.status(200).json({
       success: true,
+      message,
+      pagination: {
+        page,
+        limit,
+        totalData,
+        totalPage,
+      },
       data: result,
     });
   } catch (error) {

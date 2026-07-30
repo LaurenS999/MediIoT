@@ -17,6 +17,10 @@ import { modalKonfirmasiPendaftaranConfig } from "../../config/modalKonfirmasiPe
 
 import { pilihanJam, isJamLewat } from "../../utils/waktuPermintaan";
 
+import Pagination from "../../components/common/Pagination";
+
+import { getPaginationItems } from "../../utils/pagination";
+
 export default function PermintaanPemeriksaanPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -38,11 +42,18 @@ export default function PermintaanPemeriksaanPage() {
     errors,
     setErrors,
     loading,
+
+    currentPage,
+    setCurrentPage,
+    limitPage,
+    totalPage,
   } = usePermintaanPemeriksaan();
   const today = new Date().toISOString().split("T")[0];
   console.log("Pendaftarn : ", pendaftaran);
 
   const currentModal = modalKonfirmasiPendaftaranConfig[modal.action];
+
+  const page = getPaginationItems(currentPage, totalPage);
 
   return (
     <div className="setup-container">
@@ -286,6 +297,12 @@ export default function PermintaanPemeriksaanPage() {
                 )}
               </tbody>
             </table>
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              pages={page}
+              totalPages={totalPage}
+            />
           </div>
         </div>
       </div>

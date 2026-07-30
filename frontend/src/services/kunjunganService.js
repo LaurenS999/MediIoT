@@ -7,8 +7,10 @@ export const getKunjungan = async (search, page, limit) => {
   return response.data;
 };
 
-export const getKunjunganPasien = async (id_pasien) => {
-  const response = await apiLocal.get(`/kunjungan/${id_pasien}`);
+export const getKunjunganPasien = async (id_pasien, page, limit) => {
+  const response = await apiLocal.get(
+    `/kunjungan/${id_pasien}?page=${page}&limit=${limit}`,
+  );
   return response.data;
 };
 

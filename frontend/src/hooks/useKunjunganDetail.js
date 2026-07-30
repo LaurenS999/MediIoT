@@ -18,19 +18,38 @@ export const useKunjunganDetail = (id_pasien) => {
   const [loadingDaftarKunjungan, setLoadingDaftarKunjungan] = useState(true);
   const measurementRef = useRef(null);
 
-  const ambilDaftarKunjunga = useCallback(async (id_pasien) => {
-    try {
-      const res = await getKunjunganPasien(id_pasien);
-      setDaftarKunjungan(res.data);
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data peran",
-      );
-    } finally {
-      setLoadingDaftarKunjungan(false);
-    }
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limitPage, setLimitPage] = useState(10);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const ambilDaftarKunjunga = useCallback(
+    async (id_pasien, page = 1, limit = 10) => {
+      try {
+        const res = await getKunjunganPasien(id_pasien, page, limit);
+        console.log("RESPONSE : ", res);
+        const kunjunganList = res.data;
+
+        if (Array.isArray(kunjunganList)) {
+          if (kunjunganList.length >= 1) {
+            setDaftarKunjungan(res.data);
+
+            setCurrentPage(res.pagination.page);
+            setTotalPage(res.pagination.totalPage);
+          } else {
+            toast.info(res.data?.message);
+            setDaftarKunjungan([]);
+          }
+        }
+      } catch (error) {
+        toast.error(
+          error.response?.data?.message ||
+            "Terjadi kesalahan saat mengambil data kunjungan pasien",
+        );
+      } finally {
+        setLoadingDaftarKunjungan(false);
+      }
+    },
+  );
 
   const ambilKunjunganTerakhir = useCallback(async (id_pasien) => {
     try {
@@ -104,7 +123,7 @@ export const useKunjunganDetail = (id_pasien) => {
   useEffect(() => {
     ambilDaftarKunjunga(id_pasien);
     ambilKunjunganTerakhir(id_pasien);
-  }, [id_pasien]);
+  }, [id_pasien, currentPage]);
 
   return {
     kunjungan,
@@ -115,5 +134,10 @@ export const useKunjunganDetail = (id_pasien) => {
     loadingDaftarKunjungan,
     setLoadingDaftarKunjungan,
     measurementRef,
+
+    currentPage,
+    setCurrentPage,
+    limitPage,
+    totalPage,
   };
 };

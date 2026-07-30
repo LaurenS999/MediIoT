@@ -1,12 +1,18 @@
 import apiLocal from "./apiLocal.js";
 
-export const getPendaftaran = () => {
-  const response = apiLocal.get(`/permintaan-pemeriksaan`);
+export const getPendaftaran = (page, limit) => {
+  console.log("PAGE ", page);
+  console.log("PAGE ", limit);
+  const response = apiLocal.get(
+    `/permintaan-pemeriksaan?page=${page}&limit=${limit}`,
+  );
   return response;
 };
 
-export const getPendaftaranPasien = (id_pasien) => {
-  const response = apiLocal.get(`/permintaan-pemeriksaan/${id_pasien}/pasien`);
+export const getPendaftaranPasien = (id_pasien, page, limit) => {
+  const response = apiLocal.get(
+    `/permintaan-pemeriksaan/${id_pasien}/pasien?page=${page}&limit=${limit}`,
+  );
   return response;
 };
 

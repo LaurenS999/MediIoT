@@ -18,6 +18,10 @@ export const usePermintaanPemeriksaan = (id_user) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limitPage, setLimitPage] = useState(10);
+  const [totalPage, setTotalPage] = useState(1);
+
   const [form, setForm] = useState({
     tanggal_pemeriksaan: "",
     keluhan: "",
@@ -114,15 +118,19 @@ export const usePermintaanPemeriksaan = (id_user) => {
     return true;
   };
 
-  const ambilpendaftaranByPasien = useCallback(async () => {
+  const ambilpendaftaranByPasien = useCallback(async (page = 1, limit = 10) => {
     setLoading(true);
     try {
-      const res = await getPendaftaranPasien(user.id_relasi);
+      const res = await getPendaftaranPasien(user.id_relasi, page, limit);
       const pendaftaranList = res.data.data;
+      console.log("RESPON :, ", res);
 
       if (Array.isArray(pendaftaranList)) {
         if (pendaftaranList.length >= 1) {
           setPendaftaran(pendaftaranList);
+
+          setCurrentPage(res.data.pagination.page);
+          setTotalPage(res.data.pagination.totalPage);
         } else {
           toast.info(res.data?.message);
           setPendaftaran([]);
@@ -138,15 +146,19 @@ export const usePermintaanPemeriksaan = (id_user) => {
     }
   }, []);
 
-  const ambilpendaftaran = useCallback(async () => {
+  const ambilpendaftaran = useCallback(async (page = 1, limit = 10) => {
     setLoading(true);
     try {
-      const res = await getPendaftaran();
+      const res = await getPendaftaran(page, limit);
       const pendaftaranList = res.data.data;
+      console.log("RESPONSE : ", res);
 
       if (Array.isArray(pendaftaranList)) {
         if (pendaftaranList.length >= 1) {
           setPendaftaran(pendaftaranList);
+
+          setCurrentPage(res.data.pagination.page);
+          setTotalPage(res.data.pagination.totalPage);
         } else {
           toast.info(res.data?.message);
           setPendaftaran([]);
@@ -217,6 +229,8 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
       handleCloseModal();
 
+      setCurrentPage(1);
+
       // refresh data
       if (user.role == "pasien") {
         ambilpendaftaranByPasien();
@@ -232,11 +246,11 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
   useEffect(() => {
     if (user.role == "pasien") {
-      ambilpendaftaranByPasien();
+      ambilpendaftaranByPasien(currentPage, limitPage);
     } else {
-      ambilpendaftaran();
+      ambilpendaftaran(currentPage, limitPage);
     }
-  }, []);
+  }, [currentPage]);
 
   return {
     pendaftaran,
@@ -254,5 +268,10 @@ export const usePermintaanPemeriksaan = (id_user) => {
     errors,
     setErrors,
     loading,
+
+    currentPage,
+    setCurrentPage,
+    limitPage,
+    totalPage,
   };
 };
