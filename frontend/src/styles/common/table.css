@@ -24,8 +24,8 @@
   white-space: nowrap;
 }
 
-.modern-table th:first-child,
-.modern-table td:first-child {
+.modern-table th:nth-child(2),
+.modern-table td:nth-child(2) {
   min-width: 180px;
 }
 

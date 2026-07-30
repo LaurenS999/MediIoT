@@ -194,6 +194,7 @@ export default function PermintaanPemeriksaanPage() {
             <table className="modern-table">
               <thead>
                 <tr>
+                  <th>No</th>
                   {isPerawat && <th>Nama Pasien</th>}
                   <th>Tanggal Pemeriksaan</th>
                   <th>Jam Pemeriksaan</th>
@@ -213,6 +214,8 @@ export default function PermintaanPemeriksaanPage() {
                 ) : (
                   pendaftaran.map((item, index) => (
                     <tr key={pendaftaran.id_pendaftaran} className="modern-row">
+                      <td>{index + 1}</td>
+
                       {isPerawat && (
                         <td>
                           <div className="patient-name-text">

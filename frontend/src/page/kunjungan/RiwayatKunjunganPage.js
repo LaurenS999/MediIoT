@@ -128,7 +128,7 @@ export default function RiwayatKunjunganPage() {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Kode Sesi</th>
+                <th>Kode Kunjungan</th>
                 <th>Nama Pasien</th>
                 <th className="th-center">Jenis Kelamin</th>
                 <th>Perawat</th>

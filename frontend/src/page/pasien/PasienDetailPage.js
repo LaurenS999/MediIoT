@@ -574,6 +574,7 @@ export default function DetailPasienPage() {
           <table className="modern-table">
             <thead>
               <tr>
+                <th>No</th>
                 <th>Tanggal</th>
                 <th>Nama Perawat</th>
                 <th>Nama Dokter</th>
@@ -597,6 +598,8 @@ export default function DetailPasienPage() {
               ) : (
                 daftarKunjungan.map((item, index) => (
                   <tr key={index} className="modern-row">
+                    <td>{index + 1}</td>
+
                     <td>{formatDateTime(item.tanggal_kunjungan)}</td>
 
                     <td>
