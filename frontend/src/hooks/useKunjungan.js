@@ -13,7 +13,7 @@ export const useKunjungan = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const ambilKunjungan = useCallback(async (page = 1) => {
+  const ambilKunjungan = useCallback(async (search, page = 1) => {
     try {
       const res = await getKunjungan(search, page, limitPage);
       const kunjunganList = res.data;
@@ -38,7 +38,7 @@ export const useKunjungan = () => {
   }, []);
 
   useEffect(() => {
-    ambilKunjungan(currentPage);
+    ambilKunjungan(search, currentPage);
   }, [search, currentPage]);
 
   return {
