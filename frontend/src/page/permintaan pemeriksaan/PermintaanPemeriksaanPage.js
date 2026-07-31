@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CircleAlert } from "lucide-react";
 import "../../styles/pasien.css";
-import "../../styles/pendaftaran.css";
+import "../../styles/permintaan.css";
 
 import { usePermintaanPemeriksaan } from "../../hooks/usePermintaanPemeriksaan";
 import { formatDateTime } from "../../utils/formatDate";
 
-import { renderStatusPendaftaran } from "../../utils/renderStatusPendaftaran";
+import { renderStatusPermintaan } from "../../utils/renderStatusPermintaan";
 import { useAuth } from "../../context/AuthContext";
 
-import renderActionButton from "../../utils/renderButtonPendaftaran";
-import ModalKonfirmasi from "../../components/pendaftaran/modalKonfirmasi";
+import renderActionButton from "../../utils/renderButtonPermintaan";
+import ModalKonfirmasi from "../../components/pemeriksaan/modalKonfirmasi";
 
-import { modalKonfirmasiPendaftaranConfig } from "../../config/modalKonfirmasiPendaftaranConfig";
+import { modalKonfirmasiPermintaanConfig } from "../../config/modalKonfirmasiPermintaanConfig";
 
 import { pilihanJam, isJamLewat } from "../../utils/waktuPermintaan";
 
@@ -28,7 +28,7 @@ export default function PermintaanPemeriksaanPage() {
   const isPasien = user.role === "pasien" || user.role === "super admin";
 
   const {
-    pendaftaran,
+    permintaan,
     form,
     setForm,
     modal,
@@ -36,7 +36,7 @@ export default function PermintaanPemeriksaanPage() {
     setAlasan,
     handleOpenModal,
     handleCloseModal,
-    handleTambahPendaftaran,
+    handleTambahPermintaan,
     handleConfirm,
 
     errors,
@@ -49,9 +49,8 @@ export default function PermintaanPemeriksaanPage() {
     totalPage,
   } = usePermintaanPemeriksaan();
   const today = new Date().toISOString().split("T")[0];
-  console.log("Pendaftarn : ", pendaftaran);
 
-  const currentModal = modalKonfirmasiPendaftaranConfig[modal.action];
+  const currentModal = modalKonfirmasiPermintaanConfig[modal.action];
 
   const page = getPaginationItems(currentPage, totalPage);
 
@@ -74,7 +73,7 @@ export default function PermintaanPemeriksaanPage() {
       {isPasien && (
         <div className="card-custom">
           <div className="card-header-flex">
-            <h3>Form Pendaftaran Pemeriksaan</h3>
+            <h3>Form Permintaan Pemeriksaan</h3>
           </div>
 
           <div className="card-body">
@@ -196,7 +195,7 @@ export default function PermintaanPemeriksaanPage() {
             >
               <button
                 className="btn-primary"
-                onClick={handleTambahPendaftaran}
+                onClick={handleTambahPermintaan}
                 disabled={loading}
               >
                 Daftar Pemeriksaan
@@ -230,15 +229,18 @@ export default function PermintaanPemeriksaanPage() {
               </thead>
 
               <tbody>
-                {pendaftaran.length === 0 ? (
+                {permintaan.length === 0 ? (
                   <tr>
                     <td colSpan="4" className="empty-table">
-                      Belum ada riwayat pendaftaran
+                      Belum ada riwayat permintaan
                     </td>
                   </tr>
                 ) : (
-                  pendaftaran.map((item, index) => (
-                    <tr key={pendaftaran.id_pendaftaran} className="modern-row">
+                  permintaan.map((item, index) => (
+                    <tr
+                      key={permintaan.id_permintaan_pemeriksaan}
+                      className="modern-row"
+                    >
                       <td>{index + 1}</td>
 
                       {isPerawat && (
@@ -266,7 +268,7 @@ export default function PermintaanPemeriksaanPage() {
                       </td>
 
                       <td className="td-center">
-                        {renderStatusPendaftaran(item.status)}
+                        {renderStatusPermintaan(item.status)}
                       </td>
 
                       <td>

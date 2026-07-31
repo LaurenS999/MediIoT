@@ -3,18 +3,18 @@ import { toast } from "react-toastify";
 
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 import {
-  getPendaftaran,
-  getPendaftaranPasien,
-  postPendaftaran,
-  patchPendaftaranTolak,
-  patchPendaftaranBatal,
-  patchPendaftaranSetuju,
+  getPermintaan,
+  getPermintaanPasien,
+  postPermintaan,
+  patchPermintaanTolak,
+  patchPermintaanBatal,
+  patchPermintaanSetuju,
 } from "../services/permintaanPemeriksaanService.js";
 import { useAuth } from "../context/AuthContext.js";
 
 export const usePermintaanPemeriksaan = (id_user) => {
   const { user } = useAuth();
-  const [pendaftaran, setPendaftaran] = useState([]);
+  const [permintaan, setPermintaan] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -118,78 +118,78 @@ export const usePermintaanPemeriksaan = (id_user) => {
     return true;
   };
 
-  const ambilpendaftaranByPasien = useCallback(async (page = 1, limit = 10) => {
+  const ambilPermintaanByPasien = useCallback(async (page = 1, limit = 10) => {
     setLoading(true);
     try {
-      const res = await getPendaftaranPasien(user.id_relasi, page, limit);
-      const pendaftaranList = res.data.data;
+      const res = await getPermintaanPasien(user.id_relasi, page, limit);
+      const permintaanList = res.data.data;
       console.log("RESPON :, ", res);
 
-      if (Array.isArray(pendaftaranList)) {
-        if (pendaftaranList.length >= 1) {
-          setPendaftaran(pendaftaranList);
+      if (Array.isArray(permintaanList)) {
+        if (permintaanList.length >= 1) {
+          setPermintaan(permintaanList);
 
           setCurrentPage(res.data.pagination.page);
           setTotalPage(res.data.pagination.totalPage);
         } else {
           toast.info(res.data?.message);
-          setPendaftaran([]);
+          setPermintaan([]);
         }
       }
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data pendaftaran",
+          "Terjadi kesalahan saat mengambil data Permintaan",
       );
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const ambilpendaftaran = useCallback(async (page = 1, limit = 10) => {
+  const ambilPermintaan = useCallback(async (page = 1, limit = 10) => {
     setLoading(true);
     try {
-      const res = await getPendaftaran(page, limit);
-      const pendaftaranList = res.data.data;
+      const res = await getPermintaan(page, limit);
+      const permintaanList = res.data.data;
       console.log("RESPONSE : ", res);
 
-      if (Array.isArray(pendaftaranList)) {
-        if (pendaftaranList.length >= 1) {
-          setPendaftaran(pendaftaranList);
+      if (Array.isArray(permintaanList)) {
+        if (permintaanList.length >= 1) {
+          setPermintaan(permintaanList);
 
           setCurrentPage(res.data.pagination.page);
           setTotalPage(res.data.pagination.totalPage);
         } else {
           toast.info(res.data?.message);
-          setPendaftaran([]);
+          setPermintaan([]);
         }
       }
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data pendaftaran",
+          "Terjadi kesalahan saat mengambil data permintaan",
       );
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const handleTambahPendaftaran = useCallback(async () => {
+  const handleTambahPermintaan = useCallback(async () => {
     if (!validasi()) return;
     setLoading(true);
     try {
-      const response = await postPendaftaran(form);
+      const response = await postPermintaan(form);
 
       setForm({
         tanggal_pemeriksaan: "",
         keluhan: "",
         jam_pemeriksaan: "",
       });
-      ambilpendaftaranByPasien();
+      ambilPermintaanByPasien();
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data Pendaftaran",
+          "Terjadi kesalahan saat mengambil data Permintaan",
         {
           toastId: "permintaan-create-error",
         },
@@ -205,7 +205,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
       switch (modal.action) {
         case "tolak":
           if (!validasiAlasan()) return;
-          await patchPendaftaranTolak(
+          await patchPermintaanTolak(
             modal.data.id_permintaan_pemeriksaan,
             alasan,
           );
@@ -213,14 +213,14 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
         case "batal":
           if (!validasiAlasan()) return;
-          await patchPendaftaranBatal(
+          await patchPermintaanBatal(
             modal.data.id_permintaan_pemeriksaan,
             alasan,
           );
           break;
 
         case "setuju":
-          await patchPendaftaranSetuju(modal.data.id_permintaan_pemeriksaan);
+          await patchPermintaanSetuju(modal.data.id_permintaan_pemeriksaan);
           break;
 
         default:
@@ -233,9 +233,9 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
       // refresh data
       if (user.role == "pasien") {
-        ambilpendaftaranByPasien();
+        ambilPermintaanByPasien();
       } else {
-        ambilpendaftaran();
+        ambilPermintaan();
       }
     } catch (error) {
       toast.error(error.response?.data?.message);
@@ -246,14 +246,14 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
   useEffect(() => {
     if (user.role == "pasien") {
-      ambilpendaftaranByPasien(currentPage, limitPage);
+      ambilPermintaanByPasien(currentPage, limitPage);
     } else {
-      ambilpendaftaran(currentPage, limitPage);
+      ambilPermintaan(currentPage, limitPage);
     }
   }, [currentPage]);
 
   return {
-    pendaftaran,
+    permintaan,
     form,
     setForm,
     modal,
@@ -262,7 +262,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setAlasan,
     handleOpenModal,
     handleCloseModal,
-    handleTambahPendaftaran,
+    handleTambahPermintaan,
     handleConfirm,
 
     errors,

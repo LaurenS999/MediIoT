@@ -1,6 +1,6 @@
 import apiLocal from "./apiLocal.js";
 
-export const getPendaftaran = (page, limit) => {
+export const getPermintaan = (page, limit) => {
   console.log("PAGE ", page);
   console.log("PAGE ", limit);
   const response = apiLocal.get(
@@ -9,27 +9,27 @@ export const getPendaftaran = (page, limit) => {
   return response;
 };
 
-export const getPendaftaranPasien = (id_pasien, page, limit) => {
+export const getPermintaanPasien = (id_pasien, page, limit) => {
   const response = apiLocal.get(
     `/permintaan-pemeriksaan/${id_pasien}/pasien?page=${page}&limit=${limit}`,
   );
   return response;
 };
 
-export const postPendaftaran = (data) => {
+export const postPermintaan = (data) => {
   console.log("DATA : ", data);
   const response = apiLocal.post(`/permintaan-pemeriksaan`, data);
   return response;
 };
 
-export const patchPendaftaranSetuju = (id_permintaan_pemeriksaan) => {
+export const patchPermintaanSetuju = (id_permintaan_pemeriksaan) => {
   const response = apiLocal.patch(
     `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/disetujui`,
   );
   return response;
 };
 
-export const patchPendaftaranTolak = (id_permintaan_pemeriksaan, data) => {
+export const patchPermintaanTolak = (id_permintaan_pemeriksaan, data) => {
   const response = apiLocal.patch(
     `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/ditolak`,
     {
@@ -39,7 +39,7 @@ export const patchPendaftaranTolak = (id_permintaan_pemeriksaan, data) => {
   return response;
 };
 
-export const patchPendaftaranBatal = (id_permintaan_pemeriksaan, data) => {
+export const patchPermintaanBatal = (id_permintaan_pemeriksaan, data) => {
   const response = apiLocal.patch(
     `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/dibatalkan`,
     {

@@ -1,5 +1,5 @@
 import React from "react";
-export function renderStatusPendaftaran(status) {
+export function renderStatusPermintaan(status) {
   switch (status) {
     case "menunggu persetujuan":
       return <span className="badge badge-warning">Menunggu Persetujuan</span>;

@@ -1,4 +1,4 @@
-export const modalKonfirmasiPendaftaranConfig = {
+export const modalKonfirmasiPermintaanConfig = {
   tolak: {
     title: "Konfirmasi Penolakan",
     message: "Masukkan alasan penolakan pendaftaran.",

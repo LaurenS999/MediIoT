@@ -1,5 +1,5 @@
 import { formatDateTime } from "../../utils/formatDate";
-import { renderStatusPendaftaran } from "../../utils/renderStatusPendaftaran";
+import { renderStatusPermintaan } from "../../utils/renderStatusPermintaan";
 
 export default function NotifikasiItemPerawat({ item, onClick }) {
   const statusText = {
@@ -10,13 +10,13 @@ export default function NotifikasiItemPerawat({ item, onClick }) {
   return (
     <div
       className="notification-item"
-      onClick={() => onClick(item.id_pendaftaran)}
+      onClick={() => onClick(item.id_permintaan_pemeriksaan)}
     >
       <div className="notification-item-header">
         <h4>{item.nama}</h4>
 
         <span className="notification">
-          {renderStatusPendaftaran(item.status)}
+          {renderStatusPermintaan(item.status)}
         </span>
       </div>
 
