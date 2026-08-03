@@ -22,19 +22,13 @@ export const postPermintaan = (data) => {
   return response;
 };
 
-export const patchPermintaanSetuju = (id_permintaan_pemeriksaan) => {
+export const patchPermintaanSelesai = (
+  formSelesai,
+  id_permintaan_pemeriksaan,
+) => {
   const response = apiLocal.patch(
-    `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/disetujui`,
-  );
-  return response;
-};
-
-export const patchPermintaanTolak = (id_permintaan_pemeriksaan, data) => {
-  const response = apiLocal.patch(
-    `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/ditolak`,
-    {
-      data,
-    },
+    `/permintaan-pemeriksaan/${id_permintaan_pemeriksaan}/selesai`,
+    formSelesai,
   );
   return response;
 };

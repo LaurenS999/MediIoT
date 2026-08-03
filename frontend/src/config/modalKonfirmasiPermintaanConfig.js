@@ -4,6 +4,7 @@ export const modalKonfirmasiPermintaanConfig = {
     message: "Masukkan alasan penolakan pendaftaran.",
     confirmText: "Tolak",
     confirmClass: "btn-danger",
+    showWaktuPemeriksaan: false,
     showAlasan: true,
   },
 
@@ -12,15 +13,17 @@ export const modalKonfirmasiPermintaanConfig = {
     message: "Masukkan alasan pembatalan pendaftaran.",
     confirmText: "Batalkan",
     confirmClass: "btn-secondary",
+    showWaktuPemeriksaan: false,
     showAlasan: true,
   },
 
-  setuju: {
-    title: "Konfirmasi Persetujuan",
+  selesai: {
+    title: "Konfirmasi Penyelesaian",
     message:
-      "Apakah anda yakin bisa melakukan pemeriksaan pada jadwal tersebut ?.",
+      "Apakah anda sudah melakukan pemeriksaan terhadap pasien ? \nApakah anda yakin menyelesaikan permintaan pemeriksaan ?.",
     confirmText: "Ya",
     confirmClass: "btn-primary",
     showAlasan: false,
+    showWaktuPemeriksaan: true,
   },
 };

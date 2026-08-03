@@ -205,35 +205,6 @@ router.post(
       const id_kunjungan = insertKunjungan.insertId;
 
       // ==========================================
-      // UPDATE STATUS PERMINTAAN PEMERIKSAAN
-      // ==========================================
-
-      const [permintaan] = await conn.query(
-        `
-          SELECT id_permintaan_pemeriksaan
-          FROM permintaan_pemeriksaan
-          WHERE id_pasien = ?
-            AND tanggal_pemeriksaan = CURDATE()
-            AND status = 'disetujui'
-          LIMIT 1
-        `,
-        [patient.id_pasien],
-      );
-
-      if (permintaan.length > 0) {
-        await conn.query(
-          `
-            UPDATE permintaan_pemeriksaan
-            SET
-              status = 'selesai',
-              diubah_pada = NOW()
-            WHERE id_permintaan_pemeriksaan = ?
-          `,
-          [permintaan[0].id_permintaan_pemeriksaan],
-        );
-      }
-
-      // ==========================================
       // INSERT LAMPIRAN
       // ==========================================
 

@@ -6,9 +6,8 @@ import {
   getPermintaan,
   getPermintaanPasien,
   postPermintaan,
-  patchPermintaanTolak,
   patchPermintaanBatal,
-  patchPermintaanSetuju,
+  patchPermintaanSelesai,
 } from "../services/permintaanPemeriksaanService.js";
 import { useAuth } from "../context/AuthContext.js";
 
@@ -25,8 +24,14 @@ export const usePermintaanPemeriksaan = (id_user) => {
   const [form, setForm] = useState({
     tanggal_pemeriksaan: "",
     keluhan: "",
-    jam_pemeriksaan: "",
   });
+
+  const [formSelesai, setFormSelesai] = useState({
+    waktu_kunjungan_awal: "",
+    waktu_kunjungan_akhir: "",
+  });
+
+  const [selectedPermintaan, setSelectedPermintaan] = useState(null);
 
   const [modal, setModal] = useState({
     open: false,
@@ -38,6 +43,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
   const handleOpenModal = (action, data) => {
     setAlasan("");
+    setSelectedPermintaan(data);
 
     setModal({
       open: true,
@@ -66,10 +72,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
     if (!form.keluhan) {
       newErrors.keluhan = true;
-    }
-
-    if (!form.jam_pemeriksaan) {
-      newErrors.jam_pemeriksaan = true;
     }
 
     setErrors(newErrors);
@@ -116,6 +118,76 @@ export const usePermintaanPemeriksaan = (id_user) => {
     }
 
     return true;
+  };
+
+  const validasiWaktuKunjung = () => {
+    const newErrors = {};
+
+    const waktuAwal = formSelesai.waktu_kunjungan_awal;
+    const waktuAkhir = formSelesai.waktu_kunjungan_akhir;
+
+    // Konversi HH:mm menjadi menit
+    const waktuKeMenit = (waktu) => {
+      const [jam, menit] = waktu.split(":").map(Number);
+      return jam * 60 + menit;
+    };
+
+    const batasWaktuAwal = 8 * 60; // 08:00
+    const batasWaktuAkhir = 17 * 60; // 17:00
+
+    // Validasi waktu kosong
+    if (!waktuAwal) {
+      newErrors.waktu_kunjungan_awal = true;
+    }
+
+    if (!waktuAkhir) {
+      newErrors.waktu_kunjungan_akhir = true;
+    }
+
+    // Lanjut validasi jika keduanya sudah diisi
+    if (waktuAwal && waktuAkhir) {
+      const totalMenitAwal = waktuKeMenit(waktuAwal);
+      const totalMenitAkhir = waktuKeMenit(waktuAkhir);
+
+      // Validasi jam operasional
+      if (totalMenitAwal < batasWaktuAwal || totalMenitAwal > batasWaktuAkhir) {
+        newErrors.waktu_kunjungan_awal = true;
+
+        toast.warning(
+          "Waktu kunjungan awal harus berada antara 08:00 sampai 17:00.",
+        );
+      }
+
+      if (
+        totalMenitAkhir < batasWaktuAwal ||
+        totalMenitAkhir > batasWaktuAkhir
+      ) {
+        newErrors.waktu_kunjungan_akhir = true;
+
+        toast.warning(
+          "Waktu kunjungan akhir harus berada antara 08:00 sampai 17:00.",
+        );
+      }
+
+      // Waktu akhir harus lebih besar dari waktu awal
+      if (totalMenitAkhir <= totalMenitAwal) {
+        newErrors.waktu_kunjungan_akhir = true;
+
+        toast.warning(
+          "Waktu kunjungan akhir harus lebih besar dari waktu kunjungan awal.",
+        );
+      }
+    }
+
+    setErrors(newErrors);
+
+    // Validasi waktu kosong
+    if (!waktuAwal || !waktuAkhir) {
+      toast.warning("Waktu kunjungan tidak boleh kosong");
+      return false;
+    }
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const ambilPermintaanByPasien = useCallback(async (page = 1, limit = 10) => {
@@ -183,7 +255,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
       setForm({
         tanggal_pemeriksaan: "",
         keluhan: "",
-        jam_pemeriksaan: "",
       });
       ambilPermintaanByPasien();
     } catch (error) {
@@ -203,14 +274,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setLoading(true);
     try {
       switch (modal.action) {
-        case "tolak":
-          if (!validasiAlasan()) return;
-          await patchPermintaanTolak(
-            modal.data.id_permintaan_pemeriksaan,
-            alasan,
-          );
-          break;
-
         case "batal":
           if (!validasiAlasan()) return;
           await patchPermintaanBatal(
@@ -219,8 +282,12 @@ export const usePermintaanPemeriksaan = (id_user) => {
           );
           break;
 
-        case "setuju":
-          await patchPermintaanSetuju(modal.data.id_permintaan_pemeriksaan);
+        case "selesai":
+          if (!validasiWaktuKunjung()) return;
+          await patchPermintaanSelesai(
+            formSelesai,
+            modal.data.id_permintaan_pemeriksaan,
+          );
           break;
 
         default:
@@ -265,6 +332,9 @@ export const usePermintaanPemeriksaan = (id_user) => {
     handleTambahPermintaan,
     handleConfirm,
 
+    formSelesai,
+    setFormSelesai,
+
     errors,
     setErrors,
     loading,
@@ -273,5 +343,8 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setCurrentPage,
     limitPage,
     totalPage,
+
+    selectedPermintaan,
+    setSelectedPermintaan,
   };
 };

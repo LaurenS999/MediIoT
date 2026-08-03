@@ -1,9 +1,6 @@
 const cron = require("node-cron");
 
 const db = require("../db");
-const sendEmail = require("../helpers/kirimEmail");
-
-const templateDaftarPemeriksaanBesok = require("../emails/templates/daftarPemeriksaanBesok");
 
 const startCronPemeriksaanBesok = () => {
   cron.schedule(
@@ -41,14 +38,6 @@ const startCronPemeriksaanBesok = () => {
           jamPemeriksaan: item.jam_pemeriksaan,
           keluhan: item.keluhan,
         }));
-
-        const email = templateDaftarPemeriksaanBesok(daftarPermintaan);
-
-        await sendEmail({
-          to: "laurensunyoto@gmail.com",
-          subject: email.subject,
-          html: email.html,
-        });
 
         console.log(
           `CRON: Email berhasil dikirim. Total pasien: ${rows.length}`,

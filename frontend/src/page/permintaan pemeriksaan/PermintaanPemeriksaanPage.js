@@ -39,6 +39,9 @@ export default function PermintaanPemeriksaanPage() {
     handleTambahPermintaan,
     handleConfirm,
 
+    formSelesai,
+    setFormSelesai,
+
     errors,
     setErrors,
     loading,
@@ -47,7 +50,11 @@ export default function PermintaanPemeriksaanPage() {
     setCurrentPage,
     limitPage,
     totalPage,
+
+    selectedPermintaan,
+    setSelectedPermintaan,
   } = usePermintaanPemeriksaan();
+
   const today = new Date().toISOString().split("T")[0];
 
   const currentModal = modalKonfirmasiPermintaanConfig[modal.action];
@@ -124,43 +131,6 @@ export default function PermintaanPemeriksaanPage() {
                   required
                 />
               </div>
-              {/* Waktu */}
-              <div className="form-group">
-                <label>Waktu Pemeriksaan</label>
-
-                <select
-                  className={
-                    errors.jam_pemeriksaan
-                      ? "form-select input-error"
-                      : "form-select"
-                  }
-                  value={form.jam_pemeriksaan}
-                  onChange={(e) => {
-                    setForm((prev) => ({
-                      ...prev,
-                      jam_pemeriksaan: e.target.value,
-                    }));
-
-                    setErrors((prev) => ({
-                      ...prev,
-                      jam_pemeriksaan: false,
-                    }));
-                  }}
-                  required
-                >
-                  <option value="">Pilih waktu</option>
-
-                  {pilihanJam?.map((jam) => (
-                    <option
-                      key={jam}
-                      value={jam}
-                      disabled={isJamLewat(jam, form.tanggal_pemeriksaan)}
-                    >
-                      {jam.replace("-", " - ")}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
 
             <div className="form-group">
@@ -215,23 +185,21 @@ export default function PermintaanPemeriksaanPage() {
 
         <div className="card-body">
           <div className="table-wrapper-modern">
-            <table className="modern-table">
+            <table className="modern-table permintaan-table">
               <thead>
                 <tr>
                   <th>No</th>
                   {isPerawat && <th>Nama Pasien</th>}
-                  <th>Tanggal Pemeriksaan</th>
-                  <th>Jam Pemeriksaan</th>
+                  <th>Waktu Kunjungan</th>
                   <th>Keluhan</th>
                   <th className="th-center">Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
-
               <tbody>
                 {permintaan.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className="empty-table">
+                    <td colSpan={isPasien ? 7 : 8} className="empty-table">
                       Belum ada riwayat permintaan
                     </td>
                   </tr>
@@ -253,19 +221,25 @@ export default function PermintaanPemeriksaanPage() {
 
                       <td>
                         <div className="patient-name-text">
-                          {formatDateTime(item.tanggal_pemeriksaan, false)}
+                          <p>
+                            {formatDateTime(item.tanggal_pemeriksaan, false)}
+                          </p>
+                          <p>
+                            {item.waktu_kunjungan_awal} -{" "}
+                            {item.waktu_kunjungan_akhir}
+                          </p>
                         </div>
                       </td>
 
-                      <td>
-                        <div className="patient-name-text">
-                          {item.jam_pemeriksaan}
-                        </div>
-                      </td>
-
-                      <td>
+                      <td className="permintaan-keluhan">
                         <div className="patient-name-text">{item.keluhan}</div>
                       </td>
+                      {/* 
+                      <td>
+                        <div className="patient-name-text">
+                          {item.alasan_perubahan}
+                        </div>
+                      </td> */}
 
                       <td className="td-center">
                         {renderStatusPermintaan(item.status)}
@@ -274,28 +248,18 @@ export default function PermintaanPemeriksaanPage() {
                       <td>
                         {/* ACTION PERAWAT / SUPER ADMIN */}
                         {isPerawat &&
-                          item.status === "menunggu persetujuan" && (
+                          item.status === "menunggu pemeriksaan" && (
                             <div className="action-button-group">
                               <button
                                 className="btn-success"
-                                onClick={() => handleOpenModal("setuju", item)}
+                                onClick={() => handleOpenModal("selesai", item)}
                               >
-                                Setuju
-                              </button>
-
-                              <button
-                                className="btn-danger"
-                                onClick={() => handleOpenModal("tolak", item)}
-                              >
-                                Tolak
+                                Selesai
                               </button>
                             </div>
                           )}
 
-                        {((isPasien &&
-                          (item.status === "menunggu persetujuan" ||
-                            item.status === "disetujui")) ||
-                          (isPerawat && item.status === "disetujui")) && (
+                        {item.status === "menunggu pemeriksaan" && (
                           <div className="action-button-group">
                             <button
                               className="btn-batal"
@@ -335,6 +299,10 @@ export default function PermintaanPemeriksaanPage() {
         errors={errors}
         setErrors={setErrors}
         loading={loading}
+        formSelesai={formSelesai}
+        setFormSelesai={setFormSelesai}
+        showWaktuPemeriksaan={currentModal?.showWaktuPemeriksaan}
+        dataPermintaan={selectedPermintaan}
       />
     </div>
   );

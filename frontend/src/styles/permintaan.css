@@ -67,3 +67,20 @@
   font-size: 14px;
   line-height: 1.6;
 }
+
+.permintaan-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.permintaan-keluhan {
+  max-width: 300px;
+}
+
+.permintaan-keluhan .patient-name-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+}
