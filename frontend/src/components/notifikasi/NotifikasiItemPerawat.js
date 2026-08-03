@@ -22,7 +22,7 @@ export default function NotifikasiItemPerawat({ item, onClick }) {
 
       <div className="notification-item-body">
         <p>
-          Menunggu proses <strong>{statusText[item.status] || "-"}</strong>
+          Menunggu Pemeriksaan <strong>{statusText[item.status] || "-"}</strong>
         </p>
 
         <small>{formatDateTime(item.dibuat_pada)}</small>

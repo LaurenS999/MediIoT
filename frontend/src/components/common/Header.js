@@ -37,8 +37,8 @@ export default function Header() {
 
   const config = notifikasiConfig[user?.role];
 
-  const notificationData = dokterNotif;
-  // const notificationData = user?.role === "dokter" ? dokterNotif : perawatNotif;
+  // const notificationData = dokterNotif;
+  const notificationData = user?.role === "dokter" ? dokterNotif : perawatNotif;
 
   const { notifikasi, count, loading } = notificationData;
 
@@ -100,7 +100,7 @@ export default function Header() {
         <header className={`top-header ${collapsed ? "collapsed" : ""}`}>
           <div className="header-right">
             {/* NOTIFICATION */}
-            {["dokter"].includes(user?.role) && (
+            {["dokter", "perawat"].includes(user?.role) && (
               <div className="notification-wrapper">
                 <button
                   className="notification-button"

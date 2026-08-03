@@ -79,11 +79,11 @@ router.get(
   async (req, res) => {
     try {
       const sql_count = `
-        SELECT COUNT(pe.id_pendaftaran) as Jumlah_notif
-        FROM pendaftaran pe
+        SELECT COUNT(pe.id_permintaan_pemeriksaan) as Jumlah_notif
+        FROM permintaan_pemeriksaan pe
           INNER JOIN pasien p
             ON p.id_pasien = pe.id_pasien
-        WHERE pe.status LIKE "menunggu" OR pe.status LIKE "disetujui" OR pe.status LIKE "checkin"
+        WHERE pe.status LIKE "menunggu pemeriksaan"
         ORDER BY pe.dibuat_pada DESC
       `;
 
@@ -91,15 +91,15 @@ router.get(
 
       const sql = `
         SELECT
-            pe.id_pendaftaran,
+            pe.id_permintaan_pemeriksaan,
             pe.tanggal_pemeriksaan,
 			      pe.status,
             pe.dibuat_pada,
             p.nama
-        FROM pendaftaran pe
+        FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
             ON p.id_pasien = pe.id_pasien
-        WHERE pe.status LIKE "menunggu" OR pe.status LIKE "disetujui" OR pe.status LIKE "checkin"
+        WHERE pe.status LIKE "menunggu pemeriksaan"
         ORDER BY pe.dibuat_pada DESC
         LIMIT 5;
       `;
@@ -108,7 +108,7 @@ router.get(
 
       res.status(200).json({
         success: true,
-        message: "Berhasil mengambil daftar Pasien yang mendaftar.",
+        message: "Berhasil mengambil daftar Pasien yang meminta pemeriksaan.",
         data: rows,
         jumlah: count[0],
       });

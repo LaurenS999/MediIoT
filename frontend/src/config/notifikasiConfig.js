@@ -15,16 +15,16 @@ export const notifikasiConfig = {
     },
   },
 
-  // perawat: {
-  //   title: "Menunggu Pengukuran",
-  //   ItemComponent: NotifikasiItemPerawat,
+  perawat: {
+    title: "Menunggu Permintaan Pemeriksaan",
+    ItemComponent: NotifikasiItemPerawat,
 
-  //   onItemClick: (navigate, id) => {
-  //     navigate(`/pendaftaran`);
-  //   },
+    onItemClick: (navigate, id) => {
+      navigate(`/permintaan-pemeriksaan`);
+    },
 
-  //   onSeeAll: (navigate) => {
-  //     navigate("/pendaftaran");
-  //   },
-  // },
+    onSeeAll: (navigate) => {
+      navigate("/permintaan-pemeriksaan");
+    },
+  },
 };
