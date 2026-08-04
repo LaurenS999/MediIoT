@@ -15,6 +15,8 @@ import useLampiran from "../../hooks/useLampiran";
 
 import LampiranPemeriksaan from "../../components/pemeriksaan-dokter/LampiranPemeriksaan";
 
+import Lampiran from "../../components/lampiran/Lampiran";
+
 export default function DetailPemeriksaanDokter() {
   const { id_kunjungan } = useParams();
 
@@ -203,10 +205,13 @@ export default function DetailPemeriksaanDokter() {
         );
       })}
 
-      <LampiranPemeriksaan
+      <div className="card-custom ">
+        <Lampiran files={lampiran} canAdd={false} canDelete={false} />
+      </div>
+      {/* <LampiranPemeriksaan
         lampiran={lampiran}
         setPreviewImage={setPreviewImage}
-      />
+      /> */}
 
       {/* ================================================ */}
       {/* PEMERIKSAAN DOKTER */}

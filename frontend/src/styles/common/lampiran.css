@@ -1,0 +1,449 @@
+/* =====================================================
+   LAMPIRAN
+===================================================== */
+
+.lampiran-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-bottom: 18px;
+}
+
+.lampiran-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lampiran-title svg {
+  color: #475569;
+}
+
+.lampiran-title h3 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #1e293b;
+}
+
+
+/* =====================================================
+   BUTTON TAMBAH
+===================================================== */
+
+.btn-tambah-lampiran {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 14px;
+
+  border: none;
+  border-radius: 7px;
+
+  background-color: #2563eb;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.btn-tambah-lampiran:hover {
+  background-color: #1d4ed8;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.lampiran-empty {
+  min-height: 190px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+
+  background-color: #f8fafc;
+
+  text-align: center;
+
+  box-sizing: border-box;
+}
+
+.lampiran-empty-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 12px;
+
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.lampiran-empty h4 {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #334155;
+}
+
+.lampiran-empty p {
+  margin: 0 0 12px;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #64748b;
+}
+
+.lampiran-empty > span {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+
+/* =====================================================
+   LIST
+===================================================== */
+
+.lampiran-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+/* =====================================================
+   ITEM
+===================================================== */
+
+.lampiran-item {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 58px;
+
+  padding: 9px 12px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.lampiran-item:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+
+/* =====================================================
+   FILE ICON
+===================================================== */
+
+.lampiran-file-icon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =====================================================
+   FILE INFO
+===================================================== */
+
+.lampiran-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.lampiran-info strong {
+  display: block;
+
+  overflow: hidden;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #334155;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lampiran-meta {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #94a3b8;
+}
+
+.lampiran-meta span:first-child {
+  color: #64748b;
+  font-weight: 500;
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+.btn-lampiran-delete {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+
+  background-color: #ffffff;
+  color: #ef4444;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-lampiran-delete:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
+  .lampiran-header {
+    align-items: flex-start;
+  }
+
+  .btn-tambah-lampiran {
+    padding: 7px 10px;
+  }
+
+  .lampiran-item {
+    gap: 9px;
+  }
+
+  .lampiran-file-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.lampiran-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  flex-shrink: 0;
+}
+
+.btn-lampiran-preview,
+.btn-lampiran-download {
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+
+  background-color: #ffffff;
+  color: #2563eb;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-lampiran-preview:hover,
+.btn-lampiran-download:hover {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.btn-lampiran-delete {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+
+  background-color: #ffffff;
+  color: #ef4444;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-lampiran-delete:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.lampiran-preview-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.lampiran-preview-modal {
+  width: min(900px, 90vw);
+  max-height: 90vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.lampiran-preview-header {
+  min-height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lampiran-preview-header strong {
+  max-width: calc(100% - 50px);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 14px;
+}
+
+.lampiran-preview-close {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.lampiran-preview-close:hover {
+  background: #f1f5f9;
+}
+
+.lampiran-preview-body {
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: auto;
+
+  background: #f8fafc;
+}
+
+.lampiran-preview-body img {
+  display: block;
+
+  max-width: 100%;
+  max-height: calc(90vh - 120px);
+
+  object-fit: contain;
+}

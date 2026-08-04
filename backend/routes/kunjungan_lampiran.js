@@ -29,6 +29,8 @@ router.get(
             kategori,
             nama_file,
             path_file,
+            mime_type,
+            ukuran_file,
             dibuat_pada
         FROM kunjungan_lampiran
         WHERE id_kunjungan = ?
@@ -142,6 +144,7 @@ router.post(
       let nomor = total.jumlah;
 
       for (const file of req.files) {
+        console.log("FILE : " + file);
         nomor++;
 
         const ext = path.extname(file.originalname).toLowerCase();
@@ -154,11 +157,20 @@ router.post(
             id_kunjungan,
             kategori,
             nama_file,
-            path_file
+            path_file,
+            mime_type,
+            ukuran_file
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?)
         `,
-          [id_kunjungan, kategori[0], namaFile, file.filename],
+          [
+            id_kunjungan,
+            kategori[0],
+            namaFile,
+            file.filename,
+            file.mimetype,
+            file.size,
+          ],
         );
 
         uploadedFiles.push(file.filename);

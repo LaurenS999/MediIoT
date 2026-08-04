@@ -259,11 +259,20 @@ router.post(
                 id_kunjungan,
                 kategori,
                 nama_file,
-                path_file
+                path_file,
+                mime_type,
+                ukuran_file
               )
-              VALUES (?, ?, ?, ?)
+              VALUES (?, ?, ?, ?, ?, ?)
             `,
-            [id_kunjungan, kategori, namaFile, file.filename],
+            [
+              id_kunjungan,
+              kategori,
+              namaFile,
+              file.filename,
+              file.mimetype,
+              file.size,
+            ],
           );
 
           jumlahLampiran++;

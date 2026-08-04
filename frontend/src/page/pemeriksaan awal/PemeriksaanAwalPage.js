@@ -23,6 +23,8 @@ import { usePasienDetail } from "../../hooks/usePasienDetail";
 
 import UploadLampiranModal from "../../components/lampiranModal/UploadLampiranModal";
 
+import Lampiran from "../../components/lampiran/Lampiran";
+
 export default function PemeriksaanAwalPage() {
   const { state } = useLocation();
   const patientCardRef = useRef(null);
@@ -249,60 +251,12 @@ export default function PemeriksaanAwalPage() {
         />
       </div>
 
-      <div className="card-custom">
-        <div className="card-header">
-          <h3>Lampiran</h3>
-
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={isSaving || isSaved}
-            onClick={() => setShowUploadLampiran(true)}
-          >
-            Tambah Lampiran
-          </button>
-        </div>
-
-        {draftLampiran.length === 0 ? (
-          <div className="empty-state">Belum ada lampiran.</div>
-        ) : (
-          <div className="table-responsive">
-            <table className="modern-table">
-              <thead>
-                <tr>
-                  <th>Kategori</th>
-
-                  <th>Nama File</th>
-
-                  <th>Ukuran</th>
-
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {draftLampiran.map((item, index) => (
-                  <tr key={item.id} className="modern-row">
-                    <td>{item.kategori}</td>
-
-                    <td>{item.file.name}</td>
-
-                    <td>{formatFileSize(item.file.size)}</td>
-
-                    <td>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDeleteDraft(index)}
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <div className="card-custom ">
+        <Lampiran
+          files={draftLampiran}
+          onAdd={() => setShowUploadLampiran(true)}
+          onDelete={handleDeleteDraft}
+        />
       </div>
 
       {/* ===================================== */}
