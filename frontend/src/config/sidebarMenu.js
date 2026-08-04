@@ -25,10 +25,10 @@ export const sidebarMenu = [
   },
 
   {
-    label: "Data Pasien",
+    label: "Rekam Medis",
     path: `/rekam-medis-saya`,
     icon: Users,
-    roles: ["pasien", "super admin"],
+    roles: ["pasien"],
   },
 
   {

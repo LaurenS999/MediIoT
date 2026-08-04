@@ -47,6 +47,7 @@ export default function SetupPemeriksaanAwalPage() {
   // JENIS PENGUKURAN
   // =====================================================
   const { jenisPengukuran } = useJenisPengukuran();
+  console.log("JENIS PENGUKURAN : ", jenisPengukuran);
 
   // =====================================================
   // DEVICE
@@ -349,15 +350,21 @@ export default function SetupPemeriksaanAwalPage() {
 
             {showSuggestions && search.length > 0 && (
               <ul className="suggestions-list">
-                {pasien.map((patient) => (
-                  <li
-                    key={patient.id}
-                    className="suggestion-item"
-                    onClick={() => handleSelectPatient(patient)}
-                  >
-                    <strong>{patient.kode_pasien}</strong> - {patient.nama}
+                {pasien.length === 0 ? (
+                  <li className="suggestion-item suggestion-empty">
+                    Pasien tidak ditemukan
                   </li>
-                ))}
+                ) : (
+                  pasien.map((patient) => (
+                    <li
+                      key={patient.id}
+                      className="suggestion-item"
+                      onClick={() => handleSelectPatient(patient)}
+                    >
+                      <strong>{patient.kode_pasien}</strong> - {patient.nama}
+                    </li>
+                  ))
+                )}
               </ul>
             )}
           </div>
@@ -368,9 +375,9 @@ export default function SetupPemeriksaanAwalPage() {
             {selectedPatient && (
               <div className="patient-info-grid">
                 <div>
-                  <span>ID Pasien</span>
+                  <span>Kode Pasien</span>
 
-                  <strong>{selectedPatient.id_pasien}</strong>
+                  <strong>{selectedPatient.kode_pasien}</strong>
                 </div>
 
                 <div>
@@ -419,7 +426,7 @@ export default function SetupPemeriksaanAwalPage() {
 
               <input
                 type="text"
-                placeholder="Cari Nama atau ID Pasien..."
+                placeholder="Cari pengukuran..."
                 className="search-input"
                 value={jenisPengukuranSearch}
                 onChange={(e) => setJenisPengukuranSearch(e.target.value)}
@@ -500,10 +507,10 @@ export default function SetupPemeriksaanAwalPage() {
                             <div
                               key={device.id}
                               className={`
-            device-card
-            ${isSelected ? "selected" : ""}
-            ${isDisabled ? "disabled" : ""}
-          `}
+                                device-card
+                                ${isSelected ? "selected" : ""}
+                                ${isDisabled ? "disabled" : ""}
+                              `}
                               onClick={() => {
                                 if (isDisabled) return;
 
@@ -566,7 +573,11 @@ export default function SetupPemeriksaanAwalPage() {
                 </div>
               </div>
 
-              <button onClick={handleStart} className="btn-start">
+              <button
+                onClick={handleStart}
+                className="btn-start"
+                disabled={selectedDevices.length === 0}
+              >
                 Mulai Pengukuran
               </button>
             </div>

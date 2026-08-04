@@ -42,9 +42,7 @@ export default function PemeriksaanDokterPage() {
       {/* ====================================================== */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">
-            Daftar kunjungan yang Belum diperiksa Dokter
-          </h1>
+          <h1 className="page-title">Antrian Pemeriksaan Dokter</h1>
 
           <p className="page-subtitle">
             Kelola data pasien yang belum diperiksa dokter

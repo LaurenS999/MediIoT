@@ -63,6 +63,7 @@ router.get(
           sp.catatan_perawat,
 
           p.id_pasien,
+          p.kode_pasien,
           p.nama,
 
           u.username AS nama_perawat
@@ -174,6 +175,7 @@ router.get(
             COALESCE(sp.catatan_perawat, '') AS catatan_perawat,
 
             p.id_pasien AS id_pasien,
+            p.kode_pasien,
             p.nama,
             p.tanggal_lahir,
             p.jenis_kelamin,
@@ -226,6 +228,7 @@ router.get(
         data: {
           pasien: {
             id: sesi.id_pasien,
+            kode_pasien: sesi.kode_pasien,
             nama_pasien: sesi.nama,
             tanggal_lahir: sesi.tanggal_lahir,
             jenis_kelamin: sesi.jenis_kelamin,

@@ -117,8 +117,8 @@ export default function DetailPemeriksaanDokter() {
           </div>
 
           <div className="patient-detail-item">
-            <label>Kode kunjungan</label>
-            <p>{pasien.kode_kunjungan}</p>
+            <label>Kode Pasien</label>
+            <p>{pasien.kode_pasien}</p>
           </div>
 
           <div className="patient-detail-item">
@@ -216,7 +216,9 @@ export default function DetailPemeriksaanDokter() {
         <h2>Pemeriksaan Dokter</h2>
 
         <div className="doctor-form-group">
-          <label>Diagnosa</label>
+          <label>
+            Diagnosa <span className="required-mark"> *</span>
+          </label>
 
           <textarea
             className={
@@ -227,23 +229,6 @@ export default function DetailPemeriksaanDokter() {
             onChange={handleChange}
             rows={3}
             placeholder='Masukkan diagnosa. Jika tidak ada diagnosa, tuliskan "Tidak ada".'
-          />
-        </div>
-
-        <div className="doctor-form-group">
-          <label>Catatan Pemeriksaan Akhir</label>
-
-          <textarea
-            className={
-              error.catatan_dokter
-                ? "doctor-textarea input-error"
-                : "doctor-textarea"
-            }
-            name="catatan_dokter"
-            value={formData.catatan_dokter}
-            onChange={handleChange}
-            rows={4}
-            placeholder='Masukkan catatan dokter. Jika tidak ada catatan dokter, tuliskan "Tidak ada".'
           />
         </div>
 
@@ -273,6 +258,25 @@ export default function DetailPemeriksaanDokter() {
 
             <option value="unfit temporary">UnFit Temporary</option>
           </select>
+        </div>
+
+        <div className="doctor-form-group">
+          <label>
+            Catatan Pemeriksaan Akhir <span className="required-mark"> *</span>
+          </label>
+
+          <textarea
+            className={
+              error.catatan_dokter
+                ? "doctor-textarea input-error"
+                : "doctor-textarea"
+            }
+            name="catatan_dokter"
+            value={formData.catatan_dokter}
+            onChange={handleChange}
+            rows={4}
+            placeholder='Masukkan catatan dokter. Jika tidak ada catatan dokter, tuliskan "Tidak ada".'
+          />
         </div>
 
         <div className="doctor-action">

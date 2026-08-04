@@ -33,11 +33,7 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     // BELUM LOGIN
     // =========================================
     if ((!token || !user) && !hasAlerted.current) {
-      setMessage("Kamu belum login");
-      setShowModal(true);
-
-      hasAlerted.current = true;
-      return;
+      navigate("/login");
     }
 
     // =========================================
@@ -54,18 +50,6 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
   // =========================================
   // BELUM LOGIN
   // =========================================
-  if (!token) {
-    return (
-      <ModalInfo
-        isOpen={showModal}
-        message={message}
-        onClose={() => {
-          setShowModal(false);
-          navigate("/login");
-        }}
-      />
-    );
-  }
 
   // =========================================
   // ROLE TIDAK SESUAI

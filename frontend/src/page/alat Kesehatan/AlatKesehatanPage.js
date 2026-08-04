@@ -83,7 +83,6 @@ export default function AlatKesehatanPage() {
                 <th>IP Address</th>
                 <th>Gateway ID</th>
                 <th>Model</th>
-                <th>Function</th>
                 <th>Activated</th>
                 <th>Status</th>
               </tr>
@@ -114,12 +113,6 @@ export default function AlatKesehatanPage() {
                   </td>
 
                   <td>{device.model || "-"}</td>
-
-                  <td>
-                    <div className="function-chip">
-                      {device.device_function || "-"}
-                    </div>
-                  </td>
 
                   <td>
                     <span

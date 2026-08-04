@@ -16,9 +16,8 @@ const permissions = {
     "permintaan.pemeriksaan.create",
     "permintaan.pemeriksaan.read",
     "permintaan.pemeriksaan.read.pasien",
-    "permintaan.pemeriksaan.patch.tolak",
     "permintaan.pemeriksaan.patch.batal",
-    "permintaan.pemeriksaan.patch.setuju",
+    "permintaan.pemeriksaan.patch.selesai",
 
     "pengukuran.read",
     "pengukuran.create",
@@ -119,9 +118,8 @@ const permissions = {
 
     "permintaan.pemeriksaan.read",
     "permintaan.pemeriksaan.read.pasien",
-    "permintaan.pemeriksaan.patch.tolak",
     "permintaan.pemeriksaan.patch.batal",
-    "permintaan.pemeriksaan.patch.setuju",
+    "permintaan.pemeriksaan.patch.selesai",
 
     "pengukuran.read",
     "pengukuran.create",

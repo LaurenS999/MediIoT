@@ -46,7 +46,7 @@ export default function RiwayatKunjunganPage() {
 
       // convert jadi file
       const blob = new Blob([response.data], {
-        type: "application/pdf",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
       // buat url download

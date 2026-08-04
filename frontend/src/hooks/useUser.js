@@ -109,31 +109,41 @@ export const useUser = () => {
 
     if (newUser.password.length > 0) {
       if (newUser.password != konfimrasiPassword) {
-        toast.error("password tidak sama dengan konfirmasi password");
+        toast.error("password tidak sama dengan konfirmasi password", {
+          toastId: "user-create-password-tidak-sama-error",
+        });
         newErrors.password = true;
       }
     }
 
     if (newUser.password.length < 8) {
-      toast.error("password minimal 8 karakter");
+      toast.error("password minimal 8 karakter", {
+        toastId: "user-create-password-error",
+      });
       newErrors.password = true;
     }
 
     if (newUser.role === 5 && !newUser.id_relasi) {
       newErrors.id_relasi = true;
-      toast.error("User dengan role pasien wajib isi id pasien user");
+      toast.error("User dengan role pasien wajib isi id pasien user", {
+        toastId: "user-create-relasi-error",
+      });
     }
 
     if (newUser.role === 1 && !newUser.bertugas_di) {
       newErrors.bertugas_di = true;
-      toast.error("User dengan role perawat wajib isi Bertugas di Ruangan");
+      toast.error("User dengan role perawat wajib isi Bertugas di Ruangan", {
+        toastId: "user-create-bertugas-error",
+      });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
 
       if (newErrors.username || newErrors.role || newErrors.password_kosong) {
-        toast.error("Data tidak boleh kosong");
+        toast.error("Data tidak boleh kosong", {
+          toastId: "user-create-kosong",
+        });
       }
       return false;
     }
@@ -152,7 +162,9 @@ export const useUser = () => {
     try {
       await createUser(newUser);
 
-      toast.success("User berhasil ditambahkan");
+      toast.success("User berhasil ditambahkan", {
+        toastId: "user-create-success",
+      });
 
       // RESET FORM
       setNewUser({
@@ -170,7 +182,9 @@ export const useUser = () => {
       // REFRESH DATA
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message, {
+        toastId: "user-create-error",
+      });
     }
   };
 
@@ -185,7 +199,7 @@ export const useUser = () => {
 
       const response = await updateUser(selectedUser.id_user, newUser);
 
-      toast.success(response?.data?.message);
+      toast.success(response?.data?.message, { toastId: "user-update-error" });
 
       setOpenModal(false);
       setNewUser({
@@ -200,7 +214,9 @@ export const useUser = () => {
 
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message, {
+        toastId: "user-update-error",
+      });
     }
   };
 
@@ -218,13 +234,17 @@ export const useUser = () => {
   const handleConfirmDelete = async () => {
     try {
       const response = await deleteUser(selectedDeleteUser.id_user, user.role);
-      toast.success(response?.data?.message);
+      toast.success(response?.data?.message, {
+        toastId: "user-delete-success",
+      });
       setOpenDeleteModal(false);
       setSelectedDeleteUser(null);
 
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message, {
+        toastId: "user-delete-error",
+      });
     }
   };
 

@@ -60,7 +60,7 @@ export const usePasien = (id_user) => {
             setCurrentPage(paginationData.page);
             setTotalPage(paginationData.totalPage);
           } else {
-            toast.info("Pasien Tidak ditemukan");
+            // toast.info("Pasien Tidak ditemukan", { toastId: "pasien-kosong" });
             setPasien([]);
           }
         }
@@ -68,6 +68,7 @@ export const usePasien = (id_user) => {
         toast.error(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data pasien",
+          { toastId: "pasien-get-error" },
         );
       }
     },
@@ -77,7 +78,7 @@ export const usePasien = (id_user) => {
   const ambilDetailPasien = useCallback(async () => {
     try {
     } catch (error) {
-      toast.info("Terjadi Error : ", error);
+      toast.info("Terjadi Error : ", error, { toastId: "pasien=detail-error" });
     }
   }, []);
 
@@ -106,7 +107,9 @@ export const usePasien = (id_user) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.warning("Data wajib tidak boleh kosong");
+      toast.warning("Data wajib tidak boleh kosong", {
+        toastId: "pasien-data-kosong",
+      });
       return false;
     }
 
@@ -150,7 +153,7 @@ export const usePasien = (id_user) => {
           }));
         }
       }
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message, { toastId: "pasien-error" });
     }
   });
 

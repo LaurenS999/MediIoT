@@ -27,6 +27,7 @@ export default function useJenisPengukuran() {
         toast.error(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",
+          { toastId: "medlink-jenis-pengukuran-error" },
         );
 
         setError(error.response.data.message || "Ambil Device Gagal");

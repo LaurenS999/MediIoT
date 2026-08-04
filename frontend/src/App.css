@@ -57,12 +57,7 @@ body {
 
 .app-body {
   flex: 1;
-
   width: 100%;
-
   min-width: 0;
-
-  padding: 40px;
-
   background-color: #f5f7fb;
 }

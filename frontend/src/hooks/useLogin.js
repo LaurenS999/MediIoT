@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 
 import { toast } from "react-toastify";
+import { showToast } from "../utils/toast.js";
 
 export default function useLogin() {
   const { login } = useAuth();
@@ -49,16 +50,18 @@ export default function useLogin() {
       const newErrors = {};
 
       if (!form.username) {
-        newErrors.username = "Username wajib diisi";
+        newErrors.username = true;
       }
 
       if (!form.password) {
-        newErrors.password = "Password wajib diisi";
+        newErrors.password = true;
       }
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
-        toast.warning("Data tidak boleh kosong");
+        toast.warning("Data tidak boleh kosong", {
+          toastId: "Login-error-kosong",
+        });
         return;
       }
 
@@ -71,9 +74,11 @@ export default function useLogin() {
       return { success: true, res };
     } catch (err) {
       if (err.response) {
-        toast.error(err.response.data.message);
+        showToast(err.response.data.message, "Login-error", "error");
       } else {
-        toast.error("Server Tidak Terjangkau");
+        toast.error("Server Tidak Terjangkau", {
+          toastId: "Login-error-server",
+        });
       }
 
       return { success: false };

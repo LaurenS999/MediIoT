@@ -13,19 +13,20 @@ export default function NotifikasiItemPerawat({ item, onClick }) {
       onClick={() => onClick(item.id_permintaan_pemeriksaan)}
     >
       <div className="notification-item-header">
-        <h4>{item.nama}</h4>
+        <h4>{item?.nama}</h4>
 
         <span className="notification">
-          {renderStatusPermintaan(item.status)}
+          {renderStatusPermintaan(item?.status)}
         </span>
       </div>
 
       <div className="notification-item-body">
         <p>
-          Menunggu Pemeriksaan <strong>{statusText[item.status] || "-"}</strong>
+          Menunggu Pemeriksaan{" "}
+          <strong>{statusText[item?.status] || "-"}</strong>
         </p>
 
-        <small>{formatDateTime(item.dibuat_pada)}</small>
+        <small>{formatDateTime(item?.dibuat_pada)}</small>
       </div>
     </div>
   );

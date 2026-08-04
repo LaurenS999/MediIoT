@@ -108,7 +108,7 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Loading..." : "Masuk"}
+            Masuk
           </button>
         </form>
 

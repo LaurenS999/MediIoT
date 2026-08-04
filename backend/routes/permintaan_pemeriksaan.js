@@ -37,7 +37,14 @@ router.get(
       // =========================
       const sql = `
         SELECT
-          pe.*,
+          pe.id_permintaan_pemeriksaan,
+          pe.tanggal_pemeriksaan,
+          pe.keluhan,
+          pe.status,
+          
+          TIME_FORMAT(pe.waktu_kunjungan_awal, '%H:%i') AS waktu_kunjungan_awal,
+          TIME_FORMAT(pe.waktu_kunjungan_akhir, '%H:%i') AS waktu_kunjungan_akhir,
+
           p.nama AS nama_pasien
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
@@ -124,7 +131,13 @@ router.get(
       // =========================
       const sql = `
         SELECT
-          pe.*,
+          pe.id_permintaan_pemeriksaan,
+          pe.tanggal_pemeriksaan,
+          pe.keluhan,
+          pe.status,
+          
+          TIME_FORMAT(pe.waktu_kunjungan_awal, '%H:%i') AS waktu_kunjungan_awal,
+          TIME_FORMAT(pe.waktu_kunjungan_akhir, '%H:%i') AS waktu_kunjungan_akhir,
           p.nama AS nama_pasien
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
