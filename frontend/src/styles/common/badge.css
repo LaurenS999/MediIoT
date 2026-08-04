@@ -113,3 +113,10 @@
   background: #fef3c7;
   color: #92400e;
 }
+
+.badge-status-permintaan {
+  padding: 4px 5px;
+  font-size: 12px;
+  text-align: center;
+  
+}

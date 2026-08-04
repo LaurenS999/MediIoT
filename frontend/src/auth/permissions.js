@@ -16,9 +16,8 @@ export const permissions = {
     "permintaan.pemeriksaan.read",
     "permintaan.pemeriksaan.read.pasien",
     "permintaan.pemeriksaan.create",
-    "permintaan.pemeriksaan.patch.tolak",
     "permintaan.pemeriksaan.patch.batal",
-    "permintaan.pemeriksaan.patch.setuju",
+    "permintaan.pemeriksaan.patch.selesai",
 
     "pengukuran.read",
     "pengukuran.create",
@@ -93,9 +92,8 @@ export const permissions = {
 
     "permintaan.pemeriksaan.read",
     "permintaan.pemeriksaan.read.pasien",
-    "permintaan.pemeriksaan.patch.tolak",
     "permintaan.pemeriksaan.patch.batal",
-    "permintaan.pemeriksaan.patch.setuju",
+    "permintaan.pemeriksaan.patch.selesai",
 
     "pengukuran.read",
     "pengukuran.create",

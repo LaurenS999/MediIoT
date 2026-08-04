@@ -79,12 +79,7 @@ function App() {
                 path="/pasien/:id"
                 element={
                   <ProtectedRoute
-                    allowedRoles={[
-                      "perawat",
-                      "dokter",
-                      "super admin",
-                      "pasien",
-                    ]}
+                    allowedRoles={["perawat", "dokter", "super admin"]}
                   >
                     <DetailPasienPage />
                   </ProtectedRoute>
