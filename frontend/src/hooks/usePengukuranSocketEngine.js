@@ -54,8 +54,6 @@ export default function usePengukuranSocketEngine({
       // CONNECT
       // =====================================
       socket.on("connect", () => {
-        toast.success("Sucess Koneksi WebSocket");
-
         setGatewayStatus((prev) => ({
           ...prev,
           [gatewayId]: true,
@@ -68,7 +66,9 @@ export default function usePengukuranSocketEngine({
       // DISCONNECT
       // =====================================
       socket.on("disconnect", () => {
-        toast.success("Koneksi Websocket berhasil diputus");
+        toast.warn("Koneksi ke server terputus", {
+          toastId: "socket-disconnect",
+        });
 
         setGatewayStatus((prev) => ({
           ...prev,
@@ -80,8 +80,28 @@ export default function usePengukuranSocketEngine({
       // CONNECT ERROR
       // =====================================
       socket.on("connect_error", (error) => {
-        toast.warn(`CONNECT ERROR GATEWAY ${gatewayId}:`, error.message);
+        toast.warn(`Sedang mencoba menghubungkan kembali...`, {
+          toastId: "socket-reconnecting",
+        });
         console.error(`CONNECT ERROR GATEWAY ${gatewayId}:`, error.message);
+      });
+
+      // =====================================
+      // RECONNECT BERHASIL
+      // =====================================
+      socket.io.on("reconnect", (attempt) => {
+        toast.success("Koneksi ke server berhasil dipulihkan", {
+          toastId: `socket-success-reconnected`,
+        });
+
+        setGatewayStatus((prev) => ({
+          ...prev,
+          [gatewayId]: true,
+        }));
+
+        console.log(
+          `RECONNECT BERHASIL GATEWAY ${gatewayId} setelah ${attempt} percobaan`,
+        );
       });
 
       // =====================================
@@ -90,7 +110,9 @@ export default function usePengukuranSocketEngine({
       socket.io.on("reconnect_failed", () => {
         console.error(`RECONNECT FAILED GATEWAY ${gatewayId}`);
 
-        toast.error(`Gagal menghubungkan kembali ke gateway ${gatewayId}`);
+        toast.error(`Koneksi ke server gagal dipulihkan`, {
+          toastId: "socket-fail-reconnecting",
+        });
 
         setGatewayStatus((prev) => ({
           ...prev,
@@ -110,9 +132,6 @@ export default function usePengukuranSocketEngine({
         const config = pengukuranSocketMap[device.device_function];
 
         if (!config) {
-          console.warn("NO SOCKET CONFIG:", device.device_function);
-          toast.warn("NO SOCKET CONFIG:", device.device_function);
-
           return;
         }
 
