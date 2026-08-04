@@ -82,8 +82,30 @@ export default function SetupPemeriksaanAwalPage() {
   // FILTER JENIS PENGUKURAN
   // =====================================================
   const filteredJenisPengukuran = jenisPengukuran.filter((item) =>
-    item?.toLowerCase().includes(jenisPengukuranSearch.toLowerCase()),
+    item.nama.toLowerCase().includes(jenisPengukuranSearch.toLowerCase()),
   );
+
+  const [openGroups, setOpenGroups] = useState({});
+
+  const groupedJenisPengukuran = filteredJenisPengukuran.reduce(
+    (groups, item) => {
+      if (!groups[item.grup]) {
+        groups[item.grup] = [];
+      }
+
+      groups[item.grup].push(item);
+
+      return groups;
+    },
+    {},
+  );
+
+  const toggleGroup = (group) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [group]: !prev[group],
+    }));
+  };
 
   // =====================================================
   // CLICK OUTSIDE
@@ -433,25 +455,40 @@ export default function SetupPemeriksaanAwalPage() {
               />
             </div>
 
+            {/* INI YANG SCROLL */}
             <div className="measurement-list">
-              {filteredJenisPengukuran.map((type) => {
-                const isSelected = selectedMeasurements.includes(type);
+              {Object.entries(groupedJenisPengukuran).map(
+                ([group, measurements]) => (
+                  <div className="measurement-group" key={group}>
+                    <div className="measurement-group-title">{group}</div>
 
-                return (
-                  <label
-                    key={type}
-                    className={`measurement-item ${isSelected ? "active" : ""}`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleMeasurement(type)}
-                    />
+                    {measurements.map((type) => {
+                      const isSelected = selectedMeasurements.includes(
+                        type.jenis_pengukuran,
+                      );
 
-                    <span>{formatJenisPengukuran(type)}</span>
-                  </label>
-                );
-              })}
+                      return (
+                        <label
+                          key={type.jenis_pengukuran}
+                          className={`measurement-item ${
+                            isSelected ? "active" : ""
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() =>
+                              toggleMeasurement(type.jenis_pengukuran)
+                            }
+                          />
+
+                          <span>{type.nama}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                ),
+              )}
             </div>
           </div>
 

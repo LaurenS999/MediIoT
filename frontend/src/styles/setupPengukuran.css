@@ -245,16 +245,46 @@
   margin-top: 16px;
   padding-right: 6px;
 }
+.measurement-group {
+  margin-bottom: 10px;
+}
+
+.measurement-group-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+
+  padding: 8px 4px 6px;
+
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  background: #fff;
+}
 
 .measurement-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+
+  padding: 14px 16px;
   border-radius: 18px;
   border: 1px solid #dbe2ea;
+
   cursor: pointer;
   transition: 0.2s ease;
+}
+
+.measurement-item input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.measurement-item span {
+  margin-left: 4px;
 }
 
 .measurement-item:hover {
@@ -284,6 +314,8 @@
 .measurement-list::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+
 
 /* ===================================================== */
 /* DEVICE PANEL */
