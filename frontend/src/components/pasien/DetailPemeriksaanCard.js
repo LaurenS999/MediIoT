@@ -1,11 +1,27 @@
 import "../../styles/detailPemeriksaanCard.css";
 import { formatDateTime } from "../../utils/formatDate";
+
 export function DetailPemeriksaanCard({ pemeriksaan }) {
   return (
     <div className="examination-card">
       <div className="card-header">
         <h3>Hasil Pemeriksaan</h3>
-        <p>{formatDateTime(pemeriksaan?.dibuat_pada) || ""}</p>
+
+        <div className="examination-dates">
+          <div className="examination-date">
+            <span>Pemeriksaan Awal</span>
+            <strong>
+              {formatDateTime(pemeriksaan?.tanggal_pemeriksaan_awal) || "-"}
+            </strong>
+          </div>
+
+          <div className="examination-date">
+            <span>Pemeriksaan Dokter</span>
+            <strong>
+              {formatDateTime(pemeriksaan?.tanggal_pemeriksaan_dokter) || "-"}
+            </strong>
+          </div>
+        </div>
       </div>
 
       <div className="card-body-pemeriksaan">

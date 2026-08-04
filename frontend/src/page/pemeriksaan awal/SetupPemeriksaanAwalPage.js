@@ -426,7 +426,7 @@ export default function SetupPemeriksaanAwalPage() {
 
               <input
                 type="text"
-                placeholder="Cari pengukuran..."
+                placeholder="Cari jenis pengukuran..."
                 className="search-input"
                 value={jenisPengukuranSearch}
                 onChange={(e) => setJenisPengukuranSearch(e.target.value)}

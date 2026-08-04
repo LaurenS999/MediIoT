@@ -51,7 +51,8 @@ router.get(
       let sql = `
         SELECT
           k.id_kunjungan,
-          k.tanggal_berkunjung,
+          k.tanggal_pemeriksaan_awal,
+          k.tanggal_pemeriksaan_dokter,
 
           sp.id_pemeriksaan,
           sp.kode_pemeriksaan,
@@ -166,7 +167,8 @@ router.get(
       // ==================================================
       const sqlSesi = `
         SELECT
-            k.tanggal_berkunjung,
+            k.tanggal_pemeriksaan_awal,
+            k.tanggal_pemeriksaan_dokter,
             k.kode_kunjungan,
             sp.id_pemeriksaan,
             sp.kode_pemeriksaan,
@@ -340,11 +342,12 @@ router.put(
       // =========================
       const [kunjungan] = await conn.query(
         `
-        UPDATE kunjungan
-        SET
-          id_dokter = ?
-        WHERE id_kunjungan = ?
-        `,
+          UPDATE kunjungan
+          SET
+            id_dokter = ?,
+            tanggal_pemeriksaan_dokter = NOW()
+          WHERE id_kunjungan = ?
+          `,
         [req.user.id_user, id_kunjungan],
       );
 

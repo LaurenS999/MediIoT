@@ -104,7 +104,7 @@ export default function PemeriksaanDokterPage() {
                     <div className="table-name-text">{item.nama_perawat}</div>
                   </td>
 
-                  <td>{formatDateTime(item.tanggal_berkunjung)}</td>
+                  <td>{formatDateTime(item.tanggal_pemeriksaan_awal)}</td>
 
                   <td>
                     <div className="table-name-text">

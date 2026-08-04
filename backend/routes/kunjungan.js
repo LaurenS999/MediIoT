@@ -76,7 +76,8 @@ router.get("/", auth, allow("kunjungan.read"), async (req, res) => {
           perawat.username AS nama_perawat,
           dokter.id_user AS id_dokter,
           dokter.username AS nama_dokter,
-          k.dibuat_pada AS tanggal_kunjungan
+          k.tanggal_pemeriksaan_awal,
+          k.tanggal_pemeriksaan_dokter
 
       FROM kunjungan k
 
@@ -162,7 +163,8 @@ router.get("/:id_pasien", auth, allow("kunjungan.read"), async (req, res) => {
           perawat.username AS nama_perawat,
           dokter.id_user AS id_dokter,
           dokter.username AS nama_dokter,
-          k.dibuat_pada AS tanggal_kunjungan
+          k.tanggal_pemeriksaan_awal,
+          k.tanggal_pemeriksaan_dokter
 
         FROM kunjungan k
 

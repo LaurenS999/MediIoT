@@ -582,8 +582,9 @@ export default function DetailPasienPage() {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Tanggal</th>
+                <th>Tanggal Pemeriksaan Awal</th>
                 <th>Nama Perawat</th>
+                <th>Tanggal Pemeriksaan Dokter</th>
                 <th>Nama Dokter</th>
                 <th>Action</th>
               </tr>
@@ -607,13 +608,14 @@ export default function DetailPasienPage() {
                   <tr key={index} className="modern-row">
                     <td>{index + 1}</td>
 
-                    <td>{formatDateTime(item.tanggal_kunjungan)}</td>
+                    <td>{formatDateTime(item.tanggal_pemeriksaan_awal)}</td>
 
                     <td>
                       <span className="patient-name-text">
                         {item.nama_perawat}
                       </span>
                     </td>
+                    <td>{formatDateTime(item.tanggal_pemeriksaan_dokter)}</td>
 
                     <td>
                       <span className="patient-name-text">

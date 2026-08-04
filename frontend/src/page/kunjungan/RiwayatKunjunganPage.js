@@ -180,7 +180,7 @@ export default function RiwayatKunjunganPage() {
                     <div>
                       <CalendarClock size={15} />
 
-                      {formatDateTime(item.tanggal_kunjungan)}
+                      {formatDateTime(item.tanggal_pemeriksaan_awal)}
                     </div>
                   </td>
                 </tr>
