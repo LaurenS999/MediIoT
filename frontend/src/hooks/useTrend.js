@@ -11,7 +11,7 @@ import {
 export const useTrend = (id_pasien, pasienDetailStatus) => {
   const [trendBerat, setTrendBerat] = useState([]);
   const [trendFat, setTrendFat] = useState([]);
-  const [trendMucle, setTrendMuscle] = useState([]);
+  const [trendMuscle, setTrendMuscle] = useState([]);
   const [trendTensi, setTrendTensi] = useState([]);
 
   const [interval, setInterval] = useState(7);
@@ -141,7 +141,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
   return {
     trendBerat,
     trendFat,
-    trendMucle,
+    trendMuscle,
     trendTensi,
     openModal,
     setOpenModal,

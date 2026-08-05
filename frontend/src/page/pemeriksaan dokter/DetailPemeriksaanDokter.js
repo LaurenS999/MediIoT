@@ -208,10 +208,6 @@ export default function DetailPemeriksaanDokter() {
       <div className="card-custom ">
         <Lampiran files={lampiran} canAdd={false} canDelete={false} />
       </div>
-      {/* <LampiranPemeriksaan
-        lampiran={lampiran}
-        setPreviewImage={setPreviewImage}
-      /> */}
 
       {/* ================================================ */}
       {/* PEMERIKSAAN DOKTER */}

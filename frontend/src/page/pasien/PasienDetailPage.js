@@ -5,7 +5,6 @@ import "../../styles/pasienDetail.css";
 
 import { usePasienDetail } from "../../hooks/usePasienDetail";
 
-import { formatTanggalIndonesia } from "../../utils/formatTanggal";
 import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
 
 import DetailPengukuran from "../../components/pasien/DetailPengukuran";
@@ -28,11 +27,17 @@ import { useKunjunganDetail } from "../../hooks/useKunjunganDetail";
 
 import { DetailPemeriksaanCard } from "../../components/pasien/DetailPemeriksaanCard";
 import { renderAktivitasKunjungan } from "../../utils/renderAktivitasKunjungan";
+import { GrafikTrendCard } from "../../components/pasien/GrafikTrendCard";
 
-import LampiranModal from "../../components/lampiranModal/LampiranModal";
+import Lampiran from "../../components/lampiran/Lampiran";
+import useLampiran from "../../hooks/useLampiran";
 
 import Pagination from "../../components/common/Pagination";
 import { getPaginationItems } from "../../utils/pagination";
+
+import { useKunjunganDropdown } from "../../hooks/useKunjunganDropdown";
+import { getTrendMuscle } from "../../services/trendService";
+
 export default function DetailPasienPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -67,7 +72,7 @@ export default function DetailPasienPage() {
   const {
     trendBerat,
     trendFat,
-    trendMucle,
+    trendMuscle,
     trendTensi,
     openModal,
     setOpenModal,
@@ -91,13 +96,25 @@ export default function DetailPasienPage() {
     totalPage,
   } = useKunjunganDetail(idPasien);
 
+  const { kunjunganDropdown, ambilKunjunganDropdown } = useKunjunganDropdown();
+
+  const [selectedKunjungan, setSelectedKunjungan] = useState("");
+  const [activeTab, setActiveTab] = useState("pemeriksaan");
+
+  const { lampiran, previewImage, setPreviewImage } =
+    useLampiran(selectedKunjungan);
+
+  useEffect(() => {
+    if (idPasien) {
+      ambilKunjunganDropdown(idPasien);
+    }
+  }, []);
+
   const page = getPaginationItems(currentPage, totalPage);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [showLampiranModal, setShowLampiranModal] = useState(false);
-
-  const [selectedKunjungan, setSelectedKunjungan] = useState(null);
 
   const handleOpenLampiran = (kunjungan) => {
     setSelectedKunjungan(kunjungan);
@@ -483,183 +500,191 @@ export default function DetailPasienPage() {
         </div>
       )}
 
-      {/* DETAIL PEMERIKSAAN */}
-      <div ref={measurementRef}>
-        <DetailPemeriksaanCard pemeriksaan={pemeriksaan} />
-      </div>
-      {/* =====================================================
-          DETAIL PENGUKURAN
-      ===================================================== */}
-
-      <div>
-        <DetailPengukuran data={pengukuran} />
-      </div>
-
-      <div className="trend-section">
-        <div className="trend-header">
-          <div>
-            <h3 className="trend-title">Grafik Data Pasien</h3>
-
-            <p className="trend-subtitle">Grafik perubahan Data pasien</p>
-          </div>
-
-          <div className="trend-filter-group">
-            <button
-              className={`trend-filter-btn ${interval === 7 ? "active" : ""}`}
-              onClick={() => setInterval(7)}
-            >
-              7 Hari
-            </button>
-
-            <button
-              className={`trend-filter-btn ${interval === 30 ? "active" : ""}`}
-              onClick={() => setInterval(30)}
-            >
-              30 Hari
-            </button>
-
-            <button
-              className={`trend-filter-btn ${interval === 90 ? "active" : ""}`}
-              onClick={() => setInterval(90)}
-            >
-              3 Bulan
-            </button>
-          </div>
+      <div className="kunjungan-selector">
+        <div className="kunjungan-selector-info">
+          <h3>Pilih Kunjungan</h3>
+          <p>
+            Pilih tanggal kunjungan untuk melihat hasil pemeriksaan dan
+            pengukuran pasien.
+          </p>
         </div>
 
-        <div className="trend-grid">
-          <GrafikTrend
-            title="Trend Berat Badan"
-            data={transformTrendData(trendBerat, ["berat"])}
-            dataKey="berat"
-            color="#2563eb"
-            unit="kg"
-          />
+        <select
+          className="kunjungan-select"
+          value={selectedKunjungan}
+          onChange={(e) => {
+            setSelectedKunjungan(e.target.value);
+            handleSelectKunjungan(pasienDetail.id_pasien, e.target.value);
+          }}
+        >
+          <option value="">Pilih tanggal kunjungan</option>
 
-          <GrafikTensi
-            title="Trend Tekanan Darah"
-            data={transformTrendData(trendTensi, ["systolic", "diastolic"])}
-          />
-
-          <GrafikTrend
-            title="Trend Body Fat"
-            data={transformTrendData(trendFat, ["body_fat"])}
-            dataKey="body_fat"
-            color="#dc2626"
-            unit="%"
-          />
-
-          <GrafikTrend
-            title="Trend Muscle Mass"
-            data={transformTrendData(trendMucle, ["muscle_mass"])}
-            dataKey="muscle_mass"
-            color="#16a34a"
-            unit="kg"
-          />
-        </div>
+          {kunjunganDropdown.map((item) => (
+            <option key={item.id_kunjungan} value={item.id_kunjungan}>
+              {formatDateTime(item.tanggal_pemeriksaan_awal, true)}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* =====================================================
-          RIWAYAT PENGUKURAN
-      ===================================================== */}
+      <div className="detail-tabs">
+        <button
+          type="button"
+          className={`detail-tab ${
+            activeTab === "pemeriksaan" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("pemeriksaan")}
+        >
+          Pemeriksaan
+        </button>
 
-      <div className="card-custom">
-        <div className="card-header-flex">
-          <div>
-            <div className="label-header">Riwayat Kunjungan</div>
+        <button
+          type="button"
+          className={`detail-tab ${activeTab === "pengukuran" ? "active" : ""}`}
+          onClick={() => setActiveTab("pengukuran")}
+        >
+          Pengukuran
+        </button>
 
-            <div className="page-subtitle">Riwayat Kunjungan pasien</div>
+        <button
+          type="button"
+          className={`detail-tab ${activeTab === "lampiran" ? "active" : ""}`}
+          onClick={() => setActiveTab("lampiran")}
+        >
+          Lampiran
+        </button>
+
+        <button
+          type="button"
+          className={`detail-tab ${activeTab === "trend" ? "active" : ""}`}
+          onClick={() => setActiveTab("trend")}
+        >
+          Trend
+        </button>
+
+        <button
+          type="button"
+          className={`detail-tab ${activeTab === "riwayat_kunjungan" ? "active" : ""}`}
+          onClick={() => setActiveTab("riwayat_kunjungan")}
+        >
+          Riwayat Kunjungan
+        </button>
+      </div>
+
+      <div className="detail-tab-content">
+        {activeTab === "pemeriksaan" && (
+          <div className="tab-panel">
+            <DetailPemeriksaanCard pemeriksaan={pemeriksaan} />
           </div>
+        )}
 
-          <button className="export-btn" onClick={handleExportExcel}>
-            <Download size={18} />
-            Export Excel
-          </button>
-        </div>
+        {activeTab === "pengukuran" && (
+          <div className="tab-panel">
+            <DetailPengukuran data={pengukuran} />
+          </div>
+        )}
 
-        <div className="table-wrapper-modern">
-          <table className="modern-table">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Tanggal Pemeriksaan Awal</th>
-                <th>Nama Perawat</th>
-                <th>Tanggal Pemeriksaan Dokter</th>
-                <th>Nama Dokter</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+        {activeTab === "lampiran" && (
+          <div className="tab-panel">
+            <div className="card-custom ">
+              <Lampiran files={lampiran} canAdd={false} canDelete={false} />
+            </div>
+          </div>
+        )}
 
-            <tbody>
-              {loadingDaftarKunjungan ? (
-                <tr>
-                  <td colSpan="4" className="empty-table">
-                    Loading riwayat daftar Kunjungan...
-                  </td>
-                </tr>
-              ) : daftarKunjungan.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="empty-table">
-                    Belum ada riwayat Kunjungan
-                  </td>
-                </tr>
-              ) : (
-                daftarKunjungan.map((item, index) => (
-                  <tr key={index} className="modern-row">
-                    <td>{index + 1}</td>
+        {activeTab === "trend" && (
+          <div className="tab-panel">
+            <GrafikTrendCard
+              trendBerat={trendBerat}
+              trendFat={trendFat}
+              trendMucle={trendMuscle}
+              trendTensi={trendTensi}
+              interval={interval}
+              setInterval={setInterval}
+            />
+          </div>
+        )}
 
-                    <td>{formatDateTime(item.tanggal_pemeriksaan_awal)}</td>
+        {activeTab === "riwayat_kunjungan" && (
+          <div className="tab-panel">
+            <div className="card-custom">
+              <div className="card-header-flex">
+                <div>
+                  <div className="label-header">Riwayat Kunjungan</div>
 
-                    <td>
-                      <span className="patient-name-text">
-                        {item.nama_perawat}
-                      </span>
-                    </td>
-                    <td>{formatDateTime(item.tanggal_pemeriksaan_dokter)}</td>
+                  <div className="page-subtitle">Riwayat Kunjungan pasien</div>
+                </div>
 
-                    <td>
-                      <span className="patient-name-text">
-                        {item.nama_dokter || "-"}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-button-group">
-                        <button
-                          className="btn-primary"
-                          onClick={() =>
-                            handleSelectKunjungan(
-                              pasienDetail.id_pasien,
-                              item.id_pemeriksaan,
-                              item.id_pengukuran,
-                            )
-                          }
-                        >
-                          Lihat Data
-                        </button>
+                <button className="export-btn" onClick={handleExportExcel}>
+                  <Download size={18} />
+                  Export Excel
+                </button>
+              </div>
 
-                        {is_Perawat == true && (
-                          <button
-                            className="btn-primary"
-                            onClick={() => handleOpenLampiran(item)}
-                          >
-                            Lampiran
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+              <div className="table-wrapper-modern">
+                <table className="modern-table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal Pemeriksaan Awal</th>
+                      <th>Nama Perawat</th>
+                      <th>Tanggal Pemeriksaan Dokter</th>
+                      <th>Nama Dokter</th>
+                    </tr>
+                  </thead>
 
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-            pages={page}
-            totalPages={totalPage}
-          />
-        </div>
+                  <tbody>
+                    {loadingDaftarKunjungan ? (
+                      <tr>
+                        <td colSpan="4" className="empty-table">
+                          Loading riwayat daftar Kunjungan...
+                        </td>
+                      </tr>
+                    ) : daftarKunjungan.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="empty-table">
+                          Belum ada riwayat Kunjungan
+                        </td>
+                      </tr>
+                    ) : (
+                      daftarKunjungan.map((item, index) => (
+                        <tr key={index} className="modern-row">
+                          <td>{index + 1}</td>
+
+                          <td>
+                            {formatDateTime(item.tanggal_pemeriksaan_awal)}
+                          </td>
+
+                          <td>
+                            <span className="patient-name-text">
+                              {item.nama_perawat}
+                            </span>
+                          </td>
+                          <td>
+                            {formatDateTime(item.tanggal_pemeriksaan_dokter)}
+                          </td>
+
+                          <td>
+                            <span className="patient-name-text">
+                              {item.nama_dokter || "-"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+
+                <Pagination
+                  currentPage={currentPage}
+                  onPageChange={(page) => setCurrentPage(page)}
+                  pages={page}
+                  totalPages={totalPage}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <ModalKonfirmasi
@@ -671,15 +696,6 @@ export default function DetailPasienPage() {
         type="warning"
         onConfirm={handleDelete}
         onCancel={() => setOpenDeleteModal(false)}
-      />
-
-      <LampiranModal
-        show={showLampiranModal}
-        onClose={() => {
-          setShowLampiranModal(false);
-          setSelectedKunjungan(null);
-        }}
-        idKunjungan={selectedKunjungan?.id_kunjungan}
       />
     </div>
   );

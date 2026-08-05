@@ -177,6 +177,8 @@ const Lampiran = ({
           {files.map((item, index) => {
             const data = getFileData(item);
 
+            console.log("DATA LAMPIRAN : ", data);
+
             const isImage = data.type.startsWith("image/");
             const isPdf = data.type === "application/pdf";
 

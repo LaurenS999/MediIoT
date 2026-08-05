@@ -14,6 +14,11 @@ export const getKunjunganPasien = async (id_pasien, page, limit) => {
   return response.data;
 };
 
+export const getKunjunganPasienDropDown = async (id_pasien, page, limit) => {
+  const response = await apiLocal.get(`/kunjungan/${id_pasien}?all=true`);
+  return response.data;
+};
+
 export const getKunjunganDetail_Terakhir = async (id_pasien) => {
   const response = await apiLocal.get(
     `/kunjungan/${id_pasien}/kunjungan-terakhir`,
@@ -26,19 +31,9 @@ export const createKunjungan = async (form) => {
   return response.data;
 };
 
-export const getKunjunganSelectedRiwayat = async (
-  id_pasien,
-  id_pemeriksaan,
-  id_pengukuran,
-) => {
+export const getKunjunganSelectedRiwayat = async (id_pasien, id_kunjungan) => {
   const response = await apiLocal.get(
-    `/kunjungan/${id_pasien}/riwayat-kunjungan`,
-    {
-      params: {
-        id_pemeriksaan,
-        id_pengukuran,
-      },
-    },
+    `/kunjungan/${id_pasien}/riwayat-kunjungan?id_kunjungan=${id_kunjungan}`,
   );
   return response.data;
 };

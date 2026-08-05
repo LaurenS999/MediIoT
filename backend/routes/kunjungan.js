@@ -142,47 +142,69 @@ router.get("/:id_pasien", auth, allow("kunjungan.read"), async (req, res) => {
     const offset = (page - 1) * limit;
 
     // =========================
+    // MODE AMBIL SEMUA KUNJUNGAN
+    // =========================
+    if (req.query.all === "true") {
+      const sql = `
+        SELECT
+          k.id_kunjungan,
+          k.tanggal_pemeriksaan_awal
+        FROM kunjungan k
+        WHERE k.id_pasien = ?
+        ORDER BY k.tanggal_pemeriksaan_awal DESC
+      `;
+
+      const [result] = await db.query(sql, [id_pasien]);
+
+      return res.status(200).json({
+        success: true,
+        message: "Daftar kunjungan berhasil diambil",
+        data: result,
+      });
+    }
+
+    // =========================
     // COUNT QUERY
     // =========================
     const countSql = `
-        SELECT COUNT(*) AS total
-        FROM kunjungan k
-        WHERE k.id_pasien = ?
-      `;
+      SELECT COUNT(*) AS total
+      FROM kunjungan k
+      WHERE k.id_pasien = ?
+    `;
 
     // =========================
     // DATA QUERY
     // =========================
     const sql = `
-        SELECT
-          k.id_kunjungan,
-          k.kode_kunjungan,
-          k.id_pemeriksaan,
-          k.id_pengukuran,
+      SELECT
+        k.id_kunjungan,
+        k.kode_kunjungan,
+        k.id_pemeriksaan,
+        k.id_pengukuran,
 
-          perawat.username AS nama_perawat,
-          dokter.id_user AS id_dokter,
-          dokter.username AS nama_dokter,
-          k.tanggal_pemeriksaan_awal,
-          k.tanggal_pemeriksaan_dokter
+        perawat.username AS nama_perawat,
+        dokter.id_user AS id_dokter,
+        dokter.username AS nama_dokter,
+        k.tanggal_pemeriksaan_awal,
+        k.tanggal_pemeriksaan_dokter
 
-        FROM kunjungan k
+      FROM kunjungan k
 
-        JOIN pasien p
-          ON p.id_pasien = k.id_pasien
+      JOIN pasien p
+        ON p.id_pasien = k.id_pasien
 
-        LEFT JOIN user perawat
-          ON perawat.id_user = k.id_perawat
+      LEFT JOIN user perawat
+        ON perawat.id_user = k.id_perawat
 
-        LEFT JOIN user dokter
-          ON dokter.id_user = k.id_dokter
+      LEFT JOIN user dokter
+        ON dokter.id_user = k.id_dokter
 
-        WHERE k.id_pasien = ?
+      WHERE k.id_pasien = ?
 
-        ORDER BY k.dibuat_pada DESC
+      ORDER BY k.dibuat_pada DESC
 
-        LIMIT ? OFFSET ?
-      `;
+      LIMIT ? OFFSET ?
+    `;
 
     // =========================
     // TOTAL DATA
@@ -329,14 +351,51 @@ router.get(
   async (req, res) => {
     try {
       const { id_pasien } = req.params;
-      const { id_pengukuran, id_pemeriksaan } = req.query;
+      const { id_kunjungan } = req.query;
+
+      // ==========================================
+      // VALIDASI ID KUNJUNGAN
+      // ==========================================
+      if (!id_kunjungan) {
+        return res.status(400).json({
+          success: false,
+          message: "ID kunjungan wajib diisi",
+        });
+      }
+
+      // ==========================================
+      // AMBIL DATA KUNJUNGAN
+      // ==========================================
+      const sqlKunjungan = `
+        SELECT
+          id_kunjungan,
+          id_pemeriksaan,
+          id_pengukuran
+        FROM kunjungan
+        WHERE id_kunjungan = ?
+          AND id_pasien = ?
+      `;
+
+      const [resultKunjungan] = await db.query(sqlKunjungan, [
+        id_kunjungan,
+        id_pasien,
+      ]);
+
+      if (resultKunjungan.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Data kunjungan tidak ditemukan",
+        });
+      }
+
+      const kunjungan = resultKunjungan[0];
 
       // ==========================================
       // DATA PEMERIKSAAN
       // ==========================================
       let dataPemeriksaan = null;
 
-      if (id_pemeriksaan != null) {
+      if (kunjungan.id_pemeriksaan != null) {
         const sqlPemeriksaan = `
           SELECT *
           FROM sesi_pemeriksaan
@@ -344,7 +403,7 @@ router.get(
         `;
 
         const [resultPemeriksaan] = await db.query(sqlPemeriksaan, [
-          id_pemeriksaan,
+          kunjungan.id_pemeriksaan,
         ]);
 
         if (resultPemeriksaan.length > 0) {
@@ -357,8 +416,8 @@ router.get(
       // ==========================================
       let dataPengukuran = null;
 
-      if (id_pengukuran != null) {
-        dataPengukuran = await buildMeasurementData(id_pengukuran);
+      if (kunjungan.id_pengukuran != null) {
+        dataPengukuran = await buildMeasurementData(kunjungan.id_pengukuran);
       }
 
       // ==========================================
@@ -366,8 +425,9 @@ router.get(
       // ==========================================
       res.status(200).json({
         success: true,
-        message: "Data kunjungan terakhir berhasil diambil",
+        message: "Data kunjungan berhasil diambil",
         data: {
+          id_kunjungan: kunjungan.id_kunjungan,
           pemeriksaan: dataPemeriksaan,
           pengukuran: dataPengukuran,
         },

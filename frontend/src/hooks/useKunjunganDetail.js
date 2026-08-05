@@ -80,16 +80,11 @@ export const useKunjunganDetail = (id_pasien) => {
     }
   }, []);
 
-  const handleSelectKunjungan = async (
-    id_pasien,
-    id_pemeriksaan,
-    id_pengukuran,
-  ) => {
+  const handleSelectKunjungan = async (id_pasien, id_kunjungan) => {
     try {
       const response = await getKunjunganSelectedRiwayat(
         id_pasien,
-        id_pemeriksaan,
-        id_pengukuran,
+        id_kunjungan,
       );
 
       setPemeriksaan(response.data.pemeriksaan);
@@ -121,7 +116,7 @@ export const useKunjunganDetail = (id_pasien) => {
   };
 
   useEffect(() => {
-    ambilDaftarKunjunga(id_pasien);
+    ambilDaftarKunjunga(id_pasien, currentPage, limitPage);
     ambilKunjunganTerakhir(id_pasien);
   }, [id_pasien, currentPage]);
 
