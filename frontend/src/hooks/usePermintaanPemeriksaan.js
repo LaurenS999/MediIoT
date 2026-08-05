@@ -256,7 +256,12 @@ export const usePermintaanPemeriksaan = (id_user) => {
         tanggal_pemeriksaan: "",
         keluhan: "",
       });
-      ambilPermintaanByPasien();
+
+      if (user.role == "super admin") {
+        ambilPermintaan();
+      } else {
+        ambilPermintaanByPasien();
+      }
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
