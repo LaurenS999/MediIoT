@@ -3,10 +3,10 @@
 ====================================================== */
 
 .setup-container {
-  padding: 24px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
   background: #f5f7fb;
   min-height: 100vh;
 }

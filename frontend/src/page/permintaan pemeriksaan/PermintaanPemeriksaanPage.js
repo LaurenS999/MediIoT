@@ -60,20 +60,6 @@ export default function PermintaanPemeriksaanPage() {
 
   return (
     <div className="setup-container">
-      {/* ====================================================== */}
-      {/* HEADER */}
-      {/* ====================================================== */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Permintaan Pemeriksaan</h1>
-
-          <p className="page-subtitle">
-            Daftar permintaan pemeriksaan dan lihat riwayat permintaan
-            pemeriksaan.
-          </p>
-        </div>
-      </div>
-
       {isPasien && (
         <div className="card-custom">
           <div className="card-header-flex">
@@ -289,13 +275,13 @@ export default function PermintaanPemeriksaanPage() {
                 )}
               </tbody>
             </table>
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
-              pages={page}
-              totalPages={totalPage}
-            />
           </div>
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+            pages={page}
+            totalPages={totalPage}
+          />
         </div>
       </div>
 

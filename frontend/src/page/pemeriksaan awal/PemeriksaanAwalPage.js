@@ -216,21 +216,6 @@ export default function PemeriksaanAwalPage() {
   return (
     <div className="panel-container">
       <div ref={patientCardRef}> </div>
-
-      {/* ===================================== */}
-      {/* HEADER */}
-      {/* ===================================== */}
-      <div className="panel-header">
-        <h2
-          style={{
-            margin: 0,
-            color: "#111827",
-          }}
-        >
-          Pemeriksaan Awal
-        </h2>
-      </div>
-
       {/* ===================================== */}
       {/* DATA PASIEN */}
       {/* ===================================== */}

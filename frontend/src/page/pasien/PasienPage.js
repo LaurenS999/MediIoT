@@ -52,17 +52,6 @@ export default function PasienPage() {
   return (
     <div className="setup-container">
       {/* ====================================================== */}
-      {/* HEADER */}
-      {/* ====================================================== */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Daftar Pasien</h1>
-
-          <p className="page-subtitle">Kelola data pasien rumah sakit</p>
-        </div>
-      </div>
-
-      {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
@@ -153,14 +142,13 @@ export default function PasienPage() {
               )}
             </tbody>
           </table>
-
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-            pages={page}
-            totalPages={totalPage}
-          />
         </div>
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={(page) => setCurrentPage(page)}
+          pages={page}
+          totalPages={totalPage}
+        />
       </div>
 
       {/* ====================================================== */}

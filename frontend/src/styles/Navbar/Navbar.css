@@ -35,24 +35,17 @@
   height: fit-content;
   margin-top: 10px;
   margin-bottom: 10px;
-
   flex-shrink: 0;
-
   background-color: #ffffff;
-
-  border-bottom: 1px solid #eaeaea;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   padding: 0 30px;
-
   transition: height 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-
-
-
 
 /* =====================================================
    LOGO
@@ -148,6 +141,19 @@
   align-items: center;
 
   gap: 15px;
+}
+
+.header-page-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.header-page-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 

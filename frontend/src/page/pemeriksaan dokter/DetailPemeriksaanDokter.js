@@ -96,16 +96,6 @@ export default function DetailPemeriksaanDokter() {
   return (
     <div className="doctor-detail-wrapper">
       {/* ================================================ */}
-      {/* HEADER */}
-      {/* ================================================ */}
-
-      <div className="doctor-detail-header">
-        <h1>Pemeriksaan Dokter</h1>
-
-        <p>Lengkapi hasil pemeriksaan dokter pasien.</p>
-      </div>
-
-      {/* ================================================ */}
       {/* DETAIL PASIEN */}
       {/* ================================================ */}
 

@@ -1,20 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import "../../styles/Navbar/Navbar.css";
+
 import LogoutButton from "../LogoutButton";
 import { useAuth } from "../../context/AuthContext";
-import { sidebarMenu } from "../../config/sidebarMenu";
 
-import { SquarePlus, Settings, Bell, User } from "lucide-react";
+import { Settings, Bell, User } from "lucide-react";
 
-import { useLocation } from "react-router-dom";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 import { deleteStatusDevice } from "../../services/deviceService";
+
 import useNotifikasiDokter from "../../hooks/useNotifikasiDokter";
 import useNotifikasiPerawat from "../../hooks/useNotifikasiPerawat";
+
 import NotifikasiDropdown from "../notifikasi/NotifikasiDropdown";
 
 import { notifikasiConfig } from "../../config/notifikasiConfig";
+import { getPageTitle } from "../../config/pageConfig";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -26,6 +29,8 @@ export default function Header() {
   const dropdownRef = useRef(null);
 
   const location = useLocation();
+  const pageTitle = getPageTitle(location.pathname);
+
   const [showExitModal, setShowExitModal] = useState(false);
 
   const [openNotification, setOpenNotification] = useState(false);
@@ -98,6 +103,10 @@ export default function Header() {
       {/* ================================================= */}
       {token && (
         <header className={`top-header ${collapsed ? "collapsed" : ""}`}>
+          <div className="header-page-title">
+            <h2>{pageTitle}</h2>
+          </div>
+
           <div className="header-right">
             {/* NOTIFICATION */}
             {["dokter", "perawat"].includes(user?.role) && (

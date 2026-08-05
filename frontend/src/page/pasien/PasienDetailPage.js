@@ -251,20 +251,6 @@ export default function DetailPasienPage() {
   return (
     <div className="detail-pasien-container">
       {/* =====================================================
-          PAGE HEADER
-      ===================================================== */}
-
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Detail Pasien</h1>
-
-          <p className="page-subtitle">
-            Informasi detail pasien dan trend pengukuran
-          </p>
-        </div>
-      </div>
-
-      {/* =====================================================
           PATIENT CARD
       ===================================================== */}
 

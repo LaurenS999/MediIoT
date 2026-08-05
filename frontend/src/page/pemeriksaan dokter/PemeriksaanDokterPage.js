@@ -38,19 +38,6 @@ export default function PemeriksaanDokterPage() {
   return (
     <div className="setup-container">
       {/* ====================================================== */}
-      {/* HEADER */}
-      {/* ====================================================== */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Antrian Pemeriksaan Dokter</h1>
-
-          <p className="page-subtitle">
-            Kelola data pasien yang belum diperiksa dokter
-          </p>
-        </div>
-      </div>
-
-      {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
@@ -129,14 +116,14 @@ export default function PemeriksaanDokterPage() {
               )}
             </tbody>
           </table>
-          <div className="pagination-wrapper">
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
-              pages={page}
-              totalPages={totalPage}
-            />
-          </div>
+        </div>
+        <div className="pagination-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+            pages={page}
+            totalPages={totalPage}
+          />
         </div>
       </div>
     </div>

@@ -87,20 +87,7 @@ export default function RiwayatKunjunganPage() {
       {/* ===================================================== */}
       {/* HEADER */}
       {/* ===================================================== */}
-      <div className="history-page-header">
-        <div>
-          <h1 className="history-page-title">Riwayat Kunjungan</h1>
-
-          <p className="history-page-subtitle">
-            Monitoring hasil pengukuran pasien
-          </p>
-        </div>
-
-        <button className="export-button" onClick={handleExport}>
-          <Download size={18} />
-          Export Laporan
-        </button>
-      </div>
+      <div className="history-page-header"></div>
 
       {/* ===================================================== */}
       {/* SEARCH */}
@@ -117,6 +104,10 @@ export default function RiwayatKunjunganPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <button className="export-button" onClick={handleExport}>
+          <Download size={18} />
+          Export Laporan
+        </button>
       </div>
 
       {/* ===================================================== */}
@@ -196,15 +187,15 @@ export default function RiwayatKunjunganPage() {
               )}
             </tbody>
           </table>
-          {/* PAGINATION */}
-          <div className="pagination-wrapper">
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
-              pages={page}
-              totalPages={totalPage}
-            />
-          </div>
+        </div>
+        {/* PAGINATION */}
+        <div className="pagination-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+            pages={page}
+            totalPages={totalPage}
+          />
         </div>
       </div>
     </div>

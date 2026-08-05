@@ -90,12 +90,6 @@ export default function AccessCodePage() {
 
   return (
     <div className="setting-page">
-      {/* HEADER */}
-      <div className="setting-header">
-        <h1>MedLink Access Code</h1>
-        <p>Kelola Konfigurasi API MedLink</p>
-      </div>
-
       {/* API CARD */}
 
       <div className="setting-card">

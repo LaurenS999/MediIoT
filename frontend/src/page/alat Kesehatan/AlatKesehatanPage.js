@@ -42,17 +42,6 @@ export default function AlatKesehatanPage() {
   return (
     <div className="device-page-container">
       {/* ====================================================== */}
-      {/* HEADER */}
-      {/* ====================================================== */}
-      <div className="device-page-header">
-        <div>
-          <h1 className="device-page-title">Pemantauan Device</h1>
-
-          <p className="device-page-subtitle">Monitoring device rumah sakit</p>
-        </div>
-      </div>
-
-      {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
@@ -155,13 +144,13 @@ export default function AlatKesehatanPage() {
               )}
             </tbody>
           </table>
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-            pages={page}
-            totalPages={totalPage}
-          />
         </div>
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={(page) => setCurrentPage(page)}
+          pages={page}
+          totalPages={totalPage}
+        />
       </div>
     </div>
   );

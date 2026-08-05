@@ -312,15 +312,6 @@ export default function SetupPemeriksaanAwalPage() {
     <div className="setup-page">
       <div className="setup-container">
         {/* ===================================== */}
-        {/* HEADER */}
-        {/* ===================================== */}
-        <div className="setup-header">
-          <h1>Setup Pemeriksaan Awal</h1>
-
-          <p>Pilih pasien, jenis pengukuran, dan device.</p>
-        </div>
-
-        {/* ===================================== */}
         {/* PASIEN */}
         {/* ===================================== */}
         <div className="patient-card">
