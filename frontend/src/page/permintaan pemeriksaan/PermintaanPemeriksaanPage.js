@@ -161,11 +161,7 @@ export default function PermintaanPemeriksaanPage() {
       {/* ====================================================== */}
       {/* CARD RIWAYAT */}
       {/* ====================================================== */}
-      <div className="card-custom" style={{ marginTop: "24px" }}>
-        <div className="card-header-flex">
-          <h3>Daftar Permintaan</h3>
-        </div>
-
+      <div className="card-custom">
         <div className="card-body">
           <div className="table-wrapper-modern">
             <table className="modern-table permintaan-table">
@@ -217,12 +213,6 @@ export default function PermintaanPemeriksaanPage() {
                       <td className="permintaan-keluhan">
                         <div className="patient-name-text">{item.keluhan}</div>
                       </td>
-                      {/* 
-                      <td>
-                        <div className="patient-name-text">
-                          {item.alasan_perubahan}
-                        </div>
-                      </td> */}
 
                       <td className="td-center">
                         {renderStatusPermintaan(item.status)}

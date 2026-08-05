@@ -250,8 +250,10 @@ router.post("/", auth, allow("pasien.create"), async (req, res) => {
     }
 
     const year = new Date().getFullYear();
+    const month = String(new Date().getMonth() + 1).padStart(2, "0");
 
-    const kode_pasien = `P-${year}-` + String(nextNumber).padStart(4, "0");
+    const kode_pasien =
+      `P-${year}${month}-` + String(nextNumber).padStart(4, "0");
 
     // =========================
     // INSERT DATABASE
