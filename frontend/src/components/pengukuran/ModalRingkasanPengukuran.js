@@ -1,9 +1,11 @@
 import "../../styles/modalRingkasanPengukuran.css";
-import { X } from "lucide-react";
+import { X, Image, FileText } from "lucide-react";
 import { formatTanggalIndonesia } from "../../utils/formatTanggal";
 import { hitungUmur } from "../../utils/hitungUmur";
 import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
 import RingkasanPengukuranCard from "./RingkasanPengukuranCard";
+import Lampiran from "../lampiran/Lampiran";
+
 export default function ModalRingkasanPengukuran({
   open,
   onClose,
@@ -17,7 +19,9 @@ export default function ModalRingkasanPengukuran({
   setCatatan,
   error,
   setError,
+  lampiran,
 }) {
+  console.log("LAMPIRAN : ", lampiran);
   if (!open) return null;
 
   return (
@@ -78,6 +82,39 @@ export default function ModalRingkasanPengukuran({
           </div>
 
           {/* =============================== */}
+          {/* LAMPIRAN */}
+          {/* =============================== */}
+
+          <div className="summary-section">
+            <h3>Lampiran</h3>
+
+            {lampiran?.length === 0 ? (
+              <div className="summary-lampiran-empty">Tidak ada lampiran</div>
+            ) : (
+              <div className="summary-lampiran-list">
+                {lampiran.map((item) => {
+                  const isImage = item.file.type?.startsWith("image/");
+                  const isPdf = item.file.type === "application/pdf";
+
+                  return (
+                    <div className="summary-lampiran-item" key={item.id}>
+                      <div className="summary-lampiran-icon">
+                        {isImage ? <Image size={20} /> : <FileText size={20} />}
+                      </div>
+
+                      <div className="summary-lampiran-info">
+                        <strong title={item.file.name}>{item.file.name}</strong>
+
+                        <span>{item.kategori || "-"}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* =============================== */}
           {/* HASIL PENGUKURAN */}
           {/* =============================== */}
 
@@ -86,14 +123,6 @@ export default function ModalRingkasanPengukuran({
               <h3>Hasil Pengukuran</h3>
 
               <div className="summary-measurement-list">
-                {/* {devices.map((device) => (
-                <RingkasanPengukuranCard
-                  key={device.id}
-                  device={device}
-                  data={liveData[device.mac_address]}
-                  bmiResult={bmiResult}
-                />
-              ))} */}
                 {devices
                   .filter((device) => liveData[device.mac_address])
                   .map((device) => (

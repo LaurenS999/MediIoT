@@ -326,6 +326,7 @@ export default function PemeriksaanAwalPage() {
         setCatatan={setCatatanPemeriksaan}
         error={error}
         setError={setError}
+        lampiran={draftLampiran}
       />
 
       <UploadLampiranModal
