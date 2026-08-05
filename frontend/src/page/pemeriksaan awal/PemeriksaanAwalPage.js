@@ -24,6 +24,7 @@ import { usePasienDetail } from "../../hooks/usePasienDetail";
 import UploadLampiranModal from "../../components/lampiranModal/UploadLampiranModal";
 
 import Lampiran from "../../components/lampiran/Lampiran";
+import { showToast } from "../../utils/toast";
 
 export default function PemeriksaanAwalPage() {
   const { state } = useLocation();
@@ -66,6 +67,10 @@ export default function PemeriksaanAwalPage() {
   );
 
   const devices = state?.devices || [];
+
+  const [waktuKunjunganAwal, setWaktu_Kunjungan_Awal] = useState(
+    state?.waktu_kunjungan_awal || "",
+  );
 
   const [openPatientModal, setOpenPatientModal] = useState(false);
 
@@ -118,6 +123,7 @@ export default function PemeriksaanAwalPage() {
       keluhan,
       catatanPemeriksaan,
       draftLampiran,
+      waktu_kunjungan_awal: waktuKunjunganAwal,
     });
 
     if (error.catatanPemeriksaan) {
@@ -150,11 +156,20 @@ export default function PemeriksaanAwalPage() {
   const handleSelectPatient = (patientBaru) => {
     setSelectedPatient(patientBaru);
 
-    toast.success("Berhasil mengganti pasien");
+    // toast.success("Berhasil mengganti pasien");
+
+    showToast(
+      "Berhasil Mengganti Pasien",
+      "pemeriksaan-awal-ganti-pasien",
+      "success",
+    );
 
     setLiveData({});
     setTinggiBadan("");
     setKeluhan("");
+
+    const waktuKunjunganAwal = new Date().toTimeString().slice(0, 8);
+    setWaktu_Kunjungan_Awal(waktuKunjunganAwal);
 
     setHighlightPatientButton(true);
 

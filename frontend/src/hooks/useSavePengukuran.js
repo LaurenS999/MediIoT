@@ -10,42 +10,6 @@ import { useAuth } from "../context/AuthContext";
 import { createSimpanKunjungan } from "../services/simpanKunjungan";
 import { patchPendaftaranSelesai } from "../services/permintaanPemeriksaanService";
 
-const buildPayloadByDevice = ({ device, data, tinggiBadan }) => {
-  switch (device.device_function) {
-    case "mft01":
-      return {
-        temperature: data?.temperature || null,
-        mac: data?.mac || null,
-      };
-
-    case "tensione":
-      return {
-        systolic: data?.systolic || null,
-        diastolic: data?.diastolic || null,
-        pulse_rate: data?.pulse_rate || null,
-        mac: data?.mac || null,
-      };
-
-    case "oxymeter":
-      return {
-        spo2: data?.spo2 || null,
-        bpm: data?.bpm || null,
-        mac: data?.mac || null,
-      };
-
-    case "digitpro_bmi":
-      return {
-        weight: data?.weight || null,
-        impedance: data?.impedance || null,
-        tinggi_badan: tinggiBadan || null,
-        mac: data?.mac || null,
-      };
-
-    default:
-      return {};
-  }
-};
-
 export default function useSavePengukuran() {
   const [activeSessionId, setActiveSessionId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -67,6 +31,8 @@ export default function useSavePengukuran() {
     catatanPemeriksaan,
     id_pendaftaran = "",
     draftLampiran,
+    id_permintaan_pemeriksaan,
+    waktu_kunjungan_awal,
   }) => {
     if (isSaving) return;
 
@@ -110,6 +76,7 @@ export default function useSavePengukuran() {
       formData.append("tinggiBadan", tinggiBadan);
       formData.append("keluhan", keluhan);
       formData.append("catatanPemeriksaan", catatanPemeriksaan);
+      formData.append("waktu_kunjungan_awal", waktu_kunjungan_awal);
 
       draftLampiran.forEach((item) => {
         formData.append("files", item.file);

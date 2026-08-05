@@ -35,7 +35,8 @@ router.post(
       const liveData = parseJSON(req.body.liveData, {});
       const bmiResult = parseJSON(req.body.bmiResult, null);
 
-      const { tinggiBadan, keluhan, catatanPemeriksaan } = req.body;
+      const { tinggiBadan, keluhan, catatanPemeriksaan, waktu_kunjungan_awal } =
+        req.body;
 
       let kategoriData = req.body.kategori ?? [];
 
@@ -203,6 +204,40 @@ router.post(
       );
 
       const id_kunjungan = insertKunjungan.insertId;
+
+      // ==========================================
+      // CEK PERMINTAAN PEMERIKSAAN
+      // ==========================================
+      console.log("PATIENT ID : ", patient.id_pasien);
+      const [permintaan] = await db.query(
+        `
+          SELECT id_permintaan_pemeriksaan
+          FROM permintaan_pemeriksaan
+          WHERE id_pasien = ?
+            AND DATE(tanggal_pemeriksaan) = CURDATE()
+            AND status = 'menunggu pemeriksaan'
+          LIMIT 1
+        `,
+        [patient.id_pasien],
+      );
+
+      if (permintaan.length > 0) {
+        const id_permintaan_pemeriksaan =
+          permintaan[0].id_permintaan_pemeriksaan;
+
+        await db.query(
+          `
+            UPDATE permintaan_pemeriksaan
+            SET 
+              status = 'selesai',
+              waktu_kunjungan_awal = ?,
+              waktu_kunjungan_akhir = NOW(),
+              diubah_pada = NOW()
+            WHERE id_permintaan_pemeriksaan = ?
+          `,
+          [waktu_kunjungan_awal, id_permintaan_pemeriksaan],
+        );
+      }
 
       // ==========================================
       // INSERT LAMPIRAN

@@ -218,7 +218,7 @@ router.post(
           FROM permintaan_pemeriksaan
           WHERE id_pasien = ?
             AND tanggal_pemeriksaan = ?
-            AND status IN ("menunggu pemeriksaan", "disetujui")
+            AND status LIKE "menunggu pemeriksaan"
           LIMIT 1
         `,
         [req.user.id_relasi, tanggal_pemeriksaan],

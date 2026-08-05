@@ -15,8 +15,6 @@ import ModalKonfirmasi from "../../components/pemeriksaan/modalKonfirmasi";
 
 import { modalKonfirmasiPermintaanConfig } from "../../config/modalKonfirmasiPermintaanConfig";
 
-import { pilihanJam, isJamLewat } from "../../utils/waktuPermintaan";
-
 import Pagination from "../../components/common/Pagination";
 
 import { getPaginationItems } from "../../utils/pagination";
@@ -252,9 +250,11 @@ export default function PermintaanPemeriksaanPage() {
                               <button
                                 className="btn-success"
                                 onClick={() =>
-                                  navigate(
-                                    `/setup-kunjungan?id_pasien=${item.id_pasien}`,
-                                  )
+                                  navigate(`/setup-kunjungan`, {
+                                    state: {
+                                      id_pasien: item.id_pasien,
+                                    },
+                                  })
                                 }
                               >
                                 Pemeriksaan

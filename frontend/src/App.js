@@ -107,17 +107,6 @@ function App() {
               />
 
               <Route
-                path="/setup-kunjungan/:id_kunjungan"
-                element={
-                  <ProtectedRoute
-                    allowedRoles={["admin", "perawat", "super admin"]}
-                  >
-                    <SetupPemeriksaanAwalPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
                 path="/pemeriksaan-awal"
                 element={
                   <ProtectedRoute

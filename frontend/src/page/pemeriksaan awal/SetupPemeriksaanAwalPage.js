@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
 import { createStatusDevice } from "../../services/deviceService";
 
 import useStatusDevice from "../../hooks/useStatusDevice";
-import { useSearchParams } from "react-router-dom";
 import { getDetailPasien } from "../../services/pasienService";
 
 import { Search } from "lucide-react";
@@ -34,14 +33,7 @@ export default function SetupPemeriksaanAwalPage() {
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
 
-  const [searchParams] = useSearchParams();
-
-  const idPasienDariUrl = searchParams.get("id_pasien");
-
-  const [id_pasien, setId_Pasien] = useState(idPasienDariUrl || "");
-
-  // const id_pasien = searchParams.get("id_pasien") || "";
-  // const id_pasien = state?.id_pasien || "";
+  const [id_pasien, setId_Pasien] = useState(state?.id_pasien || "");
 
   // =====================================================
   // PASIEN
@@ -296,10 +288,13 @@ export default function SetupPemeriksaanAwalPage() {
         ),
       );
 
+      const waktuKunjunganAwal = new Date().toTimeString().slice(0, 8);
+
       navigate("/pemeriksaan-awal", {
         state: {
           patient: selectedPatient,
           devices: selectedDevices,
+          waktu_kunjungan_awal: waktuKunjunganAwal,
         },
       });
     } catch (error) {
@@ -618,7 +613,7 @@ export default function SetupPemeriksaanAwalPage() {
               <button
                 onClick={handleStart}
                 className="btn-start"
-                disabled={selectedDevices.length === 0}
+                disabled={!selectedPatient}
               >
                 Mulai Pengukuran
               </button>
