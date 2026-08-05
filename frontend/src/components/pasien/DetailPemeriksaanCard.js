@@ -1,7 +1,8 @@
 import "../../styles/detailPemeriksaanCard.css";
 import { formatDateTime } from "../../utils/formatDate";
 
-export function DetailPemeriksaanCard({ pemeriksaan }) {
+export function DetailPemeriksaanCard({ pemeriksaan, kunjungan }) {
+  console.log("PEMERIKSAAN : ", pemeriksaan);
   return (
     <div className="examination-card">
       <div className="card-header">
@@ -11,14 +12,14 @@ export function DetailPemeriksaanCard({ pemeriksaan }) {
           <div className="examination-date">
             <span>Pemeriksaan Awal</span>
             <strong>
-              {formatDateTime(pemeriksaan?.tanggal_pemeriksaan_awal) || "-"}
+              {formatDateTime(kunjungan?.tanggal_pemeriksaan_awal) || "-"}
             </strong>
           </div>
 
           <div className="examination-date">
             <span>Pemeriksaan Dokter</span>
             <strong>
-              {formatDateTime(pemeriksaan?.tanggal_pemeriksaan_dokter) || "-"}
+              {formatDateTime(kunjungan?.tanggal_pemeriksaan_dokter) || "-"}
             </strong>
           </div>
         </div>

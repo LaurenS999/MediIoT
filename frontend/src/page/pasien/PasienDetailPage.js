@@ -560,7 +560,10 @@ export default function DetailPasienPage() {
       <div className="detail-tab-content">
         {activeTab === "pemeriksaan" && (
           <div className="tab-panel">
-            <DetailPemeriksaanCard pemeriksaan={pemeriksaan} />
+            <DetailPemeriksaanCard
+              pemeriksaan={pemeriksaan}
+              kunjungan={kunjungan}
+            />
           </div>
         )}
 

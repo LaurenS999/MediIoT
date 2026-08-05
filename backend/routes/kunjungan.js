@@ -370,7 +370,9 @@ router.get(
         SELECT
           id_kunjungan,
           id_pemeriksaan,
-          id_pengukuran
+          id_pengukuran,
+          tanggal_pemeriksaan_awal,
+         	tanggal_pemeriksaan_dokter
         FROM kunjungan
         WHERE id_kunjungan = ?
           AND id_pasien = ?
@@ -427,7 +429,7 @@ router.get(
         success: true,
         message: "Data kunjungan berhasil diambil",
         data: {
-          id_kunjungan: kunjungan.id_kunjungan,
+          kunjungan,
           pemeriksaan: dataPemeriksaan,
           pengukuran: dataPengukuran,
         },

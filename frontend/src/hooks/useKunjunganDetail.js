@@ -54,7 +54,7 @@ export const useKunjunganDetail = (id_pasien) => {
   const ambilKunjunganTerakhir = useCallback(async (id_pasien) => {
     try {
       const res = await getKunjunganDetail_Terakhir(id_pasien);
-
+      console.log("RESPONS 123: ", res);
       setKunjungan(res.data.kunjungan);
 
       setPengukuran(res.data.pengukuran);
@@ -87,6 +87,7 @@ export const useKunjunganDetail = (id_pasien) => {
         id_kunjungan,
       );
 
+      setKunjungan(response.data.kunjungan);
       setPemeriksaan(response.data.pemeriksaan);
       setPengukuran(response.data.pengukuran);
 
