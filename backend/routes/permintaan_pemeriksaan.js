@@ -45,6 +45,7 @@ router.get(
           TIME_FORMAT(pe.waktu_kunjungan_awal, '%H:%i') AS waktu_kunjungan_awal,
           TIME_FORMAT(pe.waktu_kunjungan_akhir, '%H:%i') AS waktu_kunjungan_akhir,
 
+          p.id_pasien,
           p.nama AS nama_pasien
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p

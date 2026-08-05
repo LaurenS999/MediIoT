@@ -54,7 +54,6 @@ export default function PermintaanPemeriksaanPage() {
     selectedPermintaan,
     setSelectedPermintaan,
   } = usePermintaanPemeriksaan();
-
   const today = new Date().toISOString().split("T")[0];
 
   const currentModal = modalKonfirmasiPermintaanConfig[modal.action];
@@ -252,12 +251,27 @@ export default function PermintaanPemeriksaanPage() {
                             <div className="action-button-group">
                               <button
                                 className="btn-success"
+                                onClick={() =>
+                                  navigate(
+                                    `/setup-kunjungan?id_pasien=${item.id_pasien}`,
+                                  )
+                                }
+                              >
+                                Pemeriksaan
+                              </button>
+                            </div>
+                          )}
+                        {/* {isPerawat &&
+                          item.status === "menunggu pemeriksaan" && (
+                            <div className="action-button-group">
+                              <button
+                                className="btn-success"
                                 onClick={() => handleOpenModal("selesai", item)}
                               >
                                 Selesai
                               </button>
                             </div>
-                          )}
+                          )} */}
 
                         {item.status === "menunggu pemeriksaan" && (
                           <div className="action-button-group">

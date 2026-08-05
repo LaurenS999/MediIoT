@@ -36,7 +36,12 @@ export default function SetupPemeriksaanAwalPage() {
 
   const [searchParams] = useSearchParams();
 
-  const id_pasien = state?.id_pasien || "";
+  const idPasienDariUrl = searchParams.get("id_pasien");
+
+  const [id_pasien, setId_Pasien] = useState(idPasienDariUrl || "");
+
+  // const id_pasien = searchParams.get("id_pasien") || "";
+  // const id_pasien = state?.id_pasien || "";
 
   // =====================================================
   // PASIEN
@@ -206,7 +211,7 @@ export default function SetupPemeriksaanAwalPage() {
     };
 
     fetchPasien();
-  }, [id_pasien, pasien, selectedPatient]);
+  }, [id_pasien]);
 
   // =====================================================
   // TOGGLE MEASUREMENT
