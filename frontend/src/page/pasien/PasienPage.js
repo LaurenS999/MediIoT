@@ -55,8 +55,18 @@ export default function PasienPage() {
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
-        <div className="card-header-flex">
-          <label className="label-header">Cari Pasien</label>
+        <div className="search-button-wrapper">
+          <div className="search-wrapper">
+            <Search size={18} className="search-icon" />
+
+            <input
+              type="text"
+              placeholder="Cari Nama atau ID Pasien..."
+              className="search-input"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
           {hasRole(user?.role, ["perawat", "super admin"]) && (
             <button
@@ -69,18 +79,6 @@ export default function PasienPage() {
               Tambah Pasien
             </button>
           )}
-        </div>
-
-        <div className="search-wrapper">
-          <Search size={18} className="search-icon" />
-
-          <input
-            type="text"
-            placeholder="Cari Nama atau ID Pasien..."
-            className="search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
         </div>
       </div>
 

@@ -41,10 +41,6 @@ export default function PemeriksaanDokterPage() {
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
-        <div className="card-header-flex">
-          <label className="label-header">Cari Pemeriksaan</label>
-        </div>
-
         <div className="search-wrapper-modern">
           <Search size={18} className="search-icon" />
 

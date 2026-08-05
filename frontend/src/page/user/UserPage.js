@@ -57,8 +57,18 @@ export default function UserPage() {
       {/* SEARCH */}
       {/* ====================================================== */}
       <div className="card-custom">
-        <div className="card-header-flex">
-          <label className="label-header">Cari User</label>
+        <div className="search-button-wrapper">
+          <div className="search-wrapper">
+            <Search size={18} className="search-icon" />
+
+            <input
+              type="text"
+              placeholder="Cari username atau role..."
+              className="search-input-modern"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
           <button
             className="btn-primary"
@@ -70,18 +80,6 @@ export default function UserPage() {
             <Plus size={18} />
             Tambah User
           </button>
-        </div>
-
-        <div className="search-wrapper-modern">
-          <Search size={18} className="search-icon" />
-
-          <input
-            type="text"
-            placeholder="Cari username atau role..."
-            className="search-input-modern"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
         </div>
       </div>
 

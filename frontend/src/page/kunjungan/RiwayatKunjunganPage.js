@@ -85,29 +85,27 @@ export default function RiwayatKunjunganPage() {
   return (
     <div className="history-page-container">
       {/* ===================================================== */}
-      {/* HEADER */}
-      {/* ===================================================== */}
-      <div className="history-page-header"></div>
-
-      {/* ===================================================== */}
       {/* SEARCH */}
       {/* ===================================================== */}
       <div className="card-custom">
-        <div className="search-wrapper">
-          <Search size={18} className="search-icon" />
+        <div className="search-button-wrapper">
+          <div className="search-wrapper">
+            <Search size={18} className="search-icon" />
 
-          <input
-            type="text"
-            placeholder="Cari kode sesi, pasien, atau user..."
-            className="search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+            <input
+              type="text"
+              placeholder="Cari kode sesi, pasien, atau user..."
+              className="search-input"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <button className="export-button" onClick={handleExport}>
+            <Download size={18} />
+            Export Laporan
+          </button>
         </div>
-        <button className="export-button" onClick={handleExport}>
-          <Download size={18} />
-          Export Laporan
-        </button>
       </div>
 
       {/* ===================================================== */}
