@@ -17,6 +17,7 @@ export default function useSavePengukuran() {
   const [open, setOpen] = useState(false);
   const { showModal } = useModalInfo();
   const [keluhan, setKeluhan] = useState("");
+  const [butuhObservasi, setButuhObservasi] = useState(false);
   const [catatan, setCatatan] = useState("");
   const [error, setError] = useState({});
   const { user } = useAuth();
@@ -76,6 +77,7 @@ export default function useSavePengukuran() {
       formData.append("keluhan", keluhan);
       formData.append("catatanPemeriksaan", catatanPemeriksaan);
       formData.append("waktu_kunjungan_awal", waktu_kunjungan_awal);
+      formData.append("butuh_observasi", butuhObservasi);
 
       draftLampiran.forEach((item) => {
         formData.append("files", item.file);
@@ -224,5 +226,7 @@ export default function useSavePengukuran() {
     setKeluhan,
     error,
     setError,
+    butuhObservasi,
+    setButuhObservasi,
   };
 }

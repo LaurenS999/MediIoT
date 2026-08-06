@@ -5,6 +5,7 @@
 }
 
 .btn-success,
+.btn-selesai,
 .btn-danger,
 .btn-secondary,
 .btn-info,
@@ -33,7 +34,9 @@
 .btn-batal {
   background: #6b7280;
 }
-
+.btn-selesai{
+background: #2563eb;
+}
 
 .close-btn {
   border: none;
@@ -84,6 +87,7 @@
 .btn-primary:disabled,
 .btn-success:disabled,
 .btn-danger:disabled,
+.btn-selesai:disabled,
 .btn-secondary:disabled,
 .btn-start:disabled,
 .btn-info:disabled,

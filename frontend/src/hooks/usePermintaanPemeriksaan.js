@@ -27,7 +27,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
   });
 
   const [formSelesai, setFormSelesai] = useState({
-    waktu_kunjungan_awal: "",
     waktu_kunjungan_akhir: "",
   });
 
@@ -44,6 +43,18 @@ export const usePermintaanPemeriksaan = (id_user) => {
   const handleOpenModal = (action, data) => {
     setAlasan("");
     setSelectedPermintaan(data);
+
+    const sekarang = new Date();
+
+    const waktuSekarang = `${String(sekarang.getHours()).padStart(
+      2,
+      "0",
+    )}:${String(sekarang.getMinutes()).padStart(2, "0")}`;
+
+    setFormSelesai((prev) => ({
+      ...prev,
+      waktu_kunjungan_akhir: waktuSekarang,
+    }));
 
     setModal({
       open: true,
@@ -135,11 +146,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
     const batasWaktuAwal = 8 * 60; // 08:00
     const batasWaktuAkhir = 17 * 60; // 17:00
 
-    // Validasi waktu kosong
-    if (!waktuAwal) {
-      newErrors.waktu_kunjungan_awal = true;
-    }
-
     if (!waktuAkhir) {
       newErrors.waktu_kunjungan_akhir = true;
     }
@@ -187,7 +193,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setErrors(newErrors);
 
     // Validasi waktu kosong
-    if (!waktuAwal || !waktuAkhir) {
+    if (!waktuAkhir) {
       showToast("Waktu kunjungan tidak boleh kosong.", "permintaan", "warning");
       return false;
     }

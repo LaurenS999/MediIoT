@@ -22,7 +22,6 @@ export default function ModalKonfirmasi({
   setErrors,
   loading,
 }) {
-  console.log("SET ALASAN");
   if (!open) return null;
 
   return (
@@ -58,19 +57,8 @@ export default function ModalKonfirmasi({
                 <div className="time-range-input">
                   <input
                     type="time"
-                    className={errors.waktu_kunjungan_awal ? "input-error" : ""}
-                    value={formSelesai.waktu_kunjungan_awal}
-                    onChange={(e) => {
-                      setErrors((prev) => ({
-                        ...prev,
-                        waktu_kunjungan_awal: false,
-                      }));
-
-                      setFormSelesai((prev) => ({
-                        ...prev,
-                        waktu_kunjungan_awal: e.target.value,
-                      }));
-                    }}
+                    value={dataPermintaan.waktu_kunjungan_awal}
+                    disabled
                   />
 
                   <span>sampai</span>

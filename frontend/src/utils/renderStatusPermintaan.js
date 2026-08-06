@@ -21,6 +21,13 @@ export function renderStatusPermintaan(status) {
         </span>
       );
 
+    case "observasi":
+      return (
+        <span className="badge badge-info badge-status-permintaan">
+          Observasi
+        </span>
+      );
+
     default:
       return (
         <span className="badge badge-secondary badge-status-permintaan">-</span>

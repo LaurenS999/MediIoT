@@ -68,11 +68,6 @@
   line-height: 1.6;
 }
 
-.permintaan-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
 .permintaan-keluhan {
   max-width: 300px;
 }

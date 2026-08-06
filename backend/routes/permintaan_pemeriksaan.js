@@ -38,7 +38,7 @@ router.get(
       const sql = `
         SELECT
           pe.id_permintaan_pemeriksaan,
-          pe.tanggal_pemeriksaan,
+          DATE_FORMAT(pe.tanggal_pemeriksaan, '%Y-%m-%d') AS tanggal_pemeriksaan,
           pe.keluhan,
           pe.status,
           
@@ -133,7 +133,7 @@ router.get(
       const sql = `
         SELECT
           pe.id_permintaan_pemeriksaan,
-          pe.tanggal_pemeriksaan,
+          DATE_FORMAT(pe.tanggal_pemeriksaan, '%Y-%m-%d') AS tanggal_pemeriksaan,
           pe.keluhan,
           pe.status,
           
@@ -443,7 +443,7 @@ router.patch(
   allow("permintaan.pemeriksaan.patch.selesai"),
   async (req, res) => {
     try {
-      const { waktu_kunjungan_awal, waktu_kunjungan_akhir } = req.body;
+      const { waktu_kunjungan_akhir } = req.body;
 
       const { id_permintaan_pemeriksaan } = req.params;
 
@@ -454,7 +454,7 @@ router.patch(
         `
         SELECT *
         FROM permintaan_pemeriksaan
-        WHERE id_permintaan_pemeriksaan = ? AND status = "menunggu pemeriksaan"
+        WHERE id_permintaan_pemeriksaan = ? AND status = "observasi"
         LIMIT 1
         `,
         [id_permintaan_pemeriksaan],
@@ -471,12 +471,11 @@ router.patch(
 
       const sql = `
         UPDATE permintaan_pemeriksaan
-        SET status = "selesai", waktu_kunjungan_awal = ?, waktu_kunjungan_akhir = ?
+        SET status = "selesai", waktu_kunjungan_akhir = ?
         WHERE id_permintaan_pemeriksaan = ?
       `;
 
       const [result] = await db.query(sql, [
-        waktu_kunjungan_awal,
         waktu_kunjungan_akhir,
         id_permintaan_pemeriksaan,
       ]);

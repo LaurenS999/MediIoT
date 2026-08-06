@@ -218,45 +218,12 @@ export default function PermintaanPemeriksaanPage() {
                       </td>
 
                       <td>
-                        {/* ACTION PERAWAT / SUPER ADMIN */}
-                        {isPerawat &&
-                          item.status === "menunggu pemeriksaan" && (
-                            <div className="action-button-group">
-                              <button
-                                className="btn-success"
-                                onClick={() =>
-                                  navigate(`/setup-kunjungan`, {
-                                    state: {
-                                      id_pasien: item.id_pasien,
-                                    },
-                                  })
-                                }
-                              >
-                                Pemeriksaan
-                              </button>
-                            </div>
-                          )}
-                        {/* {isPerawat &&
-                          item.status === "menunggu pemeriksaan" && (
-                            <div className="action-button-group">
-                              <button
-                                className="btn-success"
-                                onClick={() => handleOpenModal("selesai", item)}
-                              >
-                                Selesai
-                              </button>
-                            </div>
-                          )} */}
-
-                        {item.status === "menunggu pemeriksaan" && (
-                          <div className="action-button-group">
-                            <button
-                              className="btn-batal"
-                              onClick={() => handleOpenModal("batal", item)}
-                            >
-                              Batal
-                            </button>
-                          </div>
+                        {renderActionButton(
+                          item,
+                          navigate,
+                          handleOpenModal,
+                          isPerawat,
+                          isPasien,
                         )}
                       </td>
                     </tr>

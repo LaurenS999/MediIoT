@@ -20,6 +20,8 @@ export default function ModalRingkasanPengukuran({
   error,
   setError,
   lampiran,
+  butuhObservasi,
+  setButuhObservasi,
 }) {
   console.log("LAMPIRAN : ", lampiran);
   if (!open) return null;
@@ -136,6 +138,19 @@ export default function ModalRingkasanPengukuran({
               </div>
             </div>
           )}
+
+          <div className="summary-section">
+            <h3>Status Observasi</h3>
+
+            <label className="summary-checkbox">
+              <input
+                type="checkbox"
+                checked={butuhObservasi}
+                onChange={(e) => setButuhObservasi(e.target.checked)}
+              />
+              Pasien masih membutuhkan observasi
+            </label>
+          </div>
 
           {/* =============================== */}
           {/* CATATAN */}

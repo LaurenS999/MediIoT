@@ -48,6 +48,8 @@ export default function PemeriksaanAwalPage() {
     setKeluhan,
     error,
     setError,
+    butuhObservasi,
+    setButuhObservasi,
   } = useSavePengukuran();
 
   // =====================================
@@ -315,6 +317,8 @@ export default function PemeriksaanAwalPage() {
         error={error}
         setError={setError}
         lampiran={draftLampiran}
+        butuhObservasi={butuhObservasi}
+        setButuhObservasi={setButuhObservasi}
       />
 
       <UploadLampiranModal

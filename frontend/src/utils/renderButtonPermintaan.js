@@ -1,39 +1,61 @@
 import React from "react";
 
-export default function renderActionButton(item, onAction, navigate) {
+export default function renderActionButton(
+  item,
+  navigate,
+  onAction,
+  isPerawat,
+  isPasien,
+) {
+  const hariIni = new Date().toISOString().split("T")[0];
+  const tanggalPemeriksaan = item.tanggal_pemeriksaan?.toString().split("T")[0];
+  const isHariIni = item.tanggal_pemeriksaan === hariIni;
+
   switch (item.status) {
-    case "menunggu persetujuan":
+    case "menunggu pemeriksaan":
       return (
         <div className="action-button-group">
-          <button
-            className="btn-success"
-            onClick={() => onAction("setuju", item)}
-          >
-            Setujui
-          </button>
+          {isPerawat && isHariIni && (
+            <button
+              className="btn-success"
+              onClick={() =>
+                navigate("/setup-kunjungan", {
+                  state: {
+                    id_pasien: item.id_pasien,
+                  },
+                })
+              }
+            >
+              Pemeriksaan
+            </button>
+          )}
 
-          <button
-            className="btn-danger"
-            onClick={() => onAction("tolak", item)}
-          >
-            Tolak
-          </button>
+          {(isPerawat || isPasien) && (
+            <button
+              className="btn-batal"
+              onClick={() => onAction("batal", item)}
+            >
+              Batal
+            </button>
+          )}
         </div>
       );
 
-    case "disetujui":
-      return (
+    case "observasi":
+      return isPerawat ? (
         <div className="action-button-group">
           <button
-            className="btn-secondary"
-            onClick={() => onAction("batal", item)}
+            className="btn-selesai"
+            onClick={() => onAction("selesai", item)}
           >
-            Batalkan
+            Selesai
           </button>
         </div>
+      ) : (
+        "-"
       );
 
     default:
-      return "-";
+      return "";
   }
 }
