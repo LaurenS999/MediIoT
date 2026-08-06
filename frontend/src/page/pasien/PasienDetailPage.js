@@ -490,7 +490,6 @@ export default function DetailPasienPage() {
                   Export Excel
                 </button>
               </div>
-
               <div className="table-wrapper-modern">
                 <table className="modern-table">
                   <thead>
@@ -544,14 +543,13 @@ export default function DetailPasienPage() {
                     )}
                   </tbody>
                 </table>
-
-                <Pagination
-                  currentPage={currentPage}
-                  onPageChange={(page) => setCurrentPage(page)}
-                  pages={page}
-                  totalPages={totalPage}
-                />
               </div>
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={(page) => setCurrentPage(page)}
+                pages={page}
+                totalPages={totalPage}
+              />
             </div>
           </div>
         )}
