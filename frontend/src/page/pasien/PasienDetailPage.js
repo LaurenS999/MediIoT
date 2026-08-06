@@ -75,8 +75,7 @@ export default function DetailPasienPage() {
     openModal,
     setOpenModal,
 
-    interval,
-    setInterval,
+    ambilTrend,
   } = useTrend(idPasien, pasienDetailStatus);
 
   const {
@@ -384,6 +383,7 @@ export default function DetailPasienPage() {
           onChange={(e) => {
             setSelectedKunjungan(e.target.value);
             handleSelectKunjungan(pasienDetail.id_pasien, e.target.value);
+            ambilTrend(e.target.value);
           }}
         >
           <option value="">Pilih tanggal kunjungan</option>
@@ -471,8 +471,6 @@ export default function DetailPasienPage() {
               trendFat={trendFat}
               trendMucle={trendMuscle}
               trendTensi={trendTensi}
-              interval={interval}
-              setInterval={setInterval}
             />
           </div>
         )}

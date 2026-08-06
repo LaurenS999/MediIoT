@@ -8,42 +8,48 @@ const allow = require("../middleware/permission");
 // TREND BERAT BADAN
 // ======================================================
 router.get(
-  "/:id/:interval/berat-badan",
+  "/:id_pasien/:id_kunjungan/berat-badan",
   auth,
   allow("trend.berat.read"),
   async (req, res) => {
     try {
-      const { id, interval } = req.params;
-
-      console.log("=== [DEBUG] Request masuk ===");
-      console.log("ID Pasien:", id);
+      const { id_pasien, id_kunjungan } = req.params;
 
       const sql = `
       SELECT
-          berat,
-          dibuat_pada
-      FROM (
-          SELECT
-              b.berat,
-              b.dibuat_pada,
-              ROW_NUMBER() OVER (
-                  PARTITION BY DATE(b.dibuat_pada)
-                  ORDER BY b.dibuat_pada DESC
-              ) AS rn
-          FROM pengukuran_bmi b
-          INNER JOIN sesi_pengukuran s
-              ON b.id_sesi = s.id_pengukuran
-          INNER JOIN kunjungan k
-              ON k.id_pengukuran = s.id_pengukuran
-          WHERE k.id_pasien = ?
-            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL ? DAY
-      ) AS ranked
-      WHERE rn = 1
-      ORDER BY dibuat_pada ASC;
+            berat,
+            dibuat_pada
+        FROM (
+            SELECT *
+            FROM (
+                SELECT
+                    b.berat,
+                    b.dibuat_pada,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY DATE(b.dibuat_pada)
+                        ORDER BY b.dibuat_pada DESC
+                    ) AS rn
+                FROM pengukuran_bmi b
+                INNER JOIN sesi_pengukuran s
+                    ON b.id_sesi = s.id_pengukuran
+                INNER JOIN kunjungan k
+                    ON k.id_pengukuran = s.id_pengukuran
+                WHERE k.id_pasien = ?
+                  AND DATE(k.dibuat_pada) <= (
+                      SELECT DATE(dibuat_pada)
+                      FROM kunjungan
+                      WHERE id_kunjungan = ?
+                  )
+            ) ranked
+            WHERE rn = 1
+            ORDER BY dibuat_pada DESC
+            LIMIT 7
+        ) last_seven
+        ORDER BY dibuat_pada ASC;
     `;
 
       // Menggunakan await (gaya Promise)
-      const [result] = await db.query(sql, [id, interval]);
+      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -73,40 +79,48 @@ router.get(
 // TREND TEKANAN DARAH
 // ======================================================
 router.get(
-  "/:id/:interval/tekanan-darah",
+  "/:id_pasien/:id_kunjungan/tekanan-darah",
   auth,
   allow("trend.tekanan-darah.read"),
   async (req, res) => {
     try {
-      const { id, interval } = req.params;
+      const { id_pasien, id_kunjungan } = req.params;
 
       const sql = `
         SELECT
-          systolic,
-          diastolic,
-          dibuat_pada
+            systolic,
+            diastolic,
+            dibuat_pada
         FROM (
-          SELECT
-            t.systolic,
-            t.diastolic,
-            t.dibuat_pada,
-            ROW_NUMBER() OVER (
-              PARTITION BY DATE(t.dibuat_pada)
-              ORDER BY t.dibuat_pada DESC
-            ) AS rn
-          FROM pengukuran_tensi t
-          INNER JOIN sesi_pengukuran s
-            ON t.id_sesi = s.id_pengukuran
-          INNER JOIN kunjungan k
-            ON k.id_pengukuran = s.id_pengukuran
-          WHERE k.id_pasien = ?
-            AND k.dibuat_pada >= NOW() - INTERVAL ? DAY
-        ) AS ranked
-        WHERE rn = 1
-        ORDER BY dibuat_pada ASC;
-      `;
+            SELECT *
+            FROM (
+                SELECT
+                    t.systolic,
+                    t.diastolic,
+                    t.dibuat_pada,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY DATE(t.dibuat_pada)
+                        ORDER BY t.dibuat_pada DESC
+                    ) AS rn
+                FROM pengukuran_tensi t
+                INNER JOIN sesi_pengukuran s
+                    ON t.id_sesi = s.id_pengukuran
+                INNER JOIN kunjungan k
+                    ON k.id_pengukuran = s.id_pengukuran
+                WHERE k.id_pasien = ?
+                  AND k.dibuat_pada <= (
+                      SELECT dibuat_pada
+                      FROM kunjungan
+                      WHERE id_kunjungan = ?
+                  )
+            ) AS ranked
+            WHERE rn = 1
+            ORDER BY dibuat_pada DESC
+            LIMIT 7
+        ) AS last_seven
+        ORDER BY dibuat_pada ASC;`;
 
-      const [result] = await db.query(sql, [id, interval]);
+      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -134,38 +148,47 @@ router.get(
 // TREND BODY FAT
 // ======================================================
 router.get(
-  "/:id/:interval/body-fat",
+  "/:id_pasien/:id_kunjungan/body-fat",
   auth,
   allow("trend.fat.read"),
   async (req, res) => {
     try {
-      const { id, interval } = req.params;
+      const { id_pasien, id_kunjungan } = req.params;
 
       const sql = `
         SELECT
-          body_fat,
-          dibuat_pada
+            body_fat,
+            dibuat_pada
         FROM (
-          SELECT
-            b.body_fat,
-            b.dibuat_pada,
-            ROW_NUMBER() OVER (
-              PARTITION BY DATE(b.dibuat_pada)
-              ORDER BY b.dibuat_pada DESC
-            ) AS rn
-          FROM pengukuran_bmi b
-          INNER JOIN sesi_pengukuran s
-            ON b.id_sesi = s.id_pengukuran
-          INNER JOIN kunjungan k
-            ON k.id_pengukuran = s.id_pengukuran
-          WHERE k.id_pasien = ?
-            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL 6 DAY
-        ) AS ranked
-        WHERE rn = 1
+            SELECT *
+            FROM (
+                SELECT
+                    b.body_fat,
+                    b.dibuat_pada,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY DATE(b.dibuat_pada)
+                        ORDER BY b.dibuat_pada DESC
+                    ) AS rn
+                FROM pengukuran_bmi b
+                INNER JOIN sesi_pengukuran s
+                    ON b.id_sesi = s.id_pengukuran
+                INNER JOIN kunjungan k
+                    ON k.id_pengukuran = s.id_pengukuran
+                WHERE k.id_pasien = ?
+                  AND k.dibuat_pada <= (
+                      SELECT dibuat_pada
+                      FROM kunjungan
+                      WHERE id_kunjungan = ?
+                  )
+            ) AS ranked
+            WHERE rn = 1
+            ORDER BY dibuat_pada DESC
+            LIMIT 7
+        ) AS last_seven
         ORDER BY dibuat_pada ASC;
       `;
 
-      const [result] = await db.query(sql, [id, interval]);
+      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -193,38 +216,47 @@ router.get(
 // TREND MUSCLE MASS
 // ======================================================
 router.get(
-  "/:id/:interval/muscle-mass",
+  "/:id_pasien/:id_kunjungan/muscle-mass",
   auth,
   allow("trend.muscle.read"),
   async (req, res) => {
     try {
-      const { id, interval } = req.params;
+      const { id_pasien, id_kunjungan } = req.params;
 
       const sql = `
         SELECT
-          muscle_mass,
-          dibuat_pada
+            muscle_mass,
+            dibuat_pada
         FROM (
-          SELECT
-            b.muscle_mass,
-            b.dibuat_pada,
-            ROW_NUMBER() OVER (
-              PARTITION BY DATE(b.dibuat_pada)
-              ORDER BY b.dibuat_pada DESC
-            ) AS rn
-          FROM pengukuran_bmi b
-          INNER JOIN sesi_pengukuran s
-            ON b.id_sesi = s.id_pengukuran
-          INNER JOIN kunjungan k
-            ON k.id_pengukuran = s.id_pengukuran
-          WHERE k.id_pasien = ?
-            AND DATE(k.dibuat_pada) >= CURDATE() - INTERVAL 6 DAY
-        ) AS ranked
-        WHERE rn = 1
+            SELECT *
+            FROM (
+                SELECT
+                    b.muscle_mass,
+                    b.dibuat_pada,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY DATE(b.dibuat_pada)
+                        ORDER BY b.dibuat_pada DESC
+                    ) AS rn
+                FROM pengukuran_bmi b
+                INNER JOIN sesi_pengukuran s
+                    ON b.id_sesi = s.id_pengukuran
+                INNER JOIN kunjungan k
+                    ON k.id_pengukuran = s.id_pengukuran
+                WHERE k.id_pasien = ?
+                  AND k.dibuat_pada <= (
+                      SELECT dibuat_pada
+                      FROM kunjungan
+                      WHERE id_kunjungan = ?
+                  )
+            ) AS ranked
+            WHERE rn = 1
+            ORDER BY dibuat_pada DESC
+            LIMIT 7
+        ) AS last_seven
         ORDER BY dibuat_pada ASC;
       `;
 
-      const [result] = await db.query(sql, [id, interval]);
+      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({

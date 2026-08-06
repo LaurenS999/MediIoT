@@ -1,5 +1,5 @@
 import React from "react";
-
+import VerticalDateTick from "./VerticalDateTick";
 import {
   LineChart,
   Line,
@@ -20,8 +20,7 @@ export default function GrafikTrend({ title, data, dataKey, color, unit }) {
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-
-          <XAxis dataKey="tanggal" />
+          <XAxis dataKey="tanggal" interval={0} tick={<VerticalDateTick />} />
 
           <YAxis />
 

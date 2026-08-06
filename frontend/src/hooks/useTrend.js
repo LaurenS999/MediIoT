@@ -13,15 +13,13 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
   const [trendMuscle, setTrendMuscle] = useState([]);
   const [trendTensi, setTrendTensi] = useState([]);
 
-  const [interval, setInterval] = useState(7);
-
   const [openModal, setOpenModal] = useState(false);
   const [errors, setErrors] = useState({});
 
   const ambilTrendBerat = useCallback(
-    async (emptyTrend) => {
+    async (emptyTrend, id_kunjungan) => {
       try {
-        const res = await getTrendBerat(id_pasien, interval);
+        const res = await getTrendBerat(id_pasien, id_kunjungan);
         const listBerat = res.data.data;
         if (Array.isArray(listBerat)) {
           if (listBerat.length >= 1) {
@@ -35,13 +33,13 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         showToast("Server tidak terjangkau", "trend", "error");
       }
     },
-    [id_pasien, interval],
+    [id_pasien],
   );
 
   const ambilTrendfat = useCallback(
-    async (emptyTrend) => {
+    async (emptyTrend, id_kunjungan) => {
       try {
-        const res = await getTrendFat(id_pasien, interval);
+        const res = await getTrendFat(id_pasien, id_kunjungan);
         const listfat = res.data.data;
 
         if (Array.isArray(listfat)) {
@@ -56,13 +54,13 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         showToast("Server tidak terjangkau", "trend", "error");
       }
     },
-    [id_pasien, interval],
+    [id_pasien],
   );
 
   const ambilTrendmuscle = useCallback(
-    async (emptyTrend) => {
+    async (emptyTrend, id_kunjungan) => {
       try {
-        const res = await getTrendMuscle(id_pasien, interval);
+        const res = await getTrendMuscle(id_pasien, id_kunjungan);
         const listMuscle = res.data.data;
 
         if (Array.isArray(listMuscle)) {
@@ -77,13 +75,13 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         showToast("Server tidak terjangkau", "trend", "error");
       }
     },
-    [id_pasien, interval],
+    [id_pasien],
   );
 
   const ambilTrendTensi = useCallback(
-    async (emptyTrend) => {
+    async (emptyTrend, id_kunjungan) => {
       try {
-        const res = await getTrendTensi(id_pasien, interval);
+        const res = await getTrendTensi(id_pasien, id_kunjungan);
         const listTensi = res.data.data;
 
         if (Array.isArray(listTensi)) {
@@ -98,19 +96,19 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         showToast("Server tidak terjangkau", "trend", "error");
       }
     },
-    [id_pasien, interval],
+    [id_pasien],
   );
 
-  useEffect(() => {
+  const ambilTrend = async (id_kunjungan) => {
     if (pasienDetailStatus === true) {
       const loadTrend = async () => {
         const emptyTrend = [];
 
         await Promise.all([
-          ambilTrendBerat(emptyTrend),
-          ambilTrendTensi(emptyTrend),
-          ambilTrendfat(emptyTrend),
-          ambilTrendmuscle(emptyTrend),
+          ambilTrendBerat(emptyTrend, id_kunjungan),
+          ambilTrendTensi(emptyTrend, id_kunjungan),
+          ambilTrendfat(emptyTrend, id_kunjungan),
+          ambilTrendmuscle(emptyTrend, id_kunjungan),
         ]);
 
         if (emptyTrend.length > 0) {
@@ -120,7 +118,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
 
       loadTrend();
     }
-  }, [id_pasien, pasienDetailStatus, interval]);
+  };
 
   return {
     trendBerat,
@@ -131,7 +129,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
     setOpenModal,
     errors,
     setErrors,
-    interval,
-    setInterval,
+
+    ambilTrend,
   };
 };

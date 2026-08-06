@@ -9,9 +9,11 @@ export function GrafikTrendCard({
   trendFat,
   trendMucle,
   trendTensi,
-  interval,
-  setInterval,
 }) {
+  console.log("TREND BERAT : ", trendBerat);
+  console.log("TREND FAT : ", trendFat);
+  console.log("TREND MUSCLE : ", trendMucle);
+  console.log("TREND TENSI : ", trendTensi);
   return (
     <div className="trend-section">
       <div className="trend-header">
@@ -19,29 +21,6 @@ export function GrafikTrendCard({
           <h3 className="trend-title">Grafik Data Pasien</h3>
 
           <p className="trend-subtitle">Grafik perubahan Data pasien</p>
-        </div>
-
-        <div className="trend-filter-group">
-          <button
-            className={`trend-filter-btn ${interval === 7 ? "active" : ""}`}
-            onClick={() => setInterval(7)}
-          >
-            7 Hari
-          </button>
-
-          <button
-            className={`trend-filter-btn ${interval === 30 ? "active" : ""}`}
-            onClick={() => setInterval(30)}
-          >
-            30 Hari
-          </button>
-
-          <button
-            className={`trend-filter-btn ${interval === 90 ? "active" : ""}`}
-            onClick={() => setInterval(90)}
-          >
-            3 Bulan
-          </button>
         </div>
       </div>
 

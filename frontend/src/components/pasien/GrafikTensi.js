@@ -1,5 +1,5 @@
 import React from "react";
-
+import VerticalDateTick from "./VerticalDateTick";
 import {
   LineChart,
   Line,
@@ -23,6 +23,7 @@ export default function GrafikTensi({ title, data }) {
           <CartesianGrid strokeDasharray="3 3" />
 
           <XAxis dataKey="tanggal" />
+          <XAxis dataKey="tanggal" interval={0} tick={<VerticalDateTick />} />
 
           <YAxis />
 
