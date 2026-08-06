@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import { getPasienDrowdown } from "../services/pasienService.js";
 
 import { useModalInfo } from "../context/ModalInfoProvider.js";
+import { showToast } from "../utils/showToast.js";
 
 export const usePasienDropdown = () => {
   const [pasien, setPasien] = useState([]);
@@ -17,16 +17,11 @@ export const usePasienDropdown = () => {
         if (pasienList.length >= 1) {
           setPasien(pasienList);
         } else {
-          toast.info("Pasien Tidak ditemukan");
           setPasien([]);
         }
       }
     } catch (error) {
-      toast.error(
-        "Data Pasien : " + error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data pasien",
-        { toastId: "pasien-dropdown-get-toast-error" },
-      );
+      showToast(error.response?.data?.message, "pasien-dropdown", "error");
     }
   }, []);
 

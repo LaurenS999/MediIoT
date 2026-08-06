@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import {
   getDetailPemeriksaanDokter,
   updatePemeriksaanDokter,
 } from "../services/pemeriksaanDokterService";
+import { showToast } from "../utils/showToast";
 
 export const usePemeriksaanDokterDetail = (id_kunjungan) => {
   const [pasien, setPasien] = useState([]);
@@ -22,12 +22,10 @@ export const usePemeriksaanDokterDetail = (id_kunjungan) => {
         setPemeriksaan(DataDetailPemeriksaan.sesi);
         setPengukuran(DataDetailPemeriksaan.pengukuran);
       } catch (error) {
-        toast.error(
+        showToast(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat mengambil data pasien",
-          {
-            toastId: "pemeriksaan-dokter-tidak-ditemukan",
-          },
+            "Terjadi kesalaha saat mengambil data",
+          "pemeriksaan-dokter-detail",
         );
       }
     },

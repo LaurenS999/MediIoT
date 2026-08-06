@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { getDevice } from "../services/adminPanelServices";
 import { useAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+
 import { data } from "react-router-dom";
+import { showToast } from "../utils/showToast";
 
 export default function useDevice() {
   // =========================================
@@ -39,24 +40,25 @@ export default function useDevice() {
       // =========================================
       if (err.response) {
         if (err.response.status === 401) {
-          toast.error(
+          showToast(
             err.response?.data?.error.errors + ", Hubungi Admin" ||
               err.response?.data?.message,
-            { toastId: "medlink-device-access-code-error" },
+            "medlink-device",
+            "error",
           );
+
           return;
         }
-
-        toast.error(
+        showToast(
           err.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",
+          "medlink-device",
+          "error",
         );
 
         setError(err.response.data.message || "Ambil Device Gagal");
       } else {
-        toast.error("Server MedLink tidak terjangkau", {
-          toastId: "device-server-tidak-terjangkau",
-        });
+        showToast("Server MedLink tidak terjangkau", "medlink-device", "error");
 
         setError("Server MedLink tidak terjangkau");
       }

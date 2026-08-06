@@ -20,7 +20,7 @@ import { exportLaporanPengukuran } from "../../services/laporanService";
 import { useAuth } from "../../context/AuthContext";
 
 import { useKunjungan } from "../../hooks/useKunjungan";
-import { toast } from "react-toastify";
+import { showToast } from "../../utils/showToast";
 
 export default function RiwayatKunjunganPage() {
   const navigate = useNavigate();
@@ -71,7 +71,11 @@ export default function RiwayatKunjunganPage() {
       // bersihkan memory
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      toast.error("Internal Server Error");
+      showToast(
+        error.response?.data?.message || "Internal Server Error",
+        "riwayat-kunjungan",
+        "error",
+      );
     }
   };
 

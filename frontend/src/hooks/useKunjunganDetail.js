@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 import { getPeran } from "../services/peranService.js";
 import {
@@ -7,6 +6,7 @@ import {
   getKunjunganPasien,
   getKunjunganSelectedRiwayat,
 } from "../services/kunjunganService.js";
+import { showToast } from "../utils/showToast.js";
 
 export const useKunjunganDetail = (id_pasien) => {
   const [kunjungan, setKunjungan] = useState([]);
@@ -36,14 +36,15 @@ export const useKunjunganDetail = (id_pasien) => {
             setCurrentPage(res.pagination.page);
             setTotalPage(res.pagination.totalPage);
           } else {
-            toast.info(res.data?.message);
             setDaftarKunjungan([]);
           }
         }
       } catch (error) {
-        toast.error(
+        showToast(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat mengambil data kunjungan pasien",
+            "Terjadi Kesalahan saat mengambil data kunjungan pasien",
+          "kunjungan-detail",
+          "error",
         );
       } finally {
         setLoadingDaftarKunjungan(false);
@@ -54,28 +55,27 @@ export const useKunjunganDetail = (id_pasien) => {
   const ambilKunjunganTerakhir = useCallback(async (id_pasien) => {
     try {
       const res = await getKunjunganDetail_Terakhir(id_pasien);
-      console.log("RESPONS 123: ", res);
       setKunjungan(res.data.kunjungan);
 
       setPengukuran(res.data.pengukuran);
 
       if (res.data.pemeriksaan == []) {
-        toast.info("PASIEN BELUM ADA PEMERIKSAAN");
         setPemeriksaan([]);
       } else {
         setPemeriksaan(res.data.pemeriksaan);
       }
 
       if (res.data.pemeriksaan == []) {
-        toast.info("PASIEN BELUM ADA PEMERIKSAAN");
         setPengukuran([]);
       } else {
         setPengukuran(res.data.pengukuran);
       }
     } catch (error) {
-      toast.error(
+      showToast(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data peran",
+          "Terjadi kesalahan saat mengambil data Kunjungan terakhir",
+        "kunjungan-detail",
+        "error",
       );
     }
   }, []);
@@ -91,8 +91,10 @@ export const useKunjunganDetail = (id_pasien) => {
       setPemeriksaan(response.data.pemeriksaan);
       setPengukuran(response.data.pengukuran);
 
-      toast.success(
+      showToast(
         "Data hasil pemeriksaan dan pengukuran berhasil ditampilkan",
+        "kunjungan-detail",
+        "success",
       );
 
       setTimeout(() => {
@@ -111,6 +113,12 @@ export const useKunjunganDetail = (id_pasien) => {
       }, 100);
     } catch (error) {
       console.error(error);
+      showToast(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data Kunjungan terakhir",
+        "kunjungan-detail",
+        "error",
+      );
     } finally {
       setLoadingDaftarKunjungan(false);
     }

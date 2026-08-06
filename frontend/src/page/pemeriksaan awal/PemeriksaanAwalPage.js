@@ -12,7 +12,6 @@ import usePengukuranSocketEngine from "../../hooks/usePengukuranSocketEngine";
 import { useAuth } from "../../context/AuthContext";
 import ModalPilihPasien from "../../components/pasien/ModalPilihPasien";
 import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
-import { toast } from "react-toastify";
 import useStatusDevice from "../../hooks/useStatusDevice";
 
 import ModalRingkasanPengukuran from "../../components/pengukuran/ModalRingkasanPengukuran";
@@ -24,7 +23,7 @@ import { usePasienDetail } from "../../hooks/usePasienDetail";
 import UploadLampiranModal from "../../components/lampiranModal/UploadLampiranModal";
 
 import Lampiran from "../../components/lampiran/Lampiran";
-import { showToast } from "../../utils/toast";
+import { showToast } from "../../utils/showToast";
 
 export default function PemeriksaanAwalPage() {
   const { state } = useLocation();
@@ -110,7 +109,7 @@ export default function PemeriksaanAwalPage() {
   // =====================================
   const handleSaveMeasurement = async () => {
     if (selectedPatient === null) {
-      toast.warning("BELUM MEMILIH PASIEN");
+      showToast("Belum memilih pasien", "pemeriksaan-awal", "warning");
       return;
     }
 
@@ -155,14 +154,7 @@ export default function PemeriksaanAwalPage() {
 
   const handleSelectPatient = (patientBaru) => {
     setSelectedPatient(patientBaru);
-
-    // toast.success("Berhasil mengganti pasien");
-
-    showToast(
-      "Berhasil Mengganti Pasien",
-      "pemeriksaan-awal-ganti-pasien",
-      "success",
-    );
+    showToast("Berhasil Mengganti Pasien", "pemeriksaan-awal", "success");
 
     setLiveData({});
     setTinggiBadan("");

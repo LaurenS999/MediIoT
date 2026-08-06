@@ -18,13 +18,13 @@ import { hitungUmur } from "../../utils/hitungUmur";
 import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
 import { formatTanggalIndonesia } from "../../utils/formatTanggal";
 import { formatJenisPengukuran } from "../../utils/formatJenisPengukuran";
-import { toast } from "react-toastify";
 import { createStatusDevice } from "../../services/deviceService";
 
 import useStatusDevice from "../../hooks/useStatusDevice";
 import { getDetailPasien } from "../../services/pasienService";
 
 import { Search } from "lucide-react";
+import { showToast } from "../../utils/showToast";
 
 export default function SetupPemeriksaanAwalPage() {
   const { user } = useAuth();
@@ -227,9 +227,11 @@ export default function SetupPemeriksaanAwalPage() {
     setSelectedDevices((prev) => {
       const isUsed = usedDeviceSet.has(device.mac_address);
       if (isUsed) {
-        toast.error("Device sedang digunakan. Pilih device yang lain", {
-          toastId: "setup-pemeriksaan-awal-deivce-sedang-digunakan",
-        });
+        showToast(
+          "Device sedang digunakan. Pilih device yang lain",
+          "setup-pemeriksaan-awal",
+          "warning",
+        );
         return prev;
       }
 
@@ -244,10 +246,11 @@ export default function SetupPemeriksaanAwalPage() {
       );
 
       if (sameTypeExists) {
-        toast.error(
+        showToast(
           `Device ${formatJenisPengukuran(device.device_function)} sudah dipilih`,
+          "setup-pemeriksaan-awal",
+          "error",
         );
-
         return prev;
       }
 
@@ -262,10 +265,8 @@ export default function SetupPemeriksaanAwalPage() {
     const noPatient = !selectedPatient;
 
     if (noPatient) {
-      let pesan = "Anda belum memilih pasien";
       setErrorPasien(true);
-
-      toast.error(pesan);
+      showToast("Anda belum memilih pasien", "setup-pemeriksaan-awal", "error");
       return;
     }
 
@@ -301,9 +302,9 @@ export default function SetupPemeriksaanAwalPage() {
       console.error(error);
 
       if (error.response.status === 409) {
-        toast.error("Device sedang digunakan");
+        showToast("Device sedang digunakan", "setup-pemeriksaan-awal", "error");
       } else {
-        toast.error("Internal Server Error");
+        showToast("Internal Server Error", "setup-pemeriksaan-awal", "error");
       }
     }
   };

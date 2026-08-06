@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 import { getPeran } from "../services/peranService.js";
 import { getKunjungan } from "../services/kunjunganService.js";
 import { formToJSON } from "axios";
+import { showToast } from "../utils/showToast.js";
 
 export const useKunjungan = () => {
   const [kunjungan, setKunjungan] = useState([]);
@@ -24,16 +24,16 @@ export const useKunjungan = () => {
           setCurrentPage(res.pagination.page);
           setTotalPage(res.pagination.totalPage);
         } else {
-          toast.info("kunjungan Tidak ditemukan", {
-            toastId: "riwayat-kunjungan-kosong",
-          });
           setKunjungan([]);
         }
       }
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        toastId: "kunjungan-error",
-      });
+      showToast(
+        error.response?.data?.message ||
+          "Terjadi Kesalahan saat mengambil daftar kunjungan",
+        "kunjungan",
+        "error",
+      );
     }
   }, []);
 

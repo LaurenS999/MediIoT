@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import {
   createPasien,
   getPasien,
@@ -8,6 +7,7 @@ import {
 } from "../services/pasienService.js";
 
 import { useModalInfo } from "../context/ModalInfoProvider.js";
+import { showToast } from "../utils/showToast.js";
 
 export const usePasien = (id_user) => {
   const [pasien, setPasien] = useState([]);
@@ -60,35 +60,29 @@ export const usePasien = (id_user) => {
             setCurrentPage(paginationData.page);
             setTotalPage(paginationData.totalPage);
           } else {
-            // toast.info("Pasien Tidak ditemukan", { toastId: "pasien-kosong" });
             setPasien([]);
           }
         }
       } catch (error) {
-        toast.error(
+        showToast(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data pasien",
-          { toastId: "pasien-get-error" },
+          "pasien",
+          "error",
         );
       }
     },
     [search],
   );
 
-  const ambilDetailPasien = useCallback(async () => {
-    try {
-    } catch (error) {
-      toast.info("Terjadi Error : ", error, { toastId: "pasien=detail-error" });
-    }
-  }, []);
-
   const validasi = () => {
     const newErrors = {};
     const namaLengkapRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+    if (!namaLengkapRegex.test(newPasien.nama)) {
+      newErrors.nama = true;
+    }
 
     if (!newPasien.nama.trim()) {
-      newErrors.nama = true;
-    } else if (!namaLengkapRegex.test(newPasien.nama)) {
       newErrors.nama = true;
     }
 
@@ -107,9 +101,7 @@ export const usePasien = (id_user) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.warning("Data wajib tidak boleh kosong", {
-        toastId: "pasien-data-kosong",
-      });
+      showToast("Data wajib tidak boleh kosong", "pasien", "warning");
       return false;
     }
 
@@ -130,7 +122,7 @@ export const usePasien = (id_user) => {
         id_user: id_user,
       });
 
-      toast.success(response.data.message);
+      showToast(response.data.message, "pasien", "success");
 
       setNewPasien({
         nama: "",
@@ -146,14 +138,13 @@ export const usePasien = (id_user) => {
       setOpenModal(false);
     } catch (error) {
       if (error.response?.status === 401) {
-        if (error.response?.status === 401) {
-          setErrors((prev) => ({
-            ...prev,
-            nama: true,
-          }));
-        }
+        setErrors((prev) => ({
+          ...prev,
+          nama: true,
+        }));
       }
-      toast.error(error.response?.data?.message, { toastId: "pasien-error" });
+
+      showToast(error.response?.data?.message, "pasien", "error");
     }
   });
 

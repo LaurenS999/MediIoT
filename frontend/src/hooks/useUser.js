@@ -1,6 +1,5 @@
 import { useEffect, useEffectEvent, useState } from "react";
 
-import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import {
   getUser,
@@ -8,6 +7,7 @@ import {
   createUser,
   deleteUser,
 } from "../services/userService";
+import { showToast } from "../utils/showToast";
 
 // ======================================================
 // USE USER
@@ -64,12 +64,9 @@ export const useUser = () => {
       setCurrentPage(res.data.pagination.page);
       setTotalPage(res.data.pagination.totalPage);
 
-      if (res.data.data.length < 1) {
-        toast.info("data user kosong", { toastId: "user-kosong" });
-      }
       setUsers(res.data.data || []);
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      showToast(error.response?.data?.message, "user", "error");
     } finally {
       setLoading(false);
     }
@@ -95,55 +92,62 @@ export const useUser = () => {
     if (newUser.username.length > 0) {
       const usernameRegex = /^[a-zA-Z0-9._]+$/;
       if (!usernameRegex.test(newUser.username)) {
-        toast.error(
+        showToast(
           "Username hanya boleh berisi huruf, angka, underscore (_), dan dot (.).",
+          "user",
+          "warning",
         );
+
         newErrors.username = true;
       }
 
       if (newUser.username.length < 8) {
-        toast.error("Username minimal 8 karakter");
+        showToast("Username minimal 8 karakter", "user", "warning");
         newErrors.username = true;
       }
     }
 
     if (newUser.password.length > 0) {
       if (newUser.password != konfimrasiPassword) {
-        toast.error("password tidak sama dengan konfirmasi password", {
-          toastId: "user-create-password-tidak-sama-error",
-        });
+        showToast(
+          "password tidak sama dengan konfirmasi password",
+          "user",
+          "warning",
+        );
+
         newErrors.password = true;
       }
     }
 
     if (newUser.password.length < 8) {
-      toast.error("password minimal 8 karakter", {
-        toastId: "user-create-password-error",
-      });
+      showToast("password minimal 8 karakter", "user", "warning");
+
       newErrors.password = true;
     }
 
     if (newUser.role === 5 && !newUser.id_relasi) {
       newErrors.id_relasi = true;
-      toast.error("User dengan role pasien wajib isi id pasien user", {
-        toastId: "user-create-relasi-error",
-      });
+      showToast(
+        "User dengan role pasien wajib isi id pasien user",
+        "user",
+        "warning",
+      );
     }
 
     if (newUser.role === 1 && !newUser.bertugas_di) {
       newErrors.bertugas_di = true;
-      toast.error("User dengan role perawat wajib isi Bertugas di Ruangan", {
-        toastId: "user-create-bertugas-error",
-      });
+      showToast(
+        "User dengan role perawat wajib isi Bertugas di Ruangan",
+        "user",
+        "warning",
+      );
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
 
       if (newErrors.username || newErrors.role || newErrors.password_kosong) {
-        toast.error("Data tidak boleh kosong", {
-          toastId: "user-create-kosong",
-        });
+        showToast("Data tidak boleh kosong", "user", "warning");
       }
       return false;
     }
@@ -161,10 +165,7 @@ export const useUser = () => {
 
     try {
       await createUser(newUser);
-
-      toast.success("User berhasil ditambahkan", {
-        toastId: "user-create-success",
-      });
+      showToast("User berhasil ditambahkan", "user", "success");
 
       // RESET FORM
       setNewUser({
@@ -182,9 +183,7 @@ export const useUser = () => {
       // REFRESH DATA
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        toastId: "user-create-error",
-      });
+      showToast(error.response?.data?.message, "user", "error");
     }
   };
 
@@ -198,8 +197,11 @@ export const useUser = () => {
       const newErrors = {};
 
       const response = await updateUser(selectedUser.id_user, newUser);
-
-      toast.success(response?.data?.message, { toastId: "user-update-error" });
+      showToast(
+        response?.data?.message || "data User berhasil diubah",
+        "user",
+        "success",
+      );
 
       setOpenModal(false);
       setNewUser({
@@ -214,9 +216,7 @@ export const useUser = () => {
 
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        toastId: "user-update-error",
-      });
+      showToast(error.response?.data?.message, "user", "error");
     }
   };
 
@@ -234,17 +234,23 @@ export const useUser = () => {
   const handleConfirmDelete = async () => {
     try {
       const response = await deleteUser(selectedDeleteUser.id_user, user.role);
-      toast.success(response?.data?.message, {
-        toastId: "user-delete-success",
-      });
+      showToast(
+        response?.data?.message || "data User berhasil dihapus",
+        "user",
+        "success",
+      );
+
       setOpenDeleteModal(false);
       setSelectedDeleteUser(null);
 
       fetchUsers();
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        toastId: "user-delete-error",
-      });
+      showToast(
+        error.response?.data?.message ||
+          "Terjadi kesalahan pada saat menghapus user",
+        "user",
+        "error",
+      );
     }
   };
 

@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 
-import { toast } from "react-toastify";
-
 import { getDetailPasien } from "../services/pasienService.js";
 
 import { exportLaporanPasien } from "../services/laporanService.js";
+import { showToast } from "../utils/showToast.js";
+import { deletePasien, updatePasien } from "../services/pasienService.js";
+import { useNavigate } from "react-router-dom";
 
 export const usePasienDetail = (id_pasien, id_user) => {
   const [pasienDetail, setPasienDetail] = useState(null);
@@ -28,14 +29,14 @@ export const usePasienDetail = (id_pasien, id_user) => {
       setPasienDetail(data || null);
     } catch (error) {
       if (error.response.status === 404) {
-        toast.error(error.response.data.message, {
-          toastId: "pasien-detail-tidak-ditemukan",
-        });
+        showToast(error.response?.data?.message, "pasien-detail", "error");
       } else {
         console.error(error);
-        toast.error("Internal Server Error", {
-          toastId: "pasien-detail-server-error",
-        });
+        showToast(
+          error.response?.data?.message || "Internal Server Error",
+          "pasien-detail",
+          "error",
+        );
       }
     } finally {
       setLoadingPasien(false);
@@ -68,7 +69,7 @@ export const usePasienDetail = (id_pasien, id_user) => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
-      toast.error("Internal Server Error");
+      showToast(error.response?.data?.message, "pasien-detail", "error");
     }
   };
 
@@ -77,6 +78,117 @@ export const usePasienDetail = (id_pasien, id_user) => {
       ambilDetailPasien();
     }
   }, [id_pasien]);
+
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [formData, setFormData] = useState({
+    nama: "",
+    jenis_kelamin: "",
+    tanggal_lahir: "",
+    tempat_lahir: "",
+    no_telp: "",
+    email: "",
+    alamat: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: false,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.nama.trim()) {
+      newErrors.nama = true;
+    }
+
+    if (!formData.jenis_kelamin) {
+      newErrors.jenis_kelamin = true;
+    }
+
+    if (!formData.tanggal_lahir) {
+      newErrors.tanggal_lahir = true;
+    }
+
+    if (!formData.alamat) {
+      newErrors.alamat = true;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      showToast("Data tidak boleh ada yang kosong", "pasien-detail", "warning");
+      setErrors(newErrors);
+
+      return false;
+    }
+    const namaLengkapRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+
+    if (!namaLengkapRegex.test(formData.nama)) {
+      newErrors.nama = true;
+
+      showToast(
+        "Nama Lengkap hanya boleh huruf dan spasi",
+        "pasien-detail",
+        "warning",
+      );
+      setErrors(newErrors);
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleUbahPasien = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      setLoadingUpdate(true);
+
+      const response = await updatePasien(pasienDetail.id_pasien, formData);
+
+      // update local state
+      setPasienDetail((prev) => ({
+        ...prev,
+        ...formData,
+      }));
+
+      setIsEditing(false);
+
+      showToast(response.data.message, "pasien-detail", "success");
+    } catch (error) {
+      console.error(error);
+
+      showToast(error.response?.data?.message, "pasien-detail", "error");
+    } finally {
+      setLoadingUpdate(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await deletePasien(pasienDetail.id_pasien);
+
+      showToast(res.data?.message, "pasien-detail");
+      navigate("/pasien");
+    } catch (error) {
+      console.error(error);
+      showToast(error.response?.data?.message, "pasien-detail", "error");
+    }
+  };
 
   return {
     pasienDetail,
@@ -90,5 +202,15 @@ export const usePasienDetail = (id_pasien, id_user) => {
     openDeleteModal,
     setOpenDeleteModal,
     pasienDetailStatus,
+
+    formData,
+    setFormData,
+    handleUbahPasien,
+    handleDelete,
+    handleChange,
+    errors,
+    setErrors,
+    isEditing,
+    setIsEditing,
   };
 };

@@ -5,7 +5,6 @@ import "../../styles/detailPemeriksaanDokter.css";
 import { usePemeriksaanDokterDetail } from "../../hooks/usePemeriksaanDokterDetail";
 import { formatDateTime } from "../../utils/formatDate";
 import { updatePemeriksaanDokter } from "../../services/pemeriksaanDokterService";
-import { toast } from "react-toastify";
 
 import { hasilPemeriksaanConfig } from "../../config/hasilPemeriksaanConfig";
 import HasilPemeriksaanGroup from "../../components/hasil-pemeriksaan/HasilPemeriksaanGroup";
@@ -13,9 +12,8 @@ import HasilPemeriksaanCard from "../../components/hasil-pemeriksaan/HasilPemeri
 
 import useLampiran from "../../hooks/useLampiran";
 
-import LampiranPemeriksaan from "../../components/pemeriksaan-dokter/LampiranPemeriksaan";
-
 import Lampiran from "../../components/lampiran/Lampiran";
+import { showToast } from "../../utils/showToast";
 
 export default function DetailPemeriksaanDokter() {
   const { id_kunjungan } = useParams();
@@ -71,25 +69,37 @@ export default function DetailPemeriksaanDokter() {
     if (!formData.catatan_dokter) {
       newErrors.catatan_dokter = "Catatan Pemeriksaan wajib diisi";
     }
-    if (formData.status_pasien == "") {
+    if (formData.status_pasien === "") {
       newErrors.status_pasien = "Status Pasien wajib diisi";
     }
 
     if (Object.keys(newErrors).length > 0) {
       setError(newErrors);
-      toast.warning("Data tidak boleh kosong");
+      showToast(
+        "Data tidak boleh kosong",
+        "pemeriksaan-dokter-detail",
+        "warning",
+      );
       return;
     }
 
     try {
       await updatePemeriksaanDokter(pemeriksaan.id_pemeriksaan, formData);
 
-      toast.success("Pemeriksaan berhasil disimpan.");
+      showToast(
+        "Pemeriksaan berhasil disimpan",
+        "pemeriksaan-dokter-detail",
+        "success",
+      );
       navigate("/pemeriksaan-dokter");
     } catch (error) {
       console.log(error);
-
-      toast.error(error.response?.data?.message || "Terjadi kesalahan.");
+      showToast(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat menyimpan pemeriksaan",
+        "pemeriksaan-dokter-detail",
+        "success",
+      );
     }
   };
 

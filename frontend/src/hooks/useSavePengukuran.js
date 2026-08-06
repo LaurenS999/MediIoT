@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 import { createPengukuran } from "../services/pengukuranService";
 import { simpanSemuaPengukuran } from "../config/pengukuranHandler";
@@ -9,6 +8,7 @@ import { createKunjungan } from "../services/kunjunganService";
 import { useAuth } from "../context/AuthContext";
 import { createSimpanKunjungan } from "../services/simpanKunjungan";
 import { patchPendaftaranSelesai } from "../services/permintaanPemeriksaanService";
+import { showToast } from "../utils/showToast";
 
 export default function useSavePengukuran() {
   const [activeSessionId, setActiveSessionId] = useState(null);
@@ -52,8 +52,7 @@ export default function useSavePengukuran() {
 
       if (Object.keys(newErrors).length > 0) {
         setError(newErrors);
-
-        toast.warning("Data tidak boleh kosong");
+        showToast("Data tidak boleh kosong", "pemeriksaan-awal", "warning");
         return;
       }
 

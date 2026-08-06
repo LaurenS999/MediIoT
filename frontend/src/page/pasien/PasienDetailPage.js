@@ -17,10 +17,6 @@ import { transformTrendData } from "../../utils/formatTrend";
 import { exportLaporanPasien } from "../../services/laporanService";
 import { useAuth } from "../../context/AuthContext";
 
-import { deletePasien, updatePasien } from "../../services/pasienService";
-import { toast } from "react-toastify";
-
-import { useNavigate } from "react-router-dom";
 import ModalKonfirmasi from "../../components/common/ModalKonfirmasi";
 import { formatDateTime } from "../../utils/formatDate";
 import { useKunjunganDetail } from "../../hooks/useKunjunganDetail";
@@ -39,10 +35,8 @@ import { useKunjunganDropdown } from "../../hooks/useKunjunganDropdown";
 import { getTrendMuscle } from "../../services/trendService";
 
 export default function DetailPasienPage() {
-  const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [errors, setErrors] = useState({});
   // =====================================================
   // ROUTER
   // =====================================================
@@ -67,6 +61,16 @@ export default function DetailPasienPage() {
     openDeleteModal,
     setOpenDeleteModal,
     pasienDetailStatus,
+
+    formData,
+    setFormData,
+    handleUbahPasien,
+    handleDelete,
+    handleChange,
+    errors,
+    setErrors,
+    isEditing,
+    setIsEditing,
   } = usePasienDetail(idPasien, user?.id_user);
 
   const {
@@ -112,15 +116,6 @@ export default function DetailPasienPage() {
 
   const page = getPaginationItems(currentPage, totalPage);
 
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [showLampiranModal, setShowLampiranModal] = useState(false);
-
-  const handleOpenLampiran = (kunjungan) => {
-    setSelectedKunjungan(kunjungan);
-    setShowLampiranModal(true);
-  };
-
   useEffect(() => {
     if (pasienDetail) {
       setFormData({
@@ -134,112 +129,6 @@ export default function DetailPasienPage() {
       });
     }
   }, [pasienDetail]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: false,
-    }));
-  };
-
-  const [loadingUpdate, setLoadingUpdate] = useState(false);
-
-  const [formData, setFormData] = useState({
-    nama: "",
-    jenis_kelamin: "",
-    tanggal_lahir: "",
-    tempat_lahir: "",
-    no_telp: "",
-    email: "",
-    alamat: "",
-  });
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.nama.trim()) {
-      newErrors.nama = true;
-    }
-
-    if (!formData.jenis_kelamin) {
-      newErrors.jenis_kelamin = true;
-    }
-
-    if (!formData.tanggal_lahir) {
-      newErrors.tanggal_lahir = true;
-    }
-
-    if (!formData.alamat) {
-      newErrors.alamat = true;
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      toast.warning(`Data tidak boleh ada yang kosong`);
-      setErrors(newErrors);
-
-      return false;
-    }
-    const namaLengkapRegex = /^[A-Za-zÀ-ÿ\s]+$/;
-
-    if (!namaLengkapRegex.test(formData.nama)) {
-      newErrors.nama = true;
-      toast.warn("Nama Lengkap hanya boleh huruf dan spasi");
-      setErrors(newErrors);
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleUbahPasien = async () => {
-    // validateForm();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    try {
-      setLoadingUpdate(true);
-
-      const response = await updatePasien(pasienDetail.id_pasien, formData);
-
-      // update local state
-      setPasienDetail((prev) => ({
-        ...prev,
-        ...formData,
-      }));
-
-      setIsEditing(false);
-
-      toast.success(response.data?.message);
-    } catch (error) {
-      console.error(error);
-
-      toast.error(error.response?.data?.message);
-    } finally {
-      setLoadingUpdate(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      const res = await deletePasien(pasienDetail.id_pasien);
-
-      toast.success(res.data?.message);
-      navigate("/pasien");
-    } catch (error) {
-      console.error(error);
-
-      toast.error(error.response?.data?.message);
-    }
-  };
 
   if (!initialized) {
     return null;

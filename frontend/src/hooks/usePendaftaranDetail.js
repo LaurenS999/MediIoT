@@ -1,11 +1,10 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-
-import { toast } from "react-toastify";
+import { useEffect, useState, useCallback } from "react";
 
 import { getDetailPasien } from "../services/pasienService.js";
 
 import { exportLaporanPasien } from "../services/laporanService.js";
 import { getPendaftaranDetail } from "../services/pendaftaranService.js";
+import { showToast } from "../utils/showToast.js";
 
 export const usePendaftaranDetail = (id_pendaftaran, setKeluhan) => {
   const [pendaftaranDetail, setPendaftaranDetail] = useState(null);
@@ -21,9 +20,7 @@ export const usePendaftaranDetail = (id_pendaftaran, setKeluhan) => {
       setKeluhan(data.keluhan);
     } catch (error) {
       console.error(error);
-      toast.error("Internal Server Error", {
-        toastId: "server-error",
-      });
+      showToast("Internal Server Error", "Pendaftaran-detail", "error");
     } finally {
       setLoadingPendaftaran(false);
     }

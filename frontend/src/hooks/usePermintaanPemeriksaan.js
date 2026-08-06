@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/showToast.js";
 
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 import {
@@ -64,7 +64,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
   const validasi = () => {
     const newErrors = {};
-    console.log("MASUK VALIDASI");
 
     if (!form.tanggal_pemeriksaan) {
       newErrors.tanggal_pemeriksaan = true;
@@ -77,9 +76,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.warning("Data wajib tidak boleh kosong", {
-        toastId: "permintaan-validasi-error",
-      });
+      showToast("Data wajib tidak boleh kosong", "permintaan", "warning");
       return false;
     }
 
@@ -93,8 +90,11 @@ export const usePermintaanPemeriksaan = (id_user) => {
       if (selectedDate < today) {
         newErrors.tanggal_pemeriksaan = true;
 
-        toast.warning("Tanggal pemeriksaan tidak boleh sebelum hari ini.");
-
+        showToast(
+          "Tanggal pemeriksaan tidak boleh sebelum hari ini",
+          "permintaan",
+          "error",
+        );
         setErrors(newErrors);
         return false;
       }
@@ -113,7 +113,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.warning("Alasan tidak boleh kosong");
+      showToast("Alasan tidak boleh kosong", "permintaan", "warning");
       return false;
     }
 
@@ -153,8 +153,10 @@ export const usePermintaanPemeriksaan = (id_user) => {
       if (totalMenitAwal < batasWaktuAwal || totalMenitAwal > batasWaktuAkhir) {
         newErrors.waktu_kunjungan_awal = true;
 
-        toast.warning(
+        showToast(
           "Waktu kunjungan awal harus berada antara 08:00 sampai 17:00.",
+          "permintaan",
+          "warning",
         );
       }
 
@@ -164,17 +166,20 @@ export const usePermintaanPemeriksaan = (id_user) => {
       ) {
         newErrors.waktu_kunjungan_akhir = true;
 
-        toast.warning(
+        showToast(
           "Waktu kunjungan akhir harus berada antara 08:00 sampai 17:00.",
+          "permintaan",
+          "warning",
         );
       }
 
       // Waktu akhir harus lebih besar dari waktu awal
       if (totalMenitAkhir <= totalMenitAwal) {
         newErrors.waktu_kunjungan_akhir = true;
-
-        toast.warning(
+        showToast(
           "Waktu kunjungan akhir harus lebih besar dari waktu kunjungan awal.",
+          "permintaan",
+          "warning",
         );
       }
     }
@@ -183,7 +188,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
 
     // Validasi waktu kosong
     if (!waktuAwal || !waktuAkhir) {
-      toast.warning("Waktu kunjungan tidak boleh kosong");
+      showToast("Waktu kunjungan tidak boleh kosong.", "permintaan", "warning");
       return false;
     }
 
@@ -195,7 +200,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
     try {
       const res = await getPermintaanPasien(user.id_relasi, page, limit);
       const permintaanList = res.data.data;
-      console.log("RESPON :, ", res);
 
       if (Array.isArray(permintaanList)) {
         if (permintaanList.length >= 1) {
@@ -204,14 +208,15 @@ export const usePermintaanPemeriksaan = (id_user) => {
           setCurrentPage(res.data.pagination.page);
           setTotalPage(res.data.pagination.totalPage);
         } else {
-          toast.info(res.data?.message);
           setPermintaan([]);
         }
       }
     } catch (error) {
-      toast.error(
+      showToast(
         error.response?.data?.message ||
           "Terjadi kesalahan saat mengambil data Permintaan",
+        "permintaan",
+        "error",
       );
     } finally {
       setLoading(false);
@@ -223,7 +228,6 @@ export const usePermintaanPemeriksaan = (id_user) => {
     try {
       const res = await getPermintaan(page, limit);
       const permintaanList = res.data.data;
-      console.log("RESPONSE : ", res);
 
       if (Array.isArray(permintaanList)) {
         if (permintaanList.length >= 1) {
@@ -232,14 +236,15 @@ export const usePermintaanPemeriksaan = (id_user) => {
           setCurrentPage(res.data.pagination.page);
           setTotalPage(res.data.pagination.totalPage);
         } else {
-          toast.info(res.data?.message);
           setPermintaan([]);
         }
       }
     } catch (error) {
-      toast.error(
+      showToast(
         error.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil data permintaan",
+          "Terjadi kesalahan saat mengambil data Permintaan",
+        "permintaan",
+        "error",
       );
     } finally {
       setLoading(false);
@@ -263,12 +268,11 @@ export const usePermintaanPemeriksaan = (id_user) => {
         ambilPermintaanByPasien();
       }
     } catch (error) {
-      toast.error(
+      showToast(
         error.response?.data?.message ||
           "Terjadi kesalahan saat mengambil data Permintaan",
-        {
-          toastId: "permintaan-create-error",
-        },
+        "permintaan",
+        "error",
       );
     } finally {
       setLoading(false);
@@ -310,7 +314,12 @@ export const usePermintaanPemeriksaan = (id_user) => {
         ambilPermintaan();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      showToast(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat mengubah status data Permintaan",
+        "permintaan",
+        "error",
+      );
     } finally {
       setLoading(false);
     }

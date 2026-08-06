@@ -8,8 +8,9 @@ export const showToast = (message, toastId = "global-error", tipe) => {
       autoClose: 3000,
     });
   } else {
-    toast.error(message, {
+    toast(message, {
       toastId,
+      type: tipe,
       autoClose: 3000,
     });
   }

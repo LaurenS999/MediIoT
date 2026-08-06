@@ -9,8 +9,7 @@ import { postLogin } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 
-import { toast } from "react-toastify";
-import { showToast } from "../utils/toast.js";
+import { showToast } from "../utils/showToast.js";
 
 export default function useLogin() {
   const { login } = useAuth();
@@ -59,9 +58,7 @@ export default function useLogin() {
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
-        toast.warning("Data tidak boleh kosong", {
-          toastId: "Login-error-kosong",
-        });
+        showToast("Data tidak boleh kosong", "Login", "warning");
         return;
       }
 
@@ -74,11 +71,9 @@ export default function useLogin() {
       return { success: true, res };
     } catch (err) {
       if (err.response) {
-        showToast(err.response.data.message, "Login-error", "error");
+        showToast(err.response?.data?.message, "Login", "error");
       } else {
-        toast.error("Server Tidak Terjangkau", {
-          toastId: "Login-error-server",
-        });
+        showToast("Server Tidak Terjangkau", "Login", "error");
       }
 
       return { success: false };

@@ -3,11 +3,10 @@ import "../../styles/setting.css";
 
 import { createAccessToken } from "../../services/accessTokenService";
 import { useAuth } from "../../context/AuthContext";
-import { toast } from "react-toastify";
-import { Eye, EyeClosed } from "lucide-react";
+import { showToast } from "../../utils/showToast";
 
 export default function AccessCodePage() {
-  const { user, token, login } = useAuth();
+  const { user } = useAuth();
   const [errors, setErrors] = useState({});
 
   // ==============================
@@ -40,7 +39,7 @@ export default function AccessCodePage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.warning("Data wajib tidak boleh kosong");
+      showToast("Data tidak boleh kosong", "access-code", "warning");
       return false;
     }
 
@@ -79,12 +78,10 @@ export default function AccessCodePage() {
       };
 
       const response = await createAccessToken(payload);
-
-      toast.success(response?.data?.message);
+      showToast(response?.data?.message, "access-code", "success");
     } catch (error) {
       console.error("ERROR UPDATE API KEY :", error.response?.data?.message);
-
-      toast.error(error.response?.data?.message);
+      showToast(error.response?.data?.message, "access-code", "error");
     }
   };
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { pengukuranSocketMap } from "../config/pengukuranSocketMap";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/showToast";
 
 export default function usePengukuranSocketEngine({
   devices,
@@ -66,9 +66,7 @@ export default function usePengukuranSocketEngine({
       // DISCONNECT
       // =====================================
       socket.on("disconnect", () => {
-        toast.warn("Koneksi ke server terputus", {
-          toastId: "socket-disconnect",
-        });
+        showToast("Koneksi ke server terputus", "websocket", "warn");
 
         setGatewayStatus((prev) => ({
           ...prev,
@@ -80,9 +78,12 @@ export default function usePengukuranSocketEngine({
       // CONNECT ERROR
       // =====================================
       socket.on("connect_error", (error) => {
-        toast.warn(`Sedang mencoba menghubungkan kembali...`, {
-          toastId: "socket-reconnecting",
-        });
+        showToast(
+          "Sedang mencoba menghubungkan kembali...",
+          "websocket",
+          "warn",
+        );
+
         console.error(`CONNECT ERROR GATEWAY ${gatewayId}:`, error.message);
       });
 
@@ -90,9 +91,11 @@ export default function usePengukuranSocketEngine({
       // RECONNECT BERHASIL
       // =====================================
       socket.io.on("reconnect", (attempt) => {
-        toast.success("Koneksi ke server berhasil dipulihkan", {
-          toastId: `socket-success-reconnected`,
-        });
+        showToast(
+          "Koneksi ke server berhasil dipulihkan",
+          "websocket",
+          "success",
+        );
 
         setGatewayStatus((prev) => ({
           ...prev,
@@ -109,10 +112,7 @@ export default function usePengukuranSocketEngine({
       // =====================================
       socket.io.on("reconnect_failed", () => {
         console.error(`RECONNECT FAILED GATEWAY ${gatewayId}`);
-
-        toast.error(`Koneksi ke server gagal dipulihkan`, {
-          toastId: "socket-fail-reconnecting",
-        });
+        showToast("Koneksi ke server gagal dipulihkan", "websocket", "error");
 
         setGatewayStatus((prev) => ({
           ...prev,
@@ -161,9 +161,10 @@ export default function usePengukuranSocketEngine({
 
             if (!macSudahDiberiNotifikasi) {
               invalidMacRef.current.push(mac);
-
-              toast.info(
+              showToast(
                 "Data pengukuran yang diterima bukan dari alat yang dipilih",
+                "websocket",
+                "info",
               );
             }
 
@@ -178,7 +179,11 @@ export default function usePengukuranSocketEngine({
 
             [device.mac_address]: normalizedPayload,
           }));
-          toast.success("Data pengukuran berhasil diterima");
+          showToast(
+            "Data pengukuran berhasil diterima",
+            "websocket",
+            "success",
+          );
         });
       });
     });

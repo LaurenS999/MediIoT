@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/showToast.js";
 import { useModalInfo } from "../context/ModalInfoProvider.js";
 import {
   getTrendBerat,
@@ -35,9 +35,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
           }
         }
       } catch (error) {
-        toast.error("Server tidak terjangkau", {
-          toastId: "trend-berat-server-error",
-        });
+        showToast("Server tidak terjangkau", "trend", "error");
       }
     },
     [id_pasien, interval],
@@ -58,9 +56,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
           }
         }
       } catch (error) {
-        toast.error("Server tidak terjangkau", {
-          toastId: "trend-fat-server-error",
-        });
+        showToast("Server tidak terjangkau", "trend", "error");
       }
     },
     [id_pasien, interval],
@@ -81,9 +77,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
           }
         }
       } catch (error) {
-        toast.error("Server tidak terjangkau", {
-          toastId: "trend-muscle-server-error",
-        });
+        showToast("Server tidak terjangkau", "trend", "error");
       }
     },
     [id_pasien, interval],
@@ -104,9 +98,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
           }
         }
       } catch (error) {
-        toast.error("Server tidak terjangkau", {
-          toastId: "trend-tensi-server-error",
-        });
+        showToast("Server tidak terjangkau", "trend", "error");
       }
     },
     [id_pasien, interval],
@@ -125,12 +117,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         ]);
 
         if (emptyTrend.length > 0) {
-          toast.info(
-            `Pasien belum mempunyai data trend dalam interval ${interval}: ${emptyTrend.join(", ")}`,
-            {
-              toastId: "trend-kosong",
-            },
-          );
+          showToast("Pasien belum mempunyai data trend", "trend", "info");
         }
       };
 

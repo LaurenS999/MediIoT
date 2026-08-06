@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { toast } from "react-toastify";
 import {
   getPemeriksaanDokter,
   updatePemeriksaanDokter,
 } from "../services/pemeriksaanDokterService";
+import { showToast } from "../utils/showToast";
 
 export const usePemeriksaanDokter = () => {
   const [pemeriksaanDokter, setPemeriksaanDokter] = useState([]);
@@ -27,15 +27,10 @@ export const usePemeriksaanDokter = () => {
           setCurrentPage(paginationData.page);
           setTotalPage(paginationData.totalPage);
         } else {
-          toast.info("Tidak ada Pemeriksaan Dokter", {
-            toastId: "pemeriksaan-dokter-kosong",
-          });
           setPemeriksaanDokter([]);
         }
       } catch (error) {
-        toast.error(error.response?.data?.message, {
-          toastId: "Pemeriksaan-dokter-error",
-        });
+        showToast(error.response?.data?.message, "Pemeriksaan-dokter", "error");
       }
     },
     [search],

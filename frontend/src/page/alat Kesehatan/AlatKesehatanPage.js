@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "../../styles/device.css";
 import useDevice from "../../hooks/useDevice";
 
-import { Cpu, Search, Wifi, WifiOff, CheckCircle2 } from "lucide-react";
+import { Search, Wifi, WifiOff } from "lucide-react";
 
 import Pagination from "../../components/common/Pagination";
 import { getPaginationItems } from "../../utils/pagination";
@@ -37,8 +37,6 @@ export default function AlatKesehatanPage() {
   // ======================================================
   // STATS
   // ======================================================
-  const connectedCount = devices.filter((d) => d.is_connected).length;
-
   return (
     <div className="device-page-container">
       {/* ====================================================== */}

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { getJenisPengukuran } from "../services/adminPanelServices";
-import { toast } from "react-toastify";
+
 import jenisPengukuranConfig from "../config/jenisPengukuranConfig";
+import { showToast } from "../utils/showToast";
 
 export default function useJenisPengukuran() {
   const [jenisPengukuran, setJenisPengukuran] = useState([]);
@@ -32,23 +33,20 @@ export default function useJenisPengukuran() {
       // =========================================
       if (error.response) {
         if (error.response.status === 401) {
-          toast.error(
+          showToast(
             error.response?.data?.error.errors + ", Hubungi Admin" ||
               error.response?.data?.message,
-            {
-              toastId: "medlink-jenis-pengukuran-access-code-error",
-            },
+            "medlink-jenis-pengukuran",
+            "error",
           );
 
           return;
         }
-
-        toast.error(
+        showToast(
           error.response?.data?.message ||
             "Terjadi kesalahan saat mengambil data Alat kesehatan",
-          {
-            toastId: "medlink-jenis-pengukuran-error",
-          },
+          "medlink-jenis-pengukuran",
+          "error",
         );
 
         setError(error.response.data.message || "Ambil Device Gagal");
@@ -56,9 +54,11 @@ export default function useJenisPengukuran() {
         return;
       }
 
-      toast.error("Server MedLink tidak terjangkau", {
-        toastId: "jenis-pengukuran-server-tidak-terjangkau",
-      });
+      showToast(
+        "Server MedLink tidak terjangkau",
+        "medlink-jenis-pengukuran",
+        "error",
+      );
 
       setError("Server MedLink tidak terjangkau");
     }

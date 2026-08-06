@@ -46,11 +46,10 @@ export default function PermintaanPemeriksaanPage() {
 
     currentPage,
     setCurrentPage,
-    limitPage,
+
     totalPage,
 
     selectedPermintaan,
-    setSelectedPermintaan,
   } = usePermintaanPemeriksaan();
   const today = new Date().toISOString().split("T")[0];
 

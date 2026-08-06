@@ -6,8 +6,8 @@ import {
   updateProfileUser,
 } from "../../services/profileServices";
 import { useAuth } from "../../context/AuthContext";
-import { toast } from "react-toastify";
 import { Eye, EyeClosed } from "lucide-react";
+import { showToast } from "../../utils/showToast";
 
 export default function ProfilePage() {
   const { user, token, login } = useAuth();
@@ -72,6 +72,42 @@ export default function ProfilePage() {
   // SAVE PROFILE
   // ==============================
   const handleSaveProfile = async () => {
+    const newErrors = {};
+
+    if (!profile.username) {
+      newErrors.username = "Username wajib di isi";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast("Data tidak boleh kosong", "profile", "warning");
+      return;
+    }
+
+    if (profile.username.length < 8) {
+      newErrors.username = "Username wajib di isi";
+      showToast(
+        "Username tidak boleh dibawah 8 karakter",
+        "profile",
+        "warning",
+      );
+      setErrors(newErrors);
+      return;
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9._]+$/;
+    if (!usernameRegex.test(profile.username)) {
+      newErrors.username =
+        "Username hanya boleh berisi huruf, angka, underscore (_), dan dot (.).";
+      showToast(
+        "Username hanya boleh berisi huruf, angka, underscore (_), dan dot (.).",
+        "profile",
+        "warning",
+      );
+      setErrors(newErrors);
+      return;
+    }
+
     try {
       const userStorage = JSON.parse(localStorage.getItem("user"));
 
@@ -87,15 +123,14 @@ export default function ProfilePage() {
       };
 
       login(token, updatedUser);
-
-      toast.success(response?.data?.message);
+      showToast(response?.data?.message, "profile", "success");
     } catch (error) {
       console.error("ERROR UPDATE PROFILE :", error);
 
       if (error.response?.status === 401) {
-        toast.warning(error.response?.data?.message);
+        showToast(error.response?.data?.message, "profile", "warning");
       } else {
-        toast.error(error.response?.data?.message);
+        showToast(error.response?.data?.message, "profile", "error");
       }
     }
   };
@@ -116,12 +151,17 @@ export default function ProfilePage() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.warning("Data tidak boleh kosong");
+      showToast("Data tidak boleh kosong", "profile", "warning");
       return;
     }
 
     if (password.password_baru !== password.konfirmasi_password) {
-      toast.warning("Konfirmasi password dan password baru tidak sesuai");
+      showToast(
+        "Konfirmasi password dan password baru tidak sesuai",
+        "profile",
+        "warning",
+      );
+
       newErrors.konfirmasi_password = "Konfirmasi password tidak sesuai";
       setErrors(newErrors);
       return;
@@ -135,8 +175,7 @@ export default function ProfilePage() {
 
       const response = await updateProfilePassword(payload);
 
-      toast.success(response?.data?.message);
-
+      showToast(response?.data?.message, "profile", "success");
       setPassword({
         password_lama: "",
         password_baru: "",
@@ -146,21 +185,15 @@ export default function ProfilePage() {
       console.error("ERROR UPDATE PASSWORD :", error);
 
       if (error.response?.status === 401) {
-        toast.warning(error.response?.data?.message);
+        showToast(error.response?.data?.message, "profile", "warning");
       } else {
-        toast.error(error.response?.data?.message);
+        showToast(error.response?.data?.message, "profile", "error");
       }
     }
   };
 
   return (
     <div className="setting-page">
-      {/* HEADER */}
-      <div className="setting-header">
-        {/* <h1>Profile</h1>
-        <p>Kelola akun dan password</p> */}
-      </div>
-
       {/* PROFILE CARD */}
       <div className="setting-card">
         <h2>Profile User</h2>
@@ -169,6 +202,7 @@ export default function ProfilePage() {
           <label>Username</label>
 
           <input
+            className={errors.username ? "input-error" : ""}
             type="text"
             name="username"
             value={profile.username}

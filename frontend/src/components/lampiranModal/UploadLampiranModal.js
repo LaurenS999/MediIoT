@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { X, Upload, LoaderCircle } from "lucide-react";
-import { toast } from "react-toastify";
 
 import "./UploadLampiranModal.css";
+import { showToast } from "../../utils/showToast";
 
 const UploadLampiranModal = ({ open, onClose, onSave }) => {
   const fileInputRef = useRef(null);
@@ -58,7 +58,7 @@ const UploadLampiranModal = ({ open, onClose, onSave }) => {
   // =====================================================
   const handleSubmit = async () => {
     if (files.length === 0) {
-      toast.warn("Silakan pilih minimal satu lampiran.");
+      showToast("Lampiran Kosong", "Lampiran-upload", "warning");
       return;
     }
 
