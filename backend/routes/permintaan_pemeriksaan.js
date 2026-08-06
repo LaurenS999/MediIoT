@@ -50,7 +50,14 @@ router.get(
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
           ON pe.id_pasien = p.id_pasien
-        ORDER BY pe.id_permintaan_pemeriksaan DESC
+        ORDER BY
+          CASE status
+            WHEN 'observasi' THEN 1
+            WHEN 'menunggu pemeriksaan' THEN 2
+            WHEN 'selesai' THEN 3
+            WHEN 'dibatalkan' THEN 4
+          END,
+          tanggal_pemeriksaan ASC
         LIMIT ? OFFSET ?
       `;
 
@@ -144,7 +151,14 @@ router.get(
         INNER JOIN pasien p
           ON pe.id_pasien = p.id_pasien
         WHERE pe.id_pasien = ?
-        ORDER BY pe.id_permintaan_pemeriksaan DESC
+        ORDER BY
+          CASE status
+            WHEN 'observasi' THEN 1
+            WHEN 'menunggu pemeriksaan' THEN 2
+            WHEN 'selesai' THEN 3
+            WHEN 'dibatalkan' THEN 4
+          END,
+          tanggal_pemeriksaan ASC
         LIMIT ? OFFSET ?
       `;
 
@@ -285,65 +299,6 @@ router.post(
       console.log(error);
 
       res.status(500).json({
-        success: false,
-        message: "Internal Server Error",
-      });
-    }
-  },
-);
-
-router.patch(
-  "/:id_permintaan_pemeriksaan/disetujui",
-  auth,
-  allow("permintaan.pemeriksaan.patch.setuju"),
-  async (req, res) => {
-    try {
-      const { waktu_kunjungan_awal, waktu_kunjungan_akhir } = req.body;
-
-      const { id_permintaan_pemeriksaan } = req.params;
-
-      console.log("REQUETS QUERY : ", req.body);
-
-      // CHECK permintaan_pemeriksaan
-      const [checkRows] = await db.query(
-        `
-        SELECT *
-        FROM permintaan_pemeriksaan
-        WHERE id_permintaan_pemeriksaan = ? AND status = "menunggu pemeriksaan"
-        LIMIT 1
-        `,
-        [id_permintaan_pemeriksaan],
-      );
-
-      const targetUser = checkRows[0];
-
-      if (checkRows.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "permintaan_pemeriksaan tidak ditemukan",
-        });
-      }
-
-      const sql = `
-        UPDATE permintaan_pemeriksaan
-        SET status = "disetujui", waktu_kunjungan_awal = ?, waktu_kunjungan_akhir = ?
-        WHERE id_permintaan_pemeriksaan = ?
-      `;
-
-      const [result] = await db.query(sql, [
-        waktu_kunjungan_awal,
-        waktu_kunjungan_akhir,
-        id_permintaan_pemeriksaan,
-      ]);
-
-      return res.status(200).json({
-        success: true,
-        message: "permintaan_pemeriksaan berhasil disetujui",
-      });
-    } catch (error) {
-      console.log(error);
-
-      return res.status(500).json({
         success: false,
         message: "Internal Server Error",
       });

@@ -83,7 +83,7 @@ router.get(
         FROM permintaan_pemeriksaan pe
           INNER JOIN pasien p
             ON p.id_pasien = pe.id_pasien
-        WHERE pe.status LIKE "menunggu pemeriksaan"
+        WHERE pe.status IN ('menunggu pemeriksaan','observasi')
         ORDER BY pe.dibuat_pada DESC
       `;
 
@@ -99,8 +99,15 @@ router.get(
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
             ON p.id_pasien = pe.id_pasien
-        WHERE pe.status LIKE "menunggu pemeriksaan"
-        ORDER BY pe.dibuat_pada DESC
+        WHERE pe.status IN ('menunggu pemeriksaan','observasi')
+        ORDER BY
+          CASE status
+            WHEN 'observasi' THEN 1
+            WHEN 'menunggu pemeriksaan' THEN 2
+            WHEN 'selesai' THEN 3
+            WHEN 'dibatalkan' THEN 4
+          END,
+          tanggal_pemeriksaan ASC
         LIMIT 5;
       `;
 
