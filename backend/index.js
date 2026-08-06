@@ -98,8 +98,8 @@ app.use("/pengukuran/tensi", tensi);
 const { startCleanupStatusAlatCron } = require("./cron/cleanupStatusAlat");
 startCleanupStatusAlatCron();
 
-// const startCronPemeriksaanBesok = require("./cron/pemeriksaanBesok");
-// startCronPemeriksaanBesok();
+const startCronPemeriksaanTutup = require("./cron/pemeriksaanTutup");
+startCronPemeriksaanTutup();
 
 // BUAT LAMPIRAN
 app.use("/uploads", express.static("uploads"));

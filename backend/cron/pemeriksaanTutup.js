@@ -1,17 +1,17 @@
 const cron = require("node-cron");
-const db = require("../config/database");
+const db = require("../db");
 
 const startPermintaanPemeriksaanCron = () => {
+  console.log("[CRON] Pembatalan permintaan pemeriksaan setiap jam 17:00");
   cron.schedule(
-    "40 16 * * *",
-    // "0 17 * * *",
+    "0 17 * * *",
     async () => {
       try {
         const sql = `
           UPDATE permintaan_pemeriksaan
           SET status = 'dibatalkan'
           WHERE tanggal_pemeriksaan = CURDATE()
-            AND status IN ('menunggu persetujuan', 'disetujui')
+            AND status IN ('menunggu pemeriksaan')
         `;
 
         const [result] = await db.query(sql);
@@ -30,8 +30,6 @@ const startPermintaanPemeriksaanCron = () => {
       timezone: "Asia/Jakarta",
     },
   );
-
-  console.log("Cron permintaan pemeriksaan berhasil dijalankan.");
 };
 
 module.exports = startPermintaanPemeriksaanCron;
