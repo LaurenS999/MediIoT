@@ -27,4 +27,17 @@ export const notifikasiConfig = {
       navigate("/permintaan-pemeriksaan");
     },
   },
+
+  "super admin": {
+    title: "Menunggu Permintaan Pemeriksaan",
+    ItemComponent: NotifikasiItemPerawat,
+
+    onItemClick: (navigate, id) => {
+      navigate(`/permintaan-pemeriksaan`);
+    },
+
+    onSeeAll: (navigate) => {
+      navigate("/permintaan-pemeriksaan");
+    },
+  },
 };

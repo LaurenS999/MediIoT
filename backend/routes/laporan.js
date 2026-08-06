@@ -722,8 +722,10 @@ router.get(
         "attachment; filename=laporan-pengukuran-terakhir.xlsx",
       );
 
-      await workbook.xlsx.write(res);
+      // TAMBAHKAN BARIS INI:
+      res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
 
+      await workbook.xlsx.write(res);
       res.end();
 
       await createAuditLog({

@@ -109,7 +109,7 @@ export default function Header() {
 
           <div className="header-right">
             {/* NOTIFICATION */}
-            {["dokter", "perawat"].includes(user?.role) && (
+            {["dokter", "perawat", "super admin"].includes(user?.role) && (
               <div className="notification-wrapper">
                 <button
                   className="notification-button"

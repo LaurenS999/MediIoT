@@ -15,6 +15,7 @@ import { useAuth } from "../../context/AuthContext";
 
 import { useKunjungan } from "../../hooks/useKunjungan";
 import { showToast } from "../../utils/showToast";
+import { saveAs } from "file-saver";
 
 export default function RiwayatKunjunganPage() {
   const navigate = useNavigate();
@@ -34,39 +35,20 @@ export default function RiwayatKunjunganPage() {
 
   const handleExport = async () => {
     try {
-      // ambil user login
-
       const response = await exportLaporanPengukuran(user.id_user);
 
-      // convert jadi file
-      const blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
+      // Ambil data blob
+      const blobFile = response.data instanceof Blob ? response.data : response;
 
-      // buat url download
-      const url = window.URL.createObjectURL(blob);
-
-      // element download
-      const link = document.createElement("a");
-
-      link.href = url;
-
-      link.setAttribute(
-        "download",
+      // Gunakan saveAs dari file-saver (Bukan document.createElement)
+      saveAs(
+        blobFile,
         `laporan-pengukuran-terakhir-setiap-pasien-${Date.now()}.xlsx`,
       );
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      link.remove();
-
-      // bersihkan memory
-      window.URL.revokeObjectURL(url);
     } catch (error) {
+      console.error("Export Error:", error);
       showToast(
-        error.response?.data?.message || "Internal Server Error",
+        error.response?.data?.message || "Gagal mengeksport laporan",
         "riwayat-kunjungan",
         "error",
       );

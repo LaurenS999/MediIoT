@@ -21,7 +21,7 @@ export default function useNotifikasiPerawat() {
   }, []);
 
   useEffect(() => {
-    if (user?.role == "perawat") {
+    if (user?.role == "perawat" || user?.role == "super admin") {
       fetchNotifications();
 
       const interval = setInterval(() => {
