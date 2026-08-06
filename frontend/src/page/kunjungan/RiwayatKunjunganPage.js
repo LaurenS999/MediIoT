@@ -1,16 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/riwayatPengukuran.css";
 import { getPaginationItems } from "../../utils/pagination";
-import {
-  Activity,
-  CalendarClock,
-  Search,
-  History,
-  Download,
-} from "lucide-react";
+import { CalendarClock, Search, Download } from "lucide-react";
 
 import { formatDateTime } from "../../utils/formatDate";
 

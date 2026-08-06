@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import { showToast } from "../utils/showToast.js";
-import { useModalInfo } from "../context/ModalInfoProvider.js";
 import {
   getTrendBerat,
   getTrendMuscle,
@@ -18,8 +17,6 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
 
   const [openModal, setOpenModal] = useState(false);
   const [errors, setErrors] = useState({});
-
-  const emptyTrend = [];
 
   const ambilTrendBerat = useCallback(
     async (emptyTrend) => {
@@ -105,7 +102,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
   );
 
   useEffect(() => {
-    if (pasienDetailStatus == true) {
+    if (pasienDetailStatus === true) {
       const loadTrend = async () => {
         const emptyTrend = [];
 
@@ -136,10 +133,5 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
     setErrors,
     interval,
     setInterval,
-
-    ambilTrendBerat,
-    ambilTrendTensi,
-    ambilTrendfat,
-    ambilTrendmuscle,
   };
 };

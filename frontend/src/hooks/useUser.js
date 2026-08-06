@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "../context/AuthContext";
 import {
@@ -108,7 +108,7 @@ export const useUser = () => {
     }
 
     if (newUser.password.length > 0) {
-      if (newUser.password != konfimrasiPassword) {
+      if (newUser.password !== konfimrasiPassword) {
         showToast(
           "password tidak sama dengan konfirmasi password",
           "user",
@@ -142,6 +142,7 @@ export const useUser = () => {
         "warning",
       );
     }
+    setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);

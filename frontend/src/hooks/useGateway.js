@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { getGateway } from "../services/adminPanelServices";
-import { toast } from "react-toastify";
 import { showToast } from "../utils/showToast";
 
 export default function useGateway() {

@@ -2,16 +2,12 @@ import { useState, useEffect, useRef } from "react";
 
 import { useLocation } from "react-router-dom";
 import "../../styles/pengukuran.css";
-import { UserRound, RotateCcw, UserSearch, Trash2 } from "lucide-react";
-import { formatTanggalIndonesia } from "../../utils/formatTanggal";
-import { hitungUmur } from "../../utils/hitungUmur";
 import useBMI from "../../hooks/useBMI";
 import useSavePengukuran from "../../hooks/useSavePengukuran";
 import PengukuranCard from "../../components/pengukuran/PengukuranCard";
 import usePengukuranSocketEngine from "../../hooks/usePengukuranSocketEngine";
 import { useAuth } from "../../context/AuthContext";
 import ModalPilihPasien from "../../components/pasien/ModalPilihPasien";
-import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
 import useStatusDevice from "../../hooks/useStatusDevice";
 
 import ModalRingkasanPengukuran from "../../components/pengukuran/ModalRingkasanPengukuran";

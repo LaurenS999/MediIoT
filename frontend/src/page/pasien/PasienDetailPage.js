@@ -9,12 +9,7 @@ import { Jenis_Kelamin } from "../../utils/jenisKelaminUtils";
 
 import DetailPengukuran from "../../components/pasien/DetailPengukuran";
 
-import GrafikTensi from "../../components/pasien/GrafikTensi";
-import GrafikTrend from "../../components/pasien/GrafikTrend";
-
 import { useTrend } from "../../hooks/useTrend";
-import { transformTrendData } from "../../utils/formatTrend";
-import { exportLaporanPasien } from "../../services/laporanService";
 import { useAuth } from "../../context/AuthContext";
 
 import ModalKonfirmasi from "../../components/common/ModalKonfirmasi";
@@ -32,7 +27,6 @@ import Pagination from "../../components/common/Pagination";
 import { getPaginationItems } from "../../utils/pagination";
 
 import { useKunjunganDropdown } from "../../hooks/useKunjunganDropdown";
-import { getTrendMuscle } from "../../services/trendService";
 
 export default function DetailPasienPage() {
   const { user } = useAuth();

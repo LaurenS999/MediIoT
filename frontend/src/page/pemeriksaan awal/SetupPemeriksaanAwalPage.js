@@ -1,10 +1,4 @@
-import React, {
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import "../../styles/setupPengukuran.css";
@@ -330,7 +324,7 @@ export default function SetupPemeriksaanAwalPage() {
             <input
               type="text"
               className={
-                errorPasien == true
+                errorPasien === true
                   ? "search-input input-error"
                   : "search-input"
               }
