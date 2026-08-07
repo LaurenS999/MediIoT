@@ -8,7 +8,7 @@ const TidakDitemukan = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="notfound-container">
+    <div className="page-container">
       <div className="notfound-card">
         <div className="notfound-icon">
           <TriangleAlert size={52} />

@@ -38,7 +38,7 @@ export default function AlatKesehatanPage() {
   // STATS
   // ======================================================
   return (
-    <div className="device-page-container">
+    <div className="page-container">
       {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}

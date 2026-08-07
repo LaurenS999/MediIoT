@@ -131,7 +131,7 @@ export default function DetailPasienPage() {
   // =====================================================
 
   return (
-    <div className="detail-pasien-container">
+    <div className="page-container">
       {/* =====================================================
           PATIENT CARD
       ===================================================== */}

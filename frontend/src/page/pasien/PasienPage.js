@@ -50,7 +50,7 @@ export default function PasienPage() {
   };
 
   return (
-    <div className="setup-container">
+    <div className="page-container">
       {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}

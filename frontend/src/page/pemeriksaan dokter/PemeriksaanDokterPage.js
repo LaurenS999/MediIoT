@@ -36,7 +36,7 @@ export default function PemeriksaanDokterPage() {
   };
 
   return (
-    <div className="setup-container">
+    <div className="page-container">
       {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}

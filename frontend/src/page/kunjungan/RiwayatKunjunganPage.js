@@ -63,7 +63,7 @@ export default function RiwayatKunjunganPage() {
   };
 
   return (
-    <div className="history-page-container">
+    <div className="page-container">
       {/* ===================================================== */}
       {/* SEARCH */}
       {/* ===================================================== */}

@@ -1,41 +1,4 @@
 /* ======================================================
-   PAGE
-====================================================== */
-
-.device-page-container {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: #f5f7fb;
-  min-height: 100vh;
-}
-
-/* ======================================================
-   HEADER
-====================================================== */
-
-.device-page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.device-page-title {
-  margin: 0;
-  font-size: 32px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.device-page-subtitle {
-  margin-top: 6px;
-  color: #6b7280;
-  font-size: 14px;
-}
-
-/* ======================================================
    STATS
 ====================================================== */
 

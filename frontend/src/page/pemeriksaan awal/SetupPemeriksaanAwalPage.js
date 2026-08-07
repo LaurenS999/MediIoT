@@ -310,313 +310,307 @@ export default function SetupPemeriksaanAwalPage() {
   };
 
   return (
-    <div className="setup-page">
-      <div className="setup-container">
-        {/* ===================================== */}
-        {/* PASIEN */}
-        {/* ===================================== */}
-        <div className="patient-card">
-          <div className="card-title-row">
-            <h2>Pilih Pasien</h2>
+    <div className="page-container">
+      {/* ===================================== */}
+      {/* PASIEN */}
+      {/* ===================================== */}
+      <div className="patient-card">
+        <div className="card-title-row">
+          <h2>Pilih Pasien</h2>
 
-            {selectedPatient && (
-              <div className="success-badge">Pasien Terpilih</div>
-            )}
+          {selectedPatient && (
+            <div className="success-badge">Pasien Terpilih</div>
+          )}
+        </div>
+
+        <div ref={wrapperRef} className="search-wrapper">
+          <Search size={18} className="search-icon" />
+
+          <input
+            type="text"
+            className={
+              errorPasien === true ? "search-input input-error" : "search-input"
+            }
+            placeholder="Cari nama atau ID pasien..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+
+              setShowSuggestions(true);
+
+              setErrorPasien(false);
+
+              if (selectedPatient) {
+                setSelectedPatient(null);
+              }
+            }}
+          />
+
+          {search && (
+            <button
+              className="clear-button"
+              onClick={() => {
+                setSearch("");
+
+                setSelectedPatient(null);
+              }}
+            >
+              ✕
+            </button>
+          )}
+
+          {showSuggestions && search.length > 0 && (
+            <ul className="suggestions-list">
+              {pasien.length === 0 ? (
+                <li className="suggestion-item suggestion-empty">
+                  Pasien tidak ditemukan
+                </li>
+              ) : (
+                pasien.map((patient) => (
+                  <li
+                    key={patient.id}
+                    className="suggestion-item"
+                    onClick={() => handleSelectPatient(patient)}
+                  >
+                    <strong>{patient.kode_pasien}</strong> - {patient.nama}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+        </div>
+
+        <div
+          className={`patient-info-wrapper ${selectedPatient ? "show" : ""}`}
+        >
+          {selectedPatient && (
+            <div className="patient-info-grid">
+              <div>
+                <span>Kode Pasien</span>
+
+                <strong>{selectedPatient.kode_pasien}</strong>
+              </div>
+
+              <div>
+                <span>Nama</span>
+
+                <strong>{selectedPatient.nama}</strong>
+              </div>
+
+              <div>
+                <span>Tanggal Lahir</span>
+
+                <strong>
+                  {formatTanggalIndonesia(selectedPatient.tanggal_lahir)}
+                </strong>
+              </div>
+
+              <div>
+                <span>Umur / Jenis Kelamin</span>
+
+                <strong>
+                  {hitungUmur(selectedPatient.tanggal_lahir)} /{" "}
+                  {Jenis_Kelamin(selectedPatient.jenis_kelamin)}
+                </strong>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ===================================== */}
+      {/* FILTER SECTION */}
+      {/* ===================================== */}
+      <div className="filter-layout">
+        {/* JENIS */}
+        <div className="card-box">
+          <div className="card-box-header">
+            <h2>Jenis Pengukuran</h2>
+
+            <div className="selected-count">
+              {selectedMeasurements.length} Dipilih
+            </div>
           </div>
 
-          <div ref={wrapperRef} className="search-wrapper">
+          <div className="search-wrapper">
             <Search size={18} className="search-icon" />
 
             <input
               type="text"
-              className={
-                errorPasien === true
-                  ? "search-input input-error"
-                  : "search-input"
-              }
-              placeholder="Cari nama atau ID pasien..."
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-
-                setShowSuggestions(true);
-
-                setErrorPasien(false);
-
-                if (selectedPatient) {
-                  setSelectedPatient(null);
-                }
-              }}
+              placeholder="Cari jenis pengukuran..."
+              className="search-input"
+              value={jenisPengukuranSearch}
+              onChange={(e) => setJenisPengukuranSearch(e.target.value)}
             />
-
-            {search && (
-              <button
-                className="clear-button"
-                onClick={() => {
-                  setSearch("");
-
-                  setSelectedPatient(null);
-                }}
-              >
-                ✕
-              </button>
-            )}
-
-            {showSuggestions && search.length > 0 && (
-              <ul className="suggestions-list">
-                {pasien.length === 0 ? (
-                  <li className="suggestion-item suggestion-empty">
-                    Pasien tidak ditemukan
-                  </li>
-                ) : (
-                  pasien.map((patient) => (
-                    <li
-                      key={patient.id}
-                      className="suggestion-item"
-                      onClick={() => handleSelectPatient(patient)}
-                    >
-                      <strong>{patient.kode_pasien}</strong> - {patient.nama}
-                    </li>
-                  ))
-                )}
-              </ul>
-            )}
           </div>
 
-          <div
-            className={`patient-info-wrapper ${selectedPatient ? "show" : ""}`}
-          >
-            {selectedPatient && (
-              <div className="patient-info-grid">
-                <div>
-                  <span>Kode Pasien</span>
+          {/* INI YANG SCROLL */}
+          <div className="measurement-list">
+            {Object.entries(groupedJenisPengukuran).map(
+              ([group, measurements]) => (
+                <div className="measurement-group" key={group}>
+                  <div className="measurement-group-title">{group}</div>
 
-                  <strong>{selectedPatient.kode_pasien}</strong>
+                  {measurements.map((type) => {
+                    const isSelected = selectedMeasurements.includes(
+                      type.jenis_pengukuran,
+                    );
+
+                    return (
+                      <label
+                        key={type.jenis_pengukuran}
+                        className={`measurement-item ${
+                          isSelected ? "active" : ""
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() =>
+                            toggleMeasurement(type.jenis_pengukuran)
+                          }
+                        />
+
+                        <span>{type.nama}</span>
+                      </label>
+                    );
+                  })}
                 </div>
-
-                <div>
-                  <span>Nama</span>
-
-                  <strong>{selectedPatient.nama}</strong>
-                </div>
-
-                <div>
-                  <span>Tanggal Lahir</span>
-
-                  <strong>
-                    {formatTanggalIndonesia(selectedPatient.tanggal_lahir)}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Umur / Jenis Kelamin</span>
-
-                  <strong>
-                    {hitungUmur(selectedPatient.tanggal_lahir)} /{" "}
-                    {Jenis_Kelamin(selectedPatient.jenis_kelamin)}
-                  </strong>
-                </div>
-              </div>
+              ),
             )}
           </div>
         </div>
 
-        {/* ===================================== */}
-        {/* FILTER SECTION */}
-        {/* ===================================== */}
-        <div className="filter-layout">
-          {/* JENIS */}
-          <div className="card-box">
-            <div className="card-box-header">
-              <h2>Jenis Pengukuran</h2>
+        <div className="device-panel">
+          <div className="device-header">
+            <div>
+              <h2>Daftar Device</h2>
 
-              <div className="selected-count">
-                {selectedMeasurements.length} Dipilih
-              </div>
+              <p>Device berdasarkan filter yang dipilih.</p>
             </div>
 
-            <div className="search-wrapper">
-              <Search size={18} className="search-icon" />
-
-              <input
-                type="text"
-                placeholder="Cari jenis pengukuran..."
-                className="search-input"
-                value={jenisPengukuranSearch}
-                onChange={(e) => setJenisPengukuranSearch(e.target.value)}
-              />
-            </div>
-
-            {/* INI YANG SCROLL */}
-            <div className="measurement-list">
-              {Object.entries(groupedJenisPengukuran).map(
-                ([group, measurements]) => (
-                  <div className="measurement-group" key={group}>
-                    <div className="measurement-group-title">{group}</div>
-
-                    {measurements.map((type) => {
-                      const isSelected = selectedMeasurements.includes(
-                        type.jenis_pengukuran,
-                      );
-
-                      return (
-                        <label
-                          key={type.jenis_pengukuran}
-                          className={`measurement-item ${
-                            isSelected ? "active" : ""
-                          }`}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() =>
-                              toggleMeasurement(type.jenis_pengukuran)
-                            }
-                          />
-
-                          <span>{type.nama}</span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                ),
-              )}
-            </div>
+            <div className="device-count">{devices.length} Device</div>
           </div>
 
-          <div className="device-panel">
-            <div className="device-header">
-              <div>
-                <h2>Daftar Device</h2>
+          {loadingDevice ? (
+            <div className="empty-device">Mengambil data device...</div>
+          ) : errorDevice ? (
+            <div className="empty-device">{errorDevice}</div>
+          ) : selectedMeasurements.length === 0 ? (
+            <div className="empty-device">Belum memilih jenis pengukuran.</div>
+          ) : Object.keys(groupedDevices).length === 0 ? (
+            <div className="empty-device">Device tidak ditemukan.</div>
+          ) : (
+            <div className="device-sections">
+              {Object.entries(groupedDevices).map(([groupName, group]) => (
+                <div key={groupName} className="device-section">
+                  <div className="section-header">
+                    <h3>{formatJenisPengukuran(groupName)}</h3>
 
-                <p>Device berdasarkan filter yang dipilih.</p>
-              </div>
+                    <p>{group.length} device</p>
+                  </div>
 
-              <div className="device-count">{devices.length} Device</div>
-            </div>
+                  <div className="device-grid">
+                    {group
+                      .filter(
+                        (device) => !usedDeviceSet.has(device.mac_address),
+                      )
+                      .map((device) => {
+                        const isSelected = selectedDevices.find(
+                          (d) => d.id === device.id,
+                        );
 
-            {loadingDevice ? (
-              <div className="empty-device">Mengambil data device...</div>
-            ) : errorDevice ? (
-              <div className="empty-device">{errorDevice}</div>
-            ) : selectedMeasurements.length === 0 ? (
-              <div className="empty-device">
-                Belum memilih jenis pengukuran.
-              </div>
-            ) : Object.keys(groupedDevices).length === 0 ? (
-              <div className="empty-device">Device tidak ditemukan.</div>
-            ) : (
-              <div className="device-sections">
-                {Object.entries(groupedDevices).map(([groupName, group]) => (
-                  <div key={groupName} className="device-section">
-                    <div className="section-header">
-                      <h3>{formatJenisPengukuran(groupName)}</h3>
+                        const isDisabled = selectedDevices.some(
+                          (selected) =>
+                            selected.device_function ===
+                              device.device_function &&
+                            selected.id !== device.id,
+                        );
 
-                      <p>{group.length} device</p>
-                    </div>
-
-                    <div className="device-grid">
-                      {group
-                        .filter(
-                          (device) => !usedDeviceSet.has(device.mac_address),
-                        )
-                        .map((device) => {
-                          const isSelected = selectedDevices.find(
-                            (d) => d.id === device.id,
-                          );
-
-                          const isDisabled = selectedDevices.some(
-                            (selected) =>
-                              selected.device_function ===
-                                device.device_function &&
-                              selected.id !== device.id,
-                          );
-
-                          return (
-                            <div
-                              key={device.id}
-                              className={`
+                        return (
+                          <div
+                            key={device.id}
+                            className={`
                                 device-card
                                 ${isSelected ? "selected" : ""}
                                 ${isDisabled ? "disabled" : ""}
                               `}
-                              onClick={() => {
-                                if (isDisabled) return;
+                            onClick={() => {
+                              if (isDisabled) return;
 
-                                toggleDevice(device);
-                              }}
-                            >
-                              <div className="device-card-header">
-                                <h4>{device.name}</h4>
+                              toggleDevice(device);
+                            }}
+                          >
+                            <div className="device-card-header">
+                              <h4>{device.name}</h4>
 
-                                {isSelected && (
-                                  <span className="selected-badge">
-                                    ✓ Dipilih
-                                  </span>
-                                )}
+                              {isSelected && (
+                                <span className="selected-badge">
+                                  ✓ Dipilih
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="device-status-list">
+                              <div className="status-item">
+                                <span>Status Koneksi</span>
+
+                                <span
+                                  className={`badge ${
+                                    device.is_connected
+                                      ? "connected"
+                                      : "disconnected"
+                                  }`}
+                                >
+                                  {device.is_connected ? "Online" : "Offline"}
+                                </span>
                               </div>
 
-                              <div className="device-status-list">
-                                <div className="status-item">
-                                  <span>Status Koneksi</span>
+                              <div className="status-item">
+                                <span>Status Device</span>
 
-                                  <span
-                                    className={`badge ${
-                                      device.is_connected
-                                        ? "connected"
-                                        : "disconnected"
-                                    }`}
-                                  >
-                                    {device.is_connected ? "Online" : "Offline"}
-                                  </span>
-                                </div>
-
-                                <div className="status-item">
-                                  <span>Status Device</span>
-
-                                  <span className="badge available">
-                                    Tersedia
-                                  </span>
-                                </div>
+                                <span className="badge available">
+                                  Tersedia
+                                </span>
                               </div>
                             </div>
-                          );
-                        })}
-                    </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* FOOTER */}
+          <div className="selected-device-footer">
+            <div>
+              <h3>{selectedDevices.length} Device Dipilih</h3>
+
+              <div className="selected-tags">
+                {selectedDevices.map((device) => (
+                  <div key={device.id} className="selected-tag">
+                    {device.name}
                   </div>
                 ))}
               </div>
-            )}
-
-            {/* FOOTER */}
-            <div className="selected-device-footer">
-              <div>
-                <h3>{selectedDevices.length} Device Dipilih</h3>
-
-                <div className="selected-tags">
-                  {selectedDevices.map((device) => (
-                    <div key={device.id} className="selected-tag">
-                      {device.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={handleStart}
-                className="btn-start"
-                disabled={!selectedPatient}
-              >
-                Mulai Pengukuran
-              </button>
             </div>
+
+            <button
+              onClick={handleStart}
+              className="btn-start"
+              disabled={!selectedPatient}
+            >
+              Mulai Pengukuran
+            </button>
           </div>
         </div>
-
-        {/* ===================================== */}
-        {/* DEVICE */}
-        {/* ===================================== */}
       </div>
+
+      {/* ===================================== */}
+      {/* DEVICE */}
+      {/* ===================================== */}
     </div>
   );
 }

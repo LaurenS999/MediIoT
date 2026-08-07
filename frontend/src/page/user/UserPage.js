@@ -52,7 +52,7 @@ export default function UserPage() {
   const page = getPaginationItems(currentPage, totalPage);
 
   return (
-    <div className="setup-container">
+    <div className="page-container">
       {/* ====================================================== */}
       {/* SEARCH */}
       {/* ====================================================== */}

@@ -58,7 +58,7 @@ export default function PermintaanPemeriksaanPage() {
   const page = getPaginationItems(currentPage, totalPage);
 
   return (
-    <div className="setup-container">
+    <div className="page-container">
       {isPasien && (
         <div className="card-custom">
           <div className="card-header-flex">
