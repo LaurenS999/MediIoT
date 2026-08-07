@@ -134,7 +134,7 @@ export const usePermintaanPemeriksaan = (id_user) => {
   const validasiWaktuKunjung = () => {
     const newErrors = {};
 
-    const waktuAwal = formSelesai.waktu_kunjungan_awal;
+    const waktuAwal = selectedPermintaan.waktu_kunjungan_awal;
     const waktuAkhir = formSelesai.waktu_kunjungan_akhir;
 
     // Konversi HH:mm menjadi menit

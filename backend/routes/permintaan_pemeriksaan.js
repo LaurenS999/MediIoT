@@ -232,7 +232,7 @@ router.post(
           FROM permintaan_pemeriksaan
           WHERE id_pasien = ?
             AND tanggal_pemeriksaan = ?
-            AND status LIKE "menunggu pemeriksaan"
+            AND status IN ('menunggu pemeriksaan','observasi')
           LIMIT 1
         `,
         [req.user.id_relasi, tanggal_pemeriksaan],
@@ -350,25 +350,6 @@ router.patch(
         });
       }
 
-      if (targetUser.status === "disetujui") {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const tanggalPemeriksaan = new Date(targetUser.tanggal_pemeriksaan);
-        tanggalPemeriksaan.setHours(0, 0, 0, 0);
-
-        const selisihHari =
-          (tanggalPemeriksaan - today) / (1000 * 60 * 60 * 24);
-
-        if (selisihHari <= 1) {
-          return res.status(400).json({
-            success: false,
-            message:
-              "Permintaan pemeriksaan tidak dapat dibatalkan H-1 atau pada hari pemeriksaan. Silakan datang ke UKS.",
-          });
-        }
-      }
-
       const sql = `
         UPDATE permintaan_pemeriksaan
         SET status = "dibatalkan", alasan_perubahan= ? 
@@ -399,48 +380,99 @@ router.patch(
   async (req, res) => {
     try {
       const { waktu_kunjungan_akhir } = req.body;
-
       const { id_permintaan_pemeriksaan } = req.params;
 
-      console.log("REQUETS QUERY : ", req.body);
+      console.log("REQUEST QUERY : ", req.body);
 
-      // CHECK permintaan_pemeriksaan
+      // ==========================================
+      // VALIDASI WAKTU KUNJUNGAN AKHIR
+      // ==========================================
+
+      if (!waktu_kunjungan_akhir) {
+        return res.status(400).json({
+          success: false,
+          message: "Waktu kunjungan akhir wajib diisi",
+        });
+      }
+
+      // ==========================================
+      // CHECK PERMINTAAN PEMERIKSAAN
+      // ==========================================
+
       const [checkRows] = await db.query(
         `
-        SELECT *
-        FROM permintaan_pemeriksaan
-        WHERE id_permintaan_pemeriksaan = ? AND status = "observasi"
-        LIMIT 1
+          SELECT 
+            id_permintaan_pemeriksaan,
+            waktu_kunjungan_awal
+          FROM permintaan_pemeriksaan
+          WHERE id_permintaan_pemeriksaan = ?
+            AND status = "observasi"
+          LIMIT 1
         `,
         [id_permintaan_pemeriksaan],
       );
 
-      const targetUser = checkRows[0];
-
       if (checkRows.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "permintaan pemeriksaan tidak ditemukan",
+          message: "Permintaan pemeriksaan tidak ditemukan",
         });
       }
 
+      const waktuKunjunganAwal = checkRows[0].waktu_kunjungan_awal;
+
+      // ==========================================
+      // NORMALISASI WAKTU
+      // ==========================================
+
+      const waktuAkhir = waktu_kunjungan_akhir.slice(0, 5);
+      const waktuAwal = waktuKunjunganAwal
+        ? waktuKunjunganAwal.toString().slice(0, 5)
+        : null;
+
+      // ==========================================
+      // VALIDASI MAKSIMAL JAM 17:00
+      // ==========================================
+
+      if (waktuAkhir > "17:00") {
+        return res.status(400).json({
+          success: false,
+          message: "Waktu kunjungan akhir tidak boleh melewati jam 17:00",
+        });
+      }
+
+      // ==========================================
+      // VALIDASI WAKTU AKHIR >= WAKTU AWAL
+      // ==========================================
+
+      if (waktuAwal && waktuAkhir < waktuAwal) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Waktu kunjungan akhir tidak boleh lebih awal dari waktu kunjungan awal",
+        });
+      }
+
+      // ==========================================
+      // UPDATE STATUS
+      // ==========================================
+
       const sql = `
         UPDATE permintaan_pemeriksaan
-        SET status = "selesai", waktu_kunjungan_akhir = ?
+        SET 
+          status = "selesai",
+          waktu_kunjungan_akhir = ?
         WHERE id_permintaan_pemeriksaan = ?
       `;
 
-      const [result] = await db.query(sql, [
-        waktu_kunjungan_akhir,
-        id_permintaan_pemeriksaan,
-      ]);
+      await db.query(sql, [waktu_kunjungan_akhir, id_permintaan_pemeriksaan]);
 
       return res.status(200).json({
         success: true,
-        message: "permintaan_pemeriksaan berhasil diselesaikan",
+        message: "Permintaan pemeriksaan berhasil diselesaikan",
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return res.status(500).json({
         success: false,

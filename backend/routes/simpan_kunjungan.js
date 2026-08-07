@@ -30,6 +30,10 @@ router.post(
     const conn = await db.getConnection();
 
     try {
+      // ==========================================
+      // PARSE REQUEST
+      // ==========================================
+
       const patient = parseJSON(req.body.patient, {});
       const devices = parseJSON(req.body.devices, []);
       const liveData = parseJSON(req.body.liveData, {});
@@ -43,6 +47,9 @@ router.post(
         butuh_observasi,
       } = req.body;
 
+      // FormData selalu mengirim value sebagai string
+      const butuhObservasi = butuh_observasi === "true";
+
       let kategoriData = req.body.kategori ?? [];
 
       if (!Array.isArray(kategoriData)) {
@@ -50,6 +57,8 @@ router.post(
       }
 
       console.log("REQUEST BODY : ", req.body);
+      console.log("BUTUH OBSERVASI : ", butuhObservasi);
+
       // ==========================================
       // VALIDASI PASIEN
       // ==========================================
@@ -61,6 +70,10 @@ router.post(
         });
       }
 
+      // ==========================================
+      // VALIDASI FILE DAN KATEGORI
+      // ==========================================
+
       if (req.files.length !== kategoriData.length) {
         throw new Error("Jumlah file dan kategori tidak sesuai");
       }
@@ -71,10 +84,10 @@ router.post(
 
       const [pasien] = await conn.query(
         `
-        SELECT id_pasien
-        FROM pasien
-        WHERE id_pasien = ?
-        AND status_delete = 0
+          SELECT id_pasien
+          FROM pasien
+          WHERE id_pasien = ?
+            AND status_delete = 0
         `,
         [patient.id_pasien],
       );
@@ -96,7 +109,7 @@ router.post(
       let id_pengukuran = null;
 
       // ==========================================
-      // CEK ADA PEMERIKSAAN
+      // INSERT SESI PEMERIKSAAN
       // ==========================================
 
       const kodePemeriksaan = await generateKodePemeriksaan(conn);
@@ -144,7 +157,7 @@ router.post(
             (
               ?
             )
-            `,
+          `,
           [kodePengukuran],
         );
 
@@ -198,7 +211,7 @@ router.post(
             ?,
             NULL
           )
-          `,
+        `,
         [
           kodeKunjungan,
           patient.id_pasien,
@@ -211,11 +224,13 @@ router.post(
       const id_kunjungan = insertKunjungan.insertId;
 
       // ==========================================
-      // CEK PERMINTAAN PEMERIKSAAN
+      // CEK PERMINTAAN PEMERIKSAAN HARI INI
       // ==========================================
-      const [permintaan] = await db.query(
+
+      const [permintaan] = await conn.query(
         `
-          SELECT id_permintaan_pemeriksaan
+          SELECT
+            id_permintaan_pemeriksaan
           FROM permintaan_pemeriksaan
           WHERE id_pasien = ?
             AND DATE(tanggal_pemeriksaan) = CURDATE()
@@ -225,12 +240,34 @@ router.post(
         [patient.id_pasien],
       );
 
+      // ==========================================
+      // UPDATE PERMINTAAN PEMERIKSAAN
+      // ==========================================
+
       if (permintaan.length > 0) {
         const id_permintaan_pemeriksaan =
           permintaan[0].id_permintaan_pemeriksaan;
 
-        if (butuh_observasi) {
-          await db.query(
+        // ========================================
+        // VALIDASI WAKTU KUNJUNGAN AWAL
+        // ========================================
+
+        if (!waktu_kunjungan_awal) {
+          await conn.rollback();
+
+          return res.status(400).json({
+            success: false,
+            message:
+              "Waktu kunjungan awal wajib diisi untuk permintaan pemeriksaan",
+          });
+        }
+
+        // ========================================
+        // PASIEN MEMBUTUHKAN OBSERVASI
+        // ========================================
+
+        if (butuhObservasi) {
+          await conn.query(
             `
               UPDATE permintaan_pemeriksaan
               SET
@@ -241,8 +278,13 @@ router.post(
             `,
             [waktu_kunjungan_awal, id_permintaan_pemeriksaan],
           );
-        } else {
-          await db.query(
+        }
+
+        // ========================================
+        // PASIEN TIDAK MEMBUTUHKAN OBSERVASI
+        // ========================================
+        else {
+          await conn.query(
             `
               UPDATE permintaan_pemeriksaan
               SET
@@ -279,9 +321,17 @@ router.post(
           const file = req.files[i];
           const kategori = kategoriData[i];
 
+          // ========================================
+          // VALIDASI KATEGORI
+          // ========================================
+
           if (!kategoriValid.includes(kategori)) {
             throw new Error(`Kategori tidak valid : ${kategori}`);
           }
+
+          // ========================================
+          // AMBIL NOMOR FILE BERIKUTNYA
+          // ========================================
 
           if (nomorKategori[kategori] === undefined) {
             const [[total]] = await conn.query(
@@ -289,7 +339,7 @@ router.post(
                 SELECT COUNT(*) AS jumlah
                 FROM kunjungan_lampiran
                 WHERE id_kunjungan = ?
-                AND kategori = ?
+                  AND kategori = ?
               `,
               [id_kunjungan, kategori],
             );
@@ -299,11 +349,19 @@ router.post(
 
           nomorKategori[kategori]++;
 
+          // ========================================
+          // NAMA FILE
+          // ========================================
+
           const ext = path.extname(file.originalname).toLowerCase();
 
           const namaFile =
             `L-${kodeKunjungan}-${kategori}-` +
             `${String(nomorKategori[kategori]).padStart(2, "0")}${ext}`;
+
+          // ========================================
+          // INSERT LAMPIRAN
+          // ========================================
 
           await conn.query(
             `
@@ -339,11 +397,13 @@ router.post(
       // ==========================================
       // COMMIT
       // ==========================================
+
       await conn.commit();
 
       // ==========================================
       // AUDIT LOG
       // ==========================================
+
       await createAuditLog({
         id_user: req.user.id_user,
         action: `CREATE_KUNJUNGAN_${kodeKunjungan}`,
@@ -352,7 +412,8 @@ router.post(
       // ==========================================
       // RESPONSE
       // ==========================================
-      res.status(201).json({
+
+      return res.status(201).json({
         success: true,
         message: "Data berhasil disimpan",
 
@@ -373,9 +434,14 @@ router.post(
       // ==========================================
       // ROLLBACK
       // ==========================================
+
       await conn.rollback();
 
       console.error(error);
+
+      // ==========================================
+      // HAPUS FILE JIKA TRANSACTION GAGAL
+      // ==========================================
 
       if (req.files) {
         for (const file of req.files) {
@@ -391,7 +457,7 @@ router.post(
         }
       }
 
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "Internal Server Error",
       });
@@ -399,6 +465,7 @@ router.post(
       // ==========================================
       // RELEASE CONNECTION
       // ==========================================
+
       conn.release();
     }
   },
