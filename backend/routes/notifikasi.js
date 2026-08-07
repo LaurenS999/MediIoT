@@ -95,13 +95,14 @@ router.get(
             pe.tanggal_pemeriksaan,
 			      pe.status,
             pe.dibuat_pada,
-            p.nama
+            p.nama,
+            p.id_pasien
         FROM permintaan_pemeriksaan pe
         INNER JOIN pasien p
             ON p.id_pasien = pe.id_pasien
         WHERE pe.status IN ('menunggu pemeriksaan','observasi')
         ORDER BY
-          CASE status
+          CASE pe.status
             WHEN 'observasi' THEN 1
             WHEN 'menunggu pemeriksaan' THEN 2
             WHEN 'selesai' THEN 3

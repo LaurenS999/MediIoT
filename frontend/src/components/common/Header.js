@@ -132,8 +132,8 @@ export default function Header() {
                     ItemComponent={config.ItemComponent}
                     notifications={notifikasi}
                     loading={loading}
-                    onItemClick={(id) => {
-                      config.onItemClick(navigate, id);
+                    onItemClick={(item) => {
+                      config.onItemClick(navigate, item);
                       setOpenNotification(false);
                     }}
                     onSeeAll={() => {

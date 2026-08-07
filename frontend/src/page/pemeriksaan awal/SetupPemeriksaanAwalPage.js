@@ -189,7 +189,7 @@ export default function SetupPemeriksaanAwalPage() {
     const fetchPasien = async () => {
       try {
         const res = await getDetailPasien(id_pasien);
-
+        console.log("RESPON : ", res);
         handleSelectPatient(res.data.data.pasien);
       } catch (err) {
         console.error(err);
@@ -198,6 +198,12 @@ export default function SetupPemeriksaanAwalPage() {
 
     fetchPasien();
   }, [id_pasien]);
+
+  useEffect(() => {
+    if (state?.id_pasien) {
+      setId_Pasien(state.id_pasien);
+    }
+  }, [state?.id_pasien]);
 
   // =====================================================
   // TOGGLE MEASUREMENT

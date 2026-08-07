@@ -2,16 +2,8 @@ import { formatDateTime } from "../../utils/formatDate";
 import { renderStatusPermintaan } from "../../utils/renderStatusPermintaan";
 
 export default function NotifikasiItemPerawat({ item, onClick }) {
-  const statusText = {
-    menunggu: "disetujui",
-    disetujui: "check in",
-    checkin: "pengukuran",
-  };
   return (
-    <div
-      className="notification-item"
-      onClick={() => onClick(item.id_permintaan_pemeriksaan)}
-    >
+    <div className="notification-item" onClick={() => onClick(item)}>
       <div className="notification-item-header">
         <h4>{item?.nama}</h4>
 
@@ -22,8 +14,7 @@ export default function NotifikasiItemPerawat({ item, onClick }) {
 
       <div className="notification-item-body">
         <p>
-          Menunggu Pemeriksaan{" "}
-          <strong>{statusText[item?.status] || "-"}</strong>
+          Menunggu Pemeriksaan Dokter <strong>menunggu</strong>
         </p>
 
         <small>{formatDateTime(item?.dibuat_pada)}</small>

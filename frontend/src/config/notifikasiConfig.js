@@ -19,8 +19,17 @@ export const notifikasiConfig = {
     title: "Menunggu Permintaan Pemeriksaan",
     ItemComponent: NotifikasiItemPerawat,
 
-    onItemClick: (navigate, id) => {
-      navigate(`/permintaan-pemeriksaan`);
+    onItemClick: (navigate, item) => {
+      if (item.status === "observasi") {
+        navigate("/permintaan-pemeriksaan");
+        return;
+      }
+
+      navigate("/setup-kunjungan", {
+        state: {
+          id_pasien: item.id_pasien,
+        },
+      });
     },
 
     onSeeAll: (navigate) => {
@@ -32,8 +41,17 @@ export const notifikasiConfig = {
     title: "Menunggu Permintaan Pemeriksaan",
     ItemComponent: NotifikasiItemPerawat,
 
-    onItemClick: (navigate, id) => {
-      navigate(`/permintaan-pemeriksaan`);
+    onItemClick: (navigate, item) => {
+      if (item.status === "observasi") {
+        navigate("/permintaan-pemeriksaan");
+        return;
+      }
+
+      navigate("/setup-kunjungan", {
+        state: {
+          id_pasien: item.id_pasien,
+        },
+      });
     },
 
     onSeeAll: (navigate) => {
