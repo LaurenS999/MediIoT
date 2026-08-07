@@ -158,7 +158,7 @@ export default function RiwayatKunjunganPage() {
               {/* EMPTY */}
               {kunjungan.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="history-empty">
+                  <td colSpan="7" className="history-empty">
                     Data riwayat pengukuran tidak ditemukan.
                   </td>
                 </tr>
