@@ -391,7 +391,7 @@ export default function DetailPasienPage() {
               width: "200px",
             }),
           }}
-          maxMenuHeight={240}
+          maxMenuHeight={150}
           options={KunjunganOptions}
           placeholder="Pilih tanggal kunjungan"
           value={

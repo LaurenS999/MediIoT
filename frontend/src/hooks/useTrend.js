@@ -39,7 +39,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       try {
         const res = await getTrendFat(id_pasien, id_kunjungan);
         const listfat = res.data.data;
-        if (Array.isArray(listfat) && listBerat.length > 0) {
+        if (Array.isArray(listfat) && listfat.length > 0) {
           setTrendFat(listfat);
         } else {
           setTrendFat([]);
@@ -58,7 +58,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         const res = await getTrendMuscle(id_pasien, id_kunjungan);
         const listMuscle = res.data.data;
 
-        if (Array.isArray(listMuscle) && listBerat.length > 0) {
+        if (Array.isArray(listMuscle) && listMuscle.length > 0) {
           setTrendMuscle(listMuscle);
         } else {
           setTrendMuscle([]);
@@ -76,7 +76,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       try {
         const res = await getTrendTensi(id_pasien, id_kunjungan);
         const listTensi = res.data.data;
-        if (Array.isArray(listTensi) && listBerat.length > 0) {
+        if (Array.isArray(listTensi) && listTensi.length > 0) {
           setTrendTensi(listTensi);
         } else {
           setTrendTensi([]);
@@ -98,7 +98,7 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       return;
     }
 
-    if (!pasienDetail?.id_pasien) {
+    if (!id_pasien) {
       return;
     }
 
