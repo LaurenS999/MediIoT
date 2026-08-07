@@ -22,6 +22,7 @@ export default function ModalRingkasanPengukuran({
   lampiran,
   butuhObservasi,
   setButuhObservasi,
+  permintaanPemeriksaanAktif,
 }) {
   console.log("LAMPIRAN : ", lampiran);
   if (!open) return null;
@@ -139,18 +140,33 @@ export default function ModalRingkasanPengukuran({
             </div>
           )}
 
-          <div className="summary-section">
-            <h3>Status Observasi</h3>
+          {permintaanPemeriksaanAktif && (
+            <div className="summary-section">
+              <h3>Status Observasi</h3>
 
-            <label className="summary-checkbox">
-              <input
-                type="checkbox"
-                checked={butuhObservasi}
-                onChange={(e) => setButuhObservasi(e.target.checked)}
-              />
-              Pasien masih membutuhkan observasi
-            </label>
-          </div>
+              <div className="summary-radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    name="observasi"
+                    checked={!butuhObservasi}
+                    onChange={() => setButuhObservasi(false)}
+                  />
+                  Tidak membutuhkan observasi
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    name="observasi"
+                    checked={butuhObservasi}
+                    onChange={() => setButuhObservasi(true)}
+                  />
+                  Masih membutuhkan observasi
+                </label>
+              </div>
+            </div>
+          )}
 
           {/* =============================== */}
           {/* CATATAN */}

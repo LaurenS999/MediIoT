@@ -223,4 +223,72 @@ router.delete("/:id", auth, allow("pemeriksaan.delete"), async (req, res) => {
   }
 });
 
+//GET DETAIL PASIEN di HALAMAN PEMERIKSAAN AWAL
+router.get(
+  "/:id/pasien",
+  auth,
+  allow("pasien.detail.read"),
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      // ================================
+      // DATA PASIEN
+      // ================================
+      const [pasien] = await db.query(
+        `
+          SELECT
+            id_pasien,
+            kode_pasien,
+            nama,
+            DATE_FORMAT(tanggal_lahir, '%Y-%m-%d') AS tanggal_lahir,
+            jenis_kelamin,
+            dibuat_pada AS tanggal_pendaftaran
+          FROM pasien
+          WHERE id_pasien = ? AND status_delete = 0
+        `,
+        [id],
+      );
+
+      if (pasien.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Pasien tidak ditemukan",
+        });
+      }
+
+      // ================================
+      // CEK PERMINTAAN PEMERIKSAAN AKTIF
+      // ================================
+      const [permintaan] = await db.query(
+        `
+          SELECT id_permintaan_pemeriksaan
+          FROM permintaan_pemeriksaan
+          WHERE id_pasien = ?
+            AND DATE(tanggal_pemeriksaan) = CURDATE()
+            AND status = 'menunggu pemeriksaan'
+          LIMIT 1
+        `,
+        [id],
+      );
+
+      const permintaanPemeriksaanAktif = permintaan.length > 0;
+      res.json({
+        success: true,
+        data: {
+          pasien: pasien[0],
+          permintaanPemeriksaanAktif,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+);
+
 module.exports = router;

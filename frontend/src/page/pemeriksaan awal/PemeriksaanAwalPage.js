@@ -3,22 +3,19 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import "../../styles/pengukuran.css";
 import useBMI from "../../hooks/useBMI";
-import useSavePengukuran from "../../hooks/useSavePengukuran";
-import PengukuranCard from "../../components/pengukuran/PengukuranCard";
 import usePengukuranSocketEngine from "../../hooks/usePengukuranSocketEngine";
+import useSavePengukuran from "../../hooks/useSavePengukuran";
+import useStatusDevice from "../../hooks/useStatusDevice";
+import { usePemeriksaanPasien } from "../../hooks/usePemeriksaanPasien";
+
 import { useAuth } from "../../context/AuthContext";
 import ModalPilihPasien from "../../components/pasien/ModalPilihPasien";
-import useStatusDevice from "../../hooks/useStatusDevice";
-
+import PengukuranCard from "../../components/pengukuran/PengukuranCard";
 import ModalRingkasanPengukuran from "../../components/pengukuran/ModalRingkasanPengukuran";
-
 import DataPasienCard from "../../components/pemeriksaan-awal/DataPasienCard";
-
-import { usePasienDetail } from "../../hooks/usePasienDetail";
-
 import UploadLampiranModal from "../../components/lampiranModal/UploadLampiranModal";
-
 import Lampiran from "../../components/lampiran/Lampiran";
+
 import { showToast } from "../../utils/showToast";
 
 export default function PemeriksaanAwalPage() {
@@ -59,9 +56,8 @@ export default function PemeriksaanAwalPage() {
     state?.patient || null,
   );
 
-  const { pasienDetail, setPasienDetail } = usePasienDetail(
-    selectedPatient?.id_pasien,
-  );
+  const { pasienDetail, setPasienDetail, permintaanPemeriksaanAktif } =
+    usePemeriksaanPasien(selectedPatient?.id_pasien);
 
   const devices = state?.devices || [];
 
@@ -319,6 +315,7 @@ export default function PemeriksaanAwalPage() {
         lampiran={draftLampiran}
         butuhObservasi={butuhObservasi}
         setButuhObservasi={setButuhObservasi}
+        permintaanPemeriksaanAktif={permintaanPemeriksaanAktif}
       />
 
       <UploadLampiranModal

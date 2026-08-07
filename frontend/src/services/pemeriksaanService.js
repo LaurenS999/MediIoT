@@ -15,3 +15,7 @@ export const updatepemeriksaan = (id, data) => {
 export const deletepemeriksaan = (id) => {
   return apiLocal.delete(`/pemeriksaan/${id}`);
 };
+
+export const getpemeriksaanpasien = (id_pasien) => {
+  return apiLocal.get(`/pemeriksaan/${id_pasien}/pasien`);
+};

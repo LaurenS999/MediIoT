@@ -229,3 +229,16 @@
   color: #64748b;
   font-size: 13px;
 }
+.summary-radio-group {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+}
+
+.summary-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
