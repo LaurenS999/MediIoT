@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+
+const db = require("../db.js");
 const auth = require("../middleware/auth");
 const allow = require("../middleware/permission");
+const validasiKunjunganTrend = require("../middleware/validasi/validasiTrend.js");
 
 // ======================================================
 // TREND BERAT BADAN
@@ -11,45 +13,43 @@ router.get(
   "/:id_pasien/:id_kunjungan/berat-badan",
   auth,
   allow("trend.berat.read"),
+  validasiKunjunganTrend,
   async (req, res) => {
     try {
-      const { id_pasien, id_kunjungan } = req.params;
+      const { id_pasien } = req.params;
+
+      const tanggalKunjungan = req.kunjunganTrend.dibuat_pada;
 
       const sql = `
-      SELECT
-            berat,
-            dibuat_pada
+        SELECT
+          berat,
+          dibuat_pada
         FROM (
-            SELECT *
-            FROM (
-                SELECT
-                    b.berat,
-                    b.dibuat_pada,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY DATE(b.dibuat_pada)
-                        ORDER BY b.dibuat_pada DESC
-                    ) AS rn
-                FROM pengukuran_bmi b
-                INNER JOIN sesi_pengukuran s
-                    ON b.id_sesi = s.id_pengukuran
-                INNER JOIN kunjungan k
-                    ON k.id_pengukuran = s.id_pengukuran
-                WHERE k.id_pasien = ?
-                  AND DATE(k.dibuat_pada) <= (
-                      SELECT DATE(dibuat_pada)
-                      FROM kunjungan
-                      WHERE id_kunjungan = ?
-                  )
-            ) ranked
-            WHERE rn = 1
-            ORDER BY dibuat_pada DESC
-            LIMIT 7
+          SELECT *
+          FROM (
+            SELECT
+              b.berat,
+              b.dibuat_pada,
+              ROW_NUMBER() OVER (
+                PARTITION BY DATE(b.dibuat_pada)
+                ORDER BY b.dibuat_pada DESC
+              ) AS rn
+            FROM pengukuran_bmi b
+            INNER JOIN sesi_pengukuran s
+              ON b.id_sesi = s.id_pengukuran
+            INNER JOIN kunjungan k
+              ON k.id_pengukuran = s.id_pengukuran
+            WHERE k.id_pasien = ?
+              AND k.dibuat_pada <= ?
+          ) ranked
+          WHERE rn = 1
+          ORDER BY dibuat_pada DESC
+          LIMIT 7
         ) last_seven
         ORDER BY dibuat_pada ASC;
-    `;
+      `;
 
-      // Menggunakan await (gaya Promise)
-      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
+      const [result] = await db.query(sql, [id_pasien, tanggalKunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -59,15 +59,14 @@ router.get(
         });
       }
 
-      console.log("=== [DEBUG] Query Berhasil ===");
-      res.json({
+      return res.status(200).json({
         success: true,
         data: result,
       });
-    } catch (err) {
-      console.error("=== [DEBUG] Query Error ===");
-      console.error(err);
-      res.status(500).json({
+    } catch (error) {
+      console.error("TREND BERAT BADAN ERROR:", error);
+
+      return res.status(500).json({
         success: false,
         message: "Gagal mengambil trend berat badan",
       });
@@ -82,45 +81,45 @@ router.get(
   "/:id_pasien/:id_kunjungan/tekanan-darah",
   auth,
   allow("trend.tekanan-darah.read"),
+  validasiKunjunganTrend,
   async (req, res) => {
     try {
-      const { id_pasien, id_kunjungan } = req.params;
+      const { id_pasien } = req.params;
+
+      const tanggalKunjungan = req.kunjunganTrend.dibuat_pada;
 
       const sql = `
         SELECT
-            systolic,
-            diastolic,
-            dibuat_pada
+          systolic,
+          diastolic,
+          dibuat_pada
         FROM (
-            SELECT *
-            FROM (
-                SELECT
-                    t.systolic,
-                    t.diastolic,
-                    t.dibuat_pada,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY DATE(t.dibuat_pada)
-                        ORDER BY t.dibuat_pada DESC
-                    ) AS rn
-                FROM pengukuran_tensi t
-                INNER JOIN sesi_pengukuran s
-                    ON t.id_sesi = s.id_pengukuran
-                INNER JOIN kunjungan k
-                    ON k.id_pengukuran = s.id_pengukuran
-                WHERE k.id_pasien = ?
-                  AND k.dibuat_pada <= (
-                      SELECT dibuat_pada
-                      FROM kunjungan
-                      WHERE id_kunjungan = ?
-                  )
-            ) AS ranked
-            WHERE rn = 1
-            ORDER BY dibuat_pada DESC
-            LIMIT 7
-        ) AS last_seven
-        ORDER BY dibuat_pada ASC;`;
+          SELECT *
+          FROM (
+            SELECT
+              t.systolic,
+              t.diastolic,
+              t.dibuat_pada,
+              ROW_NUMBER() OVER (
+                PARTITION BY DATE(t.dibuat_pada)
+                ORDER BY t.dibuat_pada DESC
+              ) AS rn
+            FROM pengukuran_tensi t
+            INNER JOIN sesi_pengukuran s
+              ON t.id_sesi = s.id_pengukuran
+            INNER JOIN kunjungan k
+              ON k.id_pengukuran = s.id_pengukuran
+            WHERE k.id_pasien = ?
+              AND k.dibuat_pada <= ?
+          ) ranked
+          WHERE rn = 1
+          ORDER BY dibuat_pada DESC
+          LIMIT 7
+        ) last_seven
+        ORDER BY dibuat_pada ASC;
+      `;
 
-      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
+      const [result] = await db.query(sql, [id_pasien, tanggalKunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -130,20 +129,20 @@ router.get(
         });
       }
 
-      res.json({
+      return res.status(200).json({
         success: true,
         data: result,
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({
+    } catch (error) {
+      console.error("TREND TEKANAN DARAH ERROR:", error);
+
+      return res.status(500).json({
         success: false,
         message: "Gagal mengambil trend tekanan darah",
       });
     }
   },
 );
-
 // ======================================================
 // TREND BODY FAT
 // ======================================================
@@ -151,44 +150,43 @@ router.get(
   "/:id_pasien/:id_kunjungan/body-fat",
   auth,
   allow("trend.fat.read"),
+  validasiKunjunganTrend,
   async (req, res) => {
     try {
-      const { id_pasien, id_kunjungan } = req.params;
+      const { id_pasien } = req.params;
+
+      const tanggalKunjungan = req.kunjunganTrend.dibuat_pada;
 
       const sql = `
         SELECT
-            body_fat,
-            dibuat_pada
+          body_fat,
+          dibuat_pada
         FROM (
-            SELECT *
-            FROM (
-                SELECT
-                    b.body_fat,
-                    b.dibuat_pada,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY DATE(b.dibuat_pada)
-                        ORDER BY b.dibuat_pada DESC
-                    ) AS rn
-                FROM pengukuran_bmi b
-                INNER JOIN sesi_pengukuran s
-                    ON b.id_sesi = s.id_pengukuran
-                INNER JOIN kunjungan k
-                    ON k.id_pengukuran = s.id_pengukuran
-                WHERE k.id_pasien = ?
-                  AND k.dibuat_pada <= (
-                      SELECT dibuat_pada
-                      FROM kunjungan
-                      WHERE id_kunjungan = ?
-                  )
-            ) AS ranked
-            WHERE rn = 1
-            ORDER BY dibuat_pada DESC
-            LIMIT 7
-        ) AS last_seven
+          SELECT *
+          FROM (
+            SELECT
+              b.body_fat,
+              b.dibuat_pada,
+              ROW_NUMBER() OVER (
+                PARTITION BY DATE(b.dibuat_pada)
+                ORDER BY b.dibuat_pada DESC
+              ) AS rn
+            FROM pengukuran_bmi b
+            INNER JOIN sesi_pengukuran s
+              ON b.id_sesi = s.id_pengukuran
+            INNER JOIN kunjungan k
+              ON k.id_pengukuran = s.id_pengukuran
+            WHERE k.id_pasien = ?
+              AND k.dibuat_pada <= ?
+          ) ranked
+          WHERE rn = 1
+          ORDER BY dibuat_pada DESC
+          LIMIT 7
+        ) last_seven
         ORDER BY dibuat_pada ASC;
       `;
 
-      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
+      const [result] = await db.query(sql, [id_pasien, tanggalKunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -198,13 +196,14 @@ router.get(
         });
       }
 
-      res.json({
+      return res.status(200).json({
         success: true,
         data: result,
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({
+    } catch (error) {
+      console.error("TREND BODY FAT ERROR:", error);
+
+      return res.status(500).json({
         success: false,
         message: "Gagal mengambil trend body fat",
       });
@@ -219,44 +218,43 @@ router.get(
   "/:id_pasien/:id_kunjungan/muscle-mass",
   auth,
   allow("trend.muscle.read"),
+  validasiKunjunganTrend,
   async (req, res) => {
     try {
-      const { id_pasien, id_kunjungan } = req.params;
+      const { id_pasien } = req.params;
+
+      const tanggalKunjungan = req.kunjunganTrend.dibuat_pada;
 
       const sql = `
         SELECT
-            muscle_mass,
-            dibuat_pada
+          muscle_mass,
+          dibuat_pada
         FROM (
-            SELECT *
-            FROM (
-                SELECT
-                    b.muscle_mass,
-                    b.dibuat_pada,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY DATE(b.dibuat_pada)
-                        ORDER BY b.dibuat_pada DESC
-                    ) AS rn
-                FROM pengukuran_bmi b
-                INNER JOIN sesi_pengukuran s
-                    ON b.id_sesi = s.id_pengukuran
-                INNER JOIN kunjungan k
-                    ON k.id_pengukuran = s.id_pengukuran
-                WHERE k.id_pasien = ?
-                  AND k.dibuat_pada <= (
-                      SELECT dibuat_pada
-                      FROM kunjungan
-                      WHERE id_kunjungan = ?
-                  )
-            ) AS ranked
-            WHERE rn = 1
-            ORDER BY dibuat_pada DESC
-            LIMIT 7
-        ) AS last_seven
+          SELECT *
+          FROM (
+            SELECT
+              b.muscle_mass,
+              b.dibuat_pada,
+              ROW_NUMBER() OVER (
+                PARTITION BY DATE(b.dibuat_pada)
+                ORDER BY b.dibuat_pada DESC
+              ) AS rn
+            FROM pengukuran_bmi b
+            INNER JOIN sesi_pengukuran s
+              ON b.id_sesi = s.id_pengukuran
+            INNER JOIN kunjungan k
+              ON k.id_pengukuran = s.id_pengukuran
+            WHERE k.id_pasien = ?
+              AND k.dibuat_pada <= ?
+          ) ranked
+          WHERE rn = 1
+          ORDER BY dibuat_pada DESC
+          LIMIT 7
+        ) last_seven
         ORDER BY dibuat_pada ASC;
       `;
 
-      const [result] = await db.query(sql, [id_pasien, id_kunjungan]);
+      const [result] = await db.query(sql, [id_pasien, tanggalKunjungan]);
 
       if (result.length === 0) {
         return res.status(200).json({
@@ -266,13 +264,14 @@ router.get(
         });
       }
 
-      res.json({
+      return res.status(200).json({
         success: true,
         data: result,
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({
+    } catch (error) {
+      console.error("TREND MUSCLE MASS ERROR:", error);
+
+      return res.status(500).json({
         success: false,
         message: "Gagal mengambil trend muscle mass",
       });

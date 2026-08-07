@@ -8,8 +8,6 @@ function allow(permission) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    console.log("ROLE USER : ", role);
-
     const rolePermissions = permissions[role] || [];
 
     if (!rolePermissions.includes(permission)) {

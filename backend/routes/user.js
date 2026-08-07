@@ -443,12 +443,12 @@ router.delete("/:id", auth, async (req, res) => {
     // CHECK USER
     const [checkRows] = await db.query(
       `
-  SELECT *
-  FROM user
-  WHERE id_user = ?
-  AND status_delete = 0
-  LIMIT 1
-  `,
+        SELECT *
+        FROM user
+        WHERE id_user = ?
+        AND status_delete = 0
+        LIMIT 1
+        `,
       [id],
     );
 
@@ -462,7 +462,7 @@ router.delete("/:id", auth, async (req, res) => {
     const targetUser = checkRows[0];
 
     // ADMIN TIDAK BOLEH HAPUS SUPER ADMIN
-    if (req.user.role === "admin" && targetUser.role === "super admin") {
+    if (targetUser.role === "super admin") {
       return res.status(403).json({
         success: false,
         message: "Admin tidak dapat menghapus Super Admin",

@@ -21,13 +21,11 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       try {
         const res = await getTrendBerat(id_pasien, id_kunjungan);
         const listBerat = res.data.data;
-        if (Array.isArray(listBerat)) {
-          if (listBerat.length >= 1) {
-            setTrendBerat(listBerat);
-          } else {
-            setTrendBerat([]);
-            emptyTrend.push("Berat Badan");
-          }
+        if (Array.isArray(listBerat) && listBerat.length > 0) {
+          setTrendBerat(listBerat);
+        } else {
+          setTrendBerat([]);
+          emptyTrend.push("Berat Badan");
         }
       } catch (error) {
         showToast("Server tidak terjangkau", "trend", "error");
@@ -41,14 +39,11 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       try {
         const res = await getTrendFat(id_pasien, id_kunjungan);
         const listfat = res.data.data;
-
-        if (Array.isArray(listfat)) {
-          if (listfat.length >= 1) {
-            setTrendFat(listfat);
-          } else {
-            setTrendFat([]);
-            emptyTrend.push("Body Fat");
-          }
+        if (Array.isArray(listfat) && listBerat.length > 0) {
+          setTrendFat(listfat);
+        } else {
+          setTrendFat([]);
+          emptyTrend.push("Body Fat");
         }
       } catch (error) {
         showToast("Server tidak terjangkau", "trend", "error");
@@ -63,13 +58,11 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
         const res = await getTrendMuscle(id_pasien, id_kunjungan);
         const listMuscle = res.data.data;
 
-        if (Array.isArray(listMuscle)) {
-          if (listMuscle.length >= 1) {
-            setTrendMuscle(listMuscle);
-          } else {
-            setTrendMuscle([]);
-            emptyTrend.push("Muscle Mass");
-          }
+        if (Array.isArray(listMuscle) && listBerat.length > 0) {
+          setTrendMuscle(listMuscle);
+        } else {
+          setTrendMuscle([]);
+          emptyTrend.push("Muscle Mass");
         }
       } catch (error) {
         showToast("Server tidak terjangkau", "trend", "error");
@@ -83,14 +76,11 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       try {
         const res = await getTrendTensi(id_pasien, id_kunjungan);
         const listTensi = res.data.data;
-
-        if (Array.isArray(listTensi)) {
-          if (listTensi.length >= 1) {
-            setTrendTensi(listTensi);
-          } else {
-            setTrendTensi([]);
-            emptyTrend.push("Tekanan Darah");
-          }
+        if (Array.isArray(listTensi) && listBerat.length > 0) {
+          setTrendTensi(listTensi);
+        } else {
+          setTrendTensi([]);
+          emptyTrend.push("Tekanan Darah");
         }
       } catch (error) {
         showToast("Server tidak terjangkau", "trend", "error");
@@ -105,26 +95,34 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
       setTrendFat([]);
       setTrendMuscle([]);
       setTrendTensi([]);
-      return false;
+      return;
     }
 
-    if (pasienDetailStatus === true) {
-      const loadTrend = async () => {
-        const emptyTrend = [];
+    if (!pasienDetail?.id_pasien) {
+      return;
+    }
 
-        await Promise.all([
-          ambilTrendBerat(emptyTrend, id_kunjungan),
-          ambilTrendTensi(emptyTrend, id_kunjungan),
-          ambilTrendfat(emptyTrend, id_kunjungan),
-          ambilTrendmuscle(emptyTrend, id_kunjungan),
-        ]);
+    if (pasienDetailStatus !== true) {
+      return;
+    }
 
-        if (emptyTrend.length > 0) {
-          showToast("Pasien belum mempunyai data trend", "trend", "info");
-        }
-      };
+    const emptyTrend = [];
 
-      loadTrend();
+    await Promise.all([
+      ambilTrendBerat(emptyTrend, id_kunjungan),
+      ambilTrendTensi(emptyTrend, id_kunjungan),
+      ambilTrendfat(emptyTrend, id_kunjungan),
+      ambilTrendmuscle(emptyTrend, id_kunjungan),
+    ]);
+
+    if (emptyTrend.length > 0) {
+      const daftarTrend = emptyTrend.join(", ");
+
+      showToast(
+        `Data trend berikut belum tersedia: ${daftarTrend}`,
+        "trend",
+        "info",
+      );
     }
   };
 
