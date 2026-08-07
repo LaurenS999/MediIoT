@@ -26,7 +26,6 @@ export const useKunjunganDetail = (id_pasien) => {
     async (id_pasien, page = 1, limit = 10) => {
       try {
         const res = await getKunjunganPasien(id_pasien, page, limit);
-        console.log("RESPONSE : ", res);
         const kunjunganList = res.data;
 
         if (Array.isArray(kunjunganList)) {
@@ -55,20 +54,31 @@ export const useKunjunganDetail = (id_pasien) => {
   const ambilKunjunganTerakhir = useCallback(async (id_pasien) => {
     try {
       const res = await getKunjunganDetail_Terakhir(id_pasien);
+
       setKunjungan(res.data.kunjungan);
 
-      setPengukuran(res.data.pengukuran);
-
-      if (res.data.pemeriksaan == []) {
-        setPemeriksaan([]);
-      } else {
-        setPemeriksaan(res.data.pemeriksaan);
-      }
-
-      if (res.data.pemeriksaan == []) {
+      // ================================
+      // PENGUKURAN
+      // ================================
+      if (
+        !Array.isArray(res.data.pengukuran) ||
+        res.data.pengukuran.length === 0
+      ) {
         setPengukuran([]);
       } else {
         setPengukuran(res.data.pengukuran);
+      }
+
+      // ================================
+      // PEMERIKSAAN
+      // ================================
+      if (
+        !Array.isArray(res.data.pemeriksaan) ||
+        res.data.pemeriksaan.length === 0
+      ) {
+        setPemeriksaan([]);
+      } else {
+        setPemeriksaan(res.data.pemeriksaan);
       }
     } catch (error) {
       showToast(
@@ -81,6 +91,10 @@ export const useKunjunganDetail = (id_pasien) => {
   }, []);
 
   const handleSelectKunjungan = async (id_pasien, id_kunjungan) => {
+    if (!id_kunjungan) {
+      showToast("Belum memilih kunjungan", "kunjungan-detail", "warning");
+      return;
+    }
     try {
       const response = await getKunjunganSelectedRiwayat(
         id_pasien,

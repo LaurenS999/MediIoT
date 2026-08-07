@@ -343,7 +343,7 @@ router.get(
   },
 );
 
-//AMBIL PENGUKURAN DAN PEMERIKSAAN DARI KUNJUNGA TERAKHIR PASIEN
+//AMBIL PENGUKURAN DAN PEMERIKSAAN DARI KUNJUNGAN YANG DIPILIH
 router.get(
   "/:id_pasien/riwayat-kunjungan",
   auth,

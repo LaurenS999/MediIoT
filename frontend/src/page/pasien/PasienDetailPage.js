@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { User, Download, Pencil, Trash2 } from "lucide-react";
 import "../../styles/pasienDetail.css";
+import Select from "react-select";
 
 import { usePasienDetail } from "../../hooks/usePasienDetail";
 
@@ -94,6 +95,10 @@ export default function DetailPasienPage() {
   } = useKunjunganDetail(idPasien);
 
   const { kunjunganDropdown, ambilKunjunganDropdown } = useKunjunganDropdown();
+  const KunjunganOptions = kunjunganDropdown.map((item) => ({
+    value: item.id_kunjungan,
+    label: formatDateTime(`${item.tanggal_pemeriksaan_awal}`, true),
+  }));
 
   const [selectedKunjungan, setSelectedKunjungan] = useState("");
   const [activeTab, setActiveTab] = useState("pemeriksaan");
@@ -104,8 +109,9 @@ export default function DetailPasienPage() {
   useEffect(() => {
     if (idPasien) {
       ambilKunjunganDropdown(idPasien);
+      ambilTrend(kunjungan?.id_kunjungan);
     }
-  }, []);
+  }, [kunjungan]);
 
   const page = getPaginationItems(currentPage, totalPage);
 
@@ -377,23 +383,34 @@ export default function DetailPasienPage() {
           </p>
         </div>
 
-        <select
-          className="kunjungan-select"
-          value={selectedKunjungan}
-          onChange={(e) => {
-            setSelectedKunjungan(e.target.value);
-            handleSelectKunjungan(pasienDetail.id_pasien, e.target.value);
-            ambilTrend(e.target.value);
+        <Select
+          classNamePrefix="kunjungan-select"
+          styles={{
+            container: (base) => ({
+              ...base,
+              width: "200px",
+            }),
           }}
-        >
-          <option value="">Pilih tanggal kunjungan</option>
+          maxMenuHeight={240}
+          options={KunjunganOptions}
+          placeholder="Pilih tanggal kunjungan"
+          value={
+            KunjunganOptions.find(
+              (option) => String(option.value) === String(selectedKunjungan),
+            ) || null
+          }
+          onChange={(selectedOption) => {
+            const idKunjungan = selectedOption?.value || "";
 
-          {kunjunganDropdown.map((item) => (
-            <option key={item.id_kunjungan} value={item.id_kunjungan}>
-              {formatDateTime(item.tanggal_pemeriksaan_awal, true)}
-            </option>
-          ))}
-        </select>
+            setSelectedKunjungan(idKunjungan);
+
+            if (idKunjungan) {
+              handleSelectKunjungan(pasienDetail.id_pasien, idKunjungan);
+
+              ambilTrend(idKunjungan);
+            }
+          }}
+        />
       </div>
 
       <div className="detail-tabs">

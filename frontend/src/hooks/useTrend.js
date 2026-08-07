@@ -100,6 +100,14 @@ export const useTrend = (id_pasien, pasienDetailStatus) => {
   );
 
   const ambilTrend = async (id_kunjungan) => {
+    if (!id_kunjungan) {
+      setTrendBerat([]);
+      setTrendFat([]);
+      setTrendMuscle([]);
+      setTrendTensi([]);
+      return false;
+    }
+
     if (pasienDetailStatus === true) {
       const loadTrend = async () => {
         const emptyTrend = [];

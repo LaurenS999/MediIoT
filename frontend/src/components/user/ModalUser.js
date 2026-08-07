@@ -194,7 +194,6 @@ export default function ModalUser({
                   role: false,
                 }));
               }}
-              maxMenuHeight={240}
               isClearable
             />
           </div>
